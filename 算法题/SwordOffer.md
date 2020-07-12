@@ -1,4 +1,4 @@
-<center><font size=50>SwordOffer题解</font></center>
+# SwordOffer题解
 
 ## 题序
 
