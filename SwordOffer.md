@@ -269,24 +269,128 @@ double Power(double base, int exponent) {
 }
 ```
 ## 13 
-#### 思路
-```c++
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
 
+#### 思路
+
+1. 从后往前遍历，找到偶数往后放，数组位置进行移动
+
+```c++
+void reOrderArray(vector<int> &array) {
+    if(array.empty()){
+        return ;
+    }
+    int len = array.size() - 1;
+    for(int i = array.size() - 1; i >= 0; i--){
+        if(array[i] % 2 == 0){
+            int temp = array[i];
+            for(int k = i; k < len; k++){
+                array[k] = array[k+1];
+            }
+            array[len] = temp;
+            len--;
+        }
+    }
+}
 ```
 ## 14 
-#### 思路
-```c++
 
+输入一个链表，输出该链表中倒数第k个结点。
+
+#### 思路
+
+1. 快慢指针即可
+
+```c++
+static ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+    if(pListHead == NULL)
+        return NULL;
+    ListNode *p = pListHead;
+    int len = 0;
+    while(p != NULL){
+        len++;
+        p = p->next;
+    }
+    if(len < k)	//判断长度是否大于K
+        return NULL;
+    ListNode *slow = pListHead, *fast = pListHead;	//使用快慢指针进行操作
+    while(k > 0){
+        fast = fast->next;
+        k--;
+    }
+    while(fast != NULL){
+        fast = fast->next;
+        slow = slow->next;
+    }
+    return slow;
+}
 ```
 ## 15 
-#### 思路
-```c++
+输入一个链表，反转链表后，输出新链表的表头。
 
+#### 思路
+
+1. 借助额外空间大小为N的栈进行操作
+
+```c++
+static ListNode* ReverseList(ListNode* pHead) {
+    if(pHead == NULL)
+        return NULL;
+    stack<int> s;
+    ListNode *p = pHead;
+    while(p != NULL){
+        s.push(p->val);
+        p = p->next;
+    }
+    ListNode *pre_head = new ListNode(0);
+    p = pre_head;
+    while(!s.empty()){
+        p->next = new ListNode(s.top());
+        s.pop();
+        p = p->next;
+    }
+    return pre_head->next;
+}
 ```
 ## 16
-#### 思路
-```c++
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
 
+#### 思路
+
+1. 直接比较后进行合并
+2. 还需要查看链表1或链表2是否没有加入完，直接加入到后面部分
+
+```c++
+static ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
+{
+    if(pHead1 == NULL)
+        return pHead2;
+    if(pHead2 == NULL)
+        return pHead1;
+    ListNode *new_head = new ListNode(0);
+    ListNode *p = new_head;
+    while(pHead1 != NULL && pHead2 != NULL) {
+        if(pHead1->val <= pHead2->val){
+            p->next = new ListNode(pHead1->val);
+            pHead1 = pHead1->next;
+        }else{
+            p->next = new ListNode(pHead2->val);
+            pHead2 = pHead2->next;
+        }
+        p = p->next;
+    }
+    while(pHead1 != NULL){
+        p->next = new ListNode(pHead1->val);
+        pHead1 = pHead1->next;
+        p = p->next;
+    }
+    while(pHead2 != NULL){
+        p->next = new ListNode(pHead2->val);
+        pHead2 = pHead2->next;
+        p = p->next;
+    }
+    return new_head->next;
+}
 ```
 ## 17 
 #### 思路
@@ -311,10 +415,38 @@ double Power(double base, int exponent) {
 
 ## 20
 
+定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。注意：保证测试中不会当栈为空的时候，对栈调用pop()或者min()或者top()方法。
+
 #### 思路
 
-```c++
+1. 使用两个栈用一个栈来保存当前的小的值
+2. 当两个栈，栈顶的值相同时，需要同时出栈
 
+```c++
+stack<int> s1;
+stack<int> s2;//保存小值
+void push(int value) {
+    s1.push(value);
+    if(s2.empty()){
+        s2.push(value);
+    }else{
+        if(value <= s2.top()){
+            s2.push(value);
+        }
+    }
+}
+void pop() {
+    if(s1.top() == s2.top()){
+        s2.pop();
+    }
+    s1.pop();
+}
+int top() {
+    return s1.top();
+}
+int min() {
+    return s2.top();
+}
 ```
 
 ## 21<a id="21"> </a>
