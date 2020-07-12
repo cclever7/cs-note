@@ -2,7 +2,7 @@
 
 ## 算法复杂度
 
-![AlgorithmComplexity](../image/algorithm/AlgorithmComplexity.png)
+<img src="../image/algorithm/AlgorithmComplexity.png" alt="AlgorithmComplexity" style="zoom: 50%;" />
 
 
 
@@ -68,7 +68,7 @@
 
 ##### 动画演示
 
-![InsertSort](..\image\algorithm\InsertSort.gif)
+<img src="..\\image\\algorithm\\InsertSort.gif" alt="InsertSort" style="zoom:50%;" />
 
 ##### 代码
 
@@ -102,7 +102,7 @@
 
 ##### 动画演示
 
-
+<img src="..\\image\\algorithm\\QuickSort.gif" alt="QuickSort" style="zoom:50%;" />
 
 ##### 代码
 
@@ -122,7 +122,7 @@
 
 ##### 动画演示
 
-![MergeSort](..\image\algorithm\MergeSort.gif)
+![MergeSort](..\\image\\algorithm\\MergeSort.gif)
 
 ##### 代码
 
@@ -138,7 +138,7 @@
 
 ##### 动画演示
 
-
+<img src="..\\image\\algorithm\\HeapSort.gif" alt="HeapSort" style="zoom:50%;" />
 
 ##### 代码
 
@@ -184,7 +184,7 @@
 
 ##### 动画演示
 
-
+<img src="..\\image\\algorithm\\BucketSort.gif" alt="BucketSort" style="zoom:50%;" />
 
 ##### 代码
 
@@ -200,7 +200,7 @@
 
 ##### 动画演示
 
-
+![BaseSort](..\\image\\algorithm\\BaseSort.gif)
 
 ##### 代码
 
