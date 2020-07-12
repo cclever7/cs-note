@@ -452,7 +452,7 @@ int min() {
 }
 ```
 
-## 21<a id="21"> </a>
+## 21
 
 栈的压入、弹出序列
 
@@ -545,7 +545,7 @@ int min() {
 
 ```
 
-## 31<a id="31"> </a>
+## 31
 
 #### 思路
 
@@ -683,7 +683,7 @@ ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {
 
 ```
 
-## 41<a id="41"> </a>
+## 41
 
 #### 思路
 
@@ -812,7 +812,7 @@ static void quickSort(int number[], int start, int end){
 }
 ```
 
-## 51<a id="#51"> </a>
+## 51
 
 #### 思路
 
@@ -930,7 +930,7 @@ static void quickSort(int number[], int start, int end){
 
 ```
 
-## 61 <a id="#61"> </a>
+## 61
 
 #### 思路
 
