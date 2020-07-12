@@ -2,7 +2,7 @@
 
 ## 算法复杂度
 
-![AlgorithmComplexity](..\image\algorithm\AlgorithmComplexity.png)
+![AlgorithmComplexity](../image/algorithm/AlgorithmComplexity.png)
 
 
 
