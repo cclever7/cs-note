@@ -2,7 +2,7 @@
 
 ## 算法复杂度
 
-<img src="../image/algorithm/AlgorithmComplexity.png" alt="AlgorithmComplexity" style="zoom: 33%;" />
+<img src="../image/algorithm/AlgorithmComplexity.png" alt="AlgorithmComplexity" style="zoom: 50%;" />
 
 
 
