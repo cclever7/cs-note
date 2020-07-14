@@ -16,12 +16,14 @@
   - [LeetCode题解]()
   - [SwordOffer题解]()
 - 数据库
-  - [数据库原理]()
+  - [数据库原理](/docs/database/database/)
   - [MySQL]()
-  - [Redis]()
+  - [Redis](/docs/database/Redis/Redis.md)
 - 操作系统
   - [计算机操作系统](/docs/operating-system/opreating-system.md)
   - [Linux](/docs/operating-system/linux.md)
 - 计算机网络
   - [计算机网络]()
+
+
 
