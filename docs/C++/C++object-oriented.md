@@ -1,5 +1,4 @@
-<center><font size=45>C++面向对象</font></cetner>
-
+<center><font size = 45>C++面向对象</font></center>
 
 C++面向对象的三大特性为：**封装、继承、多态**
 

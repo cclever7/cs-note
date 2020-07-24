@@ -1,4 +1,4 @@
-<center><font size="45">C++11特性 </font></center>
+<center><font size = 45>C++11</font></center>
 
   1.所有的STL容器支持初始化列表。   std::vector<int> v = { 1, 2, 3 };
   2.自定义calss支持初始化列表。    //？
