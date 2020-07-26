@@ -12,6 +12,7 @@
   - [高级教程](#高级教程)
   - [STL](#STL)
   - [C++11](#C++11)
+  - [Effective](#Effective)
   
 - [数据结构和算法](#数据结构与算法)
   - [数据结构](#数据结构)
@@ -49,7 +50,9 @@
 
 - [C++11](/docs/C++/C++11-characterastic.md)
 
-  
+### Effective
+
+- [Effective](/docs/C++/Effective-C++.md)
 
 ## 数据结构与算法
 
