@@ -14,7 +14,7 @@
 
 #### RTTI
 
-Run-Time Type Identification,运行时类型检查，在C++层面主要体现在dynamic_cast和typeid,VS中虚函数表的-1位置存放了指向type_info的指针。对于存在虚函数的类型，typeid和dynamic_cast都会去查询type_info
+Run-Time Type Identification,**运行时类型检查**，在C++层面主要体现在dynamic_cast和typeid,VS中虚函数表的-1位置存放了指向type_info的指针。对于存在虚函数的类型，typeid和dynamic_cast都会去查询type_info
 
 1. **dynamic_cast**
 
@@ -188,11 +188,13 @@ const 可以是 volatile （如只读的状态寄存器）
 
 `extern "C"` 的作用是让 C++ 编译器将 `extern "C"` 声明的代码当作 C 语言代码处理，可以避免 C++ 因符号修饰导致代码不能和C语言库中的符号进行链接的问题。
 
-#### explicit（显式）关键字
+#### explicit
+
+即（显式）关键字
 
 1. explicit 修饰构造函数时，可以防止隐式转换和复制初始化
 
-2. explicit 修饰转换函数时，可以防止隐式转换，但 [按语境转换](https://zh.cppreference.com/w/cpp/language/implicit_conversion) 除外
+2. explicit 修饰转换函数时，可以防止隐式转换，但按语境转换除外
 
 #### decltype 
 
@@ -215,8 +217,6 @@ public:
     /* ... */
 };
 ```
-
-
 
 #### assert
 
@@ -298,6 +298,8 @@ int (*p)[4] = a;
 
 1. **指针数组**：首先它是一个数组**，数组的元素都是指针**，它是“储存指针的数组”的简称。
 2. **数组指针**，**首先它是一个指针**，它指向一个数组。
+
+
 
 ## 函数
 
@@ -396,6 +398,8 @@ pf(p);            // 通过函数指针pf调用函数fun
 4. **weak_ptr**
 
    是一种不控制对象生命周期的智能指针, 它指向一个 shared_ptr 管理的对象. 进行该对象的内存管理的是那个强引用的 shared_ptr. weak_ptr只是提供了对管理对象的一个访问手段。weak_ptr 设计的目的是为配合 shared_ptr 而引入的一种智能指针来协助shared_ptr 工作, 它只可以从一个 shared_ptr 或另一个 weak_ptr 对象构造, 它的构造和析构不会引起引用记数的增加或减少。weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。
+   
+   
 
 ## 引用
 
