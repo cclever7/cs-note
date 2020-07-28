@@ -1,14 +1,14 @@
-# SwordOffer题解
+<center><font size = 45>SwordOffer</font></center>
 
 ## 题序
 
-- <a href="#01">01~10</a>
-- <a href="#11">11~20</a>
-- <a href="#21">21~30</a>
-- <a href="#31">31~40</a>
-- <a href="#41">41~50</a>
-- <a href="#51">51~60</a>
-- <a href="#51">61~67</a>
+- [01~10](#01)
+- [11~20](#11)
+- [21~30](#21)
+- [31~40](#31)
+- [41~50](#41)
+- [51~60](#51)
+- [61~67](#61)
 
 ## 01
 
@@ -516,6 +516,8 @@ int min() {
 
 ## 28
 
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+
 #### 思路
 
 ```c++
@@ -660,7 +662,33 @@ ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {
 1. 使用二分搜索，找到后向左向右寻找
 
 ```c++
-
+int GetNumberOfK(vector<int> data ,int k) {
+    if(data.empty())
+        return 0;
+    int start = 0, end = data.size() - 1;
+    int mid = (start + end) / 2;
+    int idx = -1;
+    while(start <= end){
+        if(data[mid] < k){
+            start = mid + 1;
+        }else if(data[mid] > k){
+            end = mid - 1;
+        }else{
+            idx = mid;
+            break;
+        }
+    }
+    if(idx != -1){
+        int i = idx, j = idx;
+        while(data[i] == k && i < data.size())
+            i++;
+        while(data[j] == k && j > 0)
+            j--;
+        return i - j - 1;
+    }else{
+        return 0;
+    }
+}
 ```
 
 ## 38
@@ -995,10 +1023,30 @@ static void quickSort(int number[], int start, int end){
 
 ## 62
 
+给定一棵二叉搜索树，请找出其中的第k小的结点。例如， （5，3，7，2，4，6，8）  中，按结点数值大小顺序第三小结点的值为4。
+
 #### 思路
 
-```c++
+二叉搜索树中序遍历得到一个有序的数组，第k-1位即是所求的值
 
+```c++
+TreeNode* KthNode(TreeNode* pRoot, unsigned int k)
+{
+    if(pRoot==NULL||k<=0) return NULL;
+    vector<TreeNode*> vec;
+    Inorder(pRoot,vec);
+    if(k>vec.size())
+        return NULL;
+    return vec[k-1];
+}
+//中序遍历，将节点依次压入vector中
+void Inorder(TreeNode* pRoot,vector<TreeNode*>& vec)
+{
+    if(pRoot==NULL) return;
+    Inorder(pRoot->left,vec);
+    vec.push_back(pRoot);
+    Inorder(pRoot->right,vec);
+} 
 ```
 
 ## 63
@@ -1015,8 +1063,27 @@ static void quickSort(int number[], int start, int end){
 
 #### 思路
 
-```c++
+使用队列对滑动窗口中的值进存储，当超过size将头结点退出
 
+```c++
+vector<int> maxInWindows(const vector<int>& num, unsigned int size)
+{
+    vector<int> myVec;
+    if(size == 0)
+        return myVec;
+    list<int> myList;
+    for(int i = 0; i < num.size(); i++)
+    {
+        myList.push_back(num[i]);
+        if(myList.size() >= size)
+        {
+            list<int>::iterator itor = max_element(myList.begin(), myList.end());
+            myVec.push_back(*itor);
+            myList.pop_front();
+        }
+    }
+    return myVec;
+}
 ```
 
 ## 65
