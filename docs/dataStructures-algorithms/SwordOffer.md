@@ -520,8 +520,25 @@ int min() {
 
 #### 思路
 
-```c++
+1. 若该数超过数组一半，那么该数肯定位于数组中间位置
+2. 取得该数后向左向右遍历其范围，查看其范围大小是否过一半。
 
+```c++
+int MoreThanHalfNum_Solution(vector<int> numbers) {
+    if(numbers.empty())
+        return 0;
+    sort(numbers.begin(), numbers.end());
+    int mid = (numbers.size() - 1) / 2;
+    int i = mid, j = mid, res = numbers[mid];
+    while(numbers[i] == res && i >= 0)
+        i--;
+    while(numbers[j] == res && j < numbers.size())
+        j++;
+    if((j - i - 1) > numbers.size()/2)
+        return res;
+    else
+        return 0;
+}
 ```
 
 ## 29
@@ -536,7 +553,20 @@ int min() {
 2. 方法二：堆排序，交换过程中直接可以取得K个最小值
 
 ```c++
-
+// method 1
+vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+    vector<int> v;
+    if(input.empty() || input.size() < k)
+        return v;
+    sort(input.begin(), input.end(), my_cmp);
+    for(uint32_t i = 0; i < k; i++){
+        v.push_back(input[i]);
+    }
+    return v;
+}
+static int my_cmp(int v1, int v2){
+    return v1 < v2;
+}
 ```
 
 ## 30
@@ -573,10 +603,35 @@ int min() {
 
 ## 34
 
+第一个只出现一次的字符（字节跳动面试）
+
+在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）.（从0开始计数）
+
 #### 思路
 
-```c++
+1. 首先遍历字符串，利用map统计每个字符串出现的次数
+2. 再次遍历字符串，并利用每位字符查找，首次发现为1 的即是结果
+3. 优化解法，将map替换为长度为26的数组，数组的每一位的下标代表字母，值代表出现的次数
 
+```c++
+int FirstNotRepeatingChar(string str) {
+    if(str.empty() || str.size() == 0)
+        return -1;
+    map<char, int> mmap;
+    for(int i = 0; i < str.size(); i++) {
+        map<char, int>::iterator itor = mmap.find(str[i]);
+        if(itor != mmap.end())
+            itor->second += 1;
+        else
+            mmap.insert(make_pair(str[i], 1));
+    }
+    for(int i = 0; i < str.size(); i++){
+        map<char, int>::iterator itor = mmap.find(str[i]);
+        if(itor->second == 1)
+            return i;
+    }
+    return -1;
+}
 ```
 
 ## 35
