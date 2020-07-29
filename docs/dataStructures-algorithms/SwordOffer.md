@@ -101,9 +101,42 @@ bool Find(int target, vector<vector<int>> array) {
     }
 ```
 ## 04 
-#### 思路
-```c++
+重建二叉树
 
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+
+#### 思路
+
+1. 前序遍历第一个节点为父节点，刚可将中序遍历分成左右子树
+2. 分成左右子树继续递归前面操作即可
+
+```c++
+TreeNode* reConstructBinaryTree(vector<int> pre,vector<int> vin) {
+    if(pre.empty() || vin.empty())
+        return NULL;
+    if(pre.size() == 1 || vin.size() == 1)
+        return new TreeNode(pre[0]);
+    TreeNode *node = new TreeNode(pre[0]);
+    int idx = 0;
+    for(uint32_t i = 0; i < vin.size(); i++){
+        if(node->val == vin[i]){
+            idx = i;
+            break;
+        }
+    }
+    vector<int> left_pre, left_in, right_pre, right_in;
+    for(int i = 0; i < idx; i++){
+        left_in.push_back(vin[i]);
+        left_pre.push_back(pre[i+1]);
+    }
+    for(int i = idx + 1; i < vin.size(); i++){
+        right_in.push_back(vin[i]);
+        right_pre.push_back(pre[i]);
+    }
+    node->left = reConstructBinaryTree(left_pre, left_in);
+    node->right = reConstructBinaryTree(right_pre, right_in);
+    return node;
+}
 ```
 ## 05 
 用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
@@ -241,13 +274,30 @@ int rectCover(int number) {
 
 ## 11
 
-#### 思路
-```c++
+二进制中1的个数
 
+输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。
+
+#### 思路
+
+1. **对n操作时 n = n >> 1，不知道为什么超出时间限抽**
+
+```c++
+int NumberOf1(int n) {
+    uint32_t res = 0;
+    unsigned int flag = 1;
+    while(flag){
+        if(n & flag)
+            res++;
+        flag = flag << 1;
+    }
+    return res;
+}
 ```
 ## 12
 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
 保证base和exponent不同时为0
+
 #### 思路
 1. 暴力求解，直接遍历，会超出时间复杂度
 2. 应从， 2的8次方 等于 2的4次方相乘，2的4次方等于2的2次方相乘考虑（重要）
@@ -396,19 +446,74 @@ static ListNode* Merge(ListNode* pHead1, ListNode* pHead2)
 }
 ```
 ## 17 
-#### 思路
-```c++
+树的子结构
 
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+
+#### 思路
+
+1. 递归判断A的父节点，左节点，右节点分别与B相等。
+2. 相等时，判断当前节点的，左右节点是否与B的左右节点相等
+
+```c++
+bool isSubtree(TreeNode* pRoot1, TreeNode* pRoot2){
+    if(pRoot2 == NULL)
+        return true;
+    if(pRoot1 == NULL)
+        return false;
+    if(pRoot1->val == pRoot2->val)
+        return isSubtree(pRoot1->left,pRoot2->left) && isSubtree(pRoot1->right, pRoot2->right);
+    else
+        return false;
+}
+    
+bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2){
+    if(pRoot1 == NULL || pRoot2 == NULL)
+        return false;
+    return isSubtree(pRoot1, pRoot2) || isSubtree(pRoot1->left, pRoot2) || isSubtree(pRoot1->right, pRoot2);
+}
 ```
 ## 18
 
+操作给定的二叉树，将其变换为源二叉树的镜像。
+
+```
+二叉树的镜像定义：源二叉树 
+    	    8
+    	   /  \
+    	  6   10
+    	 / \  / \
+    	5  7 9 11
+    	镜像二叉树
+    	    8
+    	   /  \
+    	  10   6
+    	 / \  / \
+    	11 9 7  5
+```
+
 #### 思路
 
-```c++
+1. 根节点不变
+2. 左右节点互换，左右节点的子节点也需要互换
 
+```c++
+void Mirror(TreeNode *pRoot) {
+    if(pRoot == NULL)
+        return ;
+    TreeNode *tmp = pRoot->left;
+    pRoot->left = pRoot->right;
+    pRoot->right = tmp;
+    Mirror(pRoot->left);
+    Mirror(pRoot->right);
+}
 ```
 
 ## 19
+
+顺时针打印矩阵
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下4 X 4矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
 
 #### 思路
 
@@ -460,13 +565,39 @@ int min() {
 
 #### 思路
 
-
+1. 构造一个新栈进行操作，不断对pushV中的值进行入栈操作
+2. 当pushV和popV相等时进行出栈操作，最终判断栈是否为空
 
 ```c++
-
+bool IsPopOrder(vector<int> pushV,vector<int> popV) {
+    if(pushV.empty() || popV.empty())
+        return true;
+    vector<int> v;
+    uint32_t j = 0;
+    for(uint32_t i = 0; i < pushV.size(); i++){
+        v.push_back(pushV[i]);
+        if(pushV[i] == popV[j]){
+            v.pop_back();
+            j++;
+        }
+    }
+    for(; j < popV.size(); j++){
+        if(v[v.size() - 1] == popV[j])
+            v.pop_back();
+        else
+            break;
+    }
+    if(v.size() == 0)
+        return true;
+    return false;
+}
 ```
 
 ## 22
+
+从上到下打印二叉树
+
+从上往下打印出二叉树的每个节点，同层节点从左至右打印。
 
 #### 思路
 
@@ -476,6 +607,10 @@ int min() {
 
 ## 23
 
+二叉搜索树的后序遍历序列
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+
 #### 思路
 
 ```c++
@@ -483,6 +618,10 @@ int min() {
 ```
 
 ## 24
+
+二叉树中和为某一值的路径
+
+输入一颗二叉树的根节点和一个整数，按字典序打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
 
 #### 思路
 
@@ -492,6 +631,10 @@ int min() {
 
 ## 25
 
+复杂链表的复制  
+
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针random指向一个随机节点），请对此链表进行深拷贝，并返回拷贝后的头结点。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
 #### 思路
 
 ```c++
@@ -500,6 +643,10 @@ int min() {
 
 ## 26
 
+二叉搜索树与双向链表
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
 #### 思路
 
 ```c++
@@ -507,6 +654,10 @@ int min() {
 ```
 
 ## 27
+
+字符串全排列
+
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则按字典序打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
 
 #### 思路
 
@@ -571,6 +722,10 @@ static int my_cmp(int v1, int v2){
 
 ## 30
 
+连续子数组的最大和
+
+HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。给一个数组，返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+
 #### 思路
 
 ```c++
@@ -578,6 +733,10 @@ static int my_cmp(int v1, int v2){
 ```
 
 ## 31
+
+整数中1出现的次数（从1到n整数中1出现的次数）
+
+求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数（从1 到 n 中1出现的次数）。
 
 #### 思路
 
@@ -587,6 +746,10 @@ static int my_cmp(int v1, int v2){
 
 ## 32
 
+把数组排成最小的数
+
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+
 #### 思路
 
 ```c++
@@ -594,6 +757,8 @@ static int my_cmp(int v1, int v2){
 ```
 
 ## 33
+
+
 
 #### 思路
 
@@ -995,9 +1160,47 @@ static void quickSort(int number[], int start, int end){
 
 ```c++
 //方法1
-
+ ListNode* EntryNodeOfLoop(ListNode* pHead)
+ {
+     if(pHead == NULL)
+         return NULL;
+     map<ListNode *, int> mmap;
+     ListNode *ptr = pHead;
+     while(ptr != NULL){
+         map<ListNode *, int>::iterator itor = mmap.find(ptr);
+         if(itor != mmap.end()){
+             return itor->first;
+         }else{
+             mmap.insert(make_pair(ptr, 1));
+         }
+         ptr = ptr->next;
+     }
+     return NULL;
+ }
 //方法2
-
+ListNode* EntryNodeOfLoop(ListNode* pHead){
+    if(pHead == NULL)
+        return NULL;
+    ListNode *slow = pHead, *fast = pHead;
+    bool flag = false;
+    while(fast != NULL && fast->next != NULL){
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast){
+            flag = true;
+            break;
+        }
+    }
+    if(flag != true)
+        return NULL;
+    fast = pHead;
+    while(fast != slow)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    return fast;
+}
 ```
 
 ## 56
