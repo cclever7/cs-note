@@ -280,7 +280,7 @@ int rectCover(int number) {
 
 #### 思路
 
-1. **对n操作时 n = n >> 1，不知道为什么超出时间限抽**
+1. **对n操作时 n = n >> 1，不知道为什么超出时间限制**
 
 ```c++
 int NumberOf1(int n) {
@@ -601,8 +601,28 @@ bool IsPopOrder(vector<int> pushV,vector<int> popV) {
 
 #### 思路
 
-```c++
+使用队列进行操作
 
+```c++
+vector<int> PrintFromTopToBottom(TreeNode* root) {
+    vector<int> res;
+    if(root == NULL)
+        return res;
+    list<TreeNode *> list;
+    list.push_back(root);
+    while(!list.empty()) {
+        TreeNode *node = list.front();
+        res.push_back(node->val);
+        if(node->left != NULL){
+            list.push_back(node->left);
+        }
+        if(node->right != NULL){
+            list.push_back(node->right);
+        }
+        list.pop_front();
+    }
+    return res;
+}
 ```
 
 ## 23
@@ -612,6 +632,9 @@ bool IsPopOrder(vector<int> pushV,vector<int> popV) {
 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
 
 #### 思路
+
+1. 二叉树搜索树，父节点的值大于左子树的节点，小于右子树节点
+2. 后序遍历，先左右节点再遍历 
 
 ```c++
 
@@ -728,8 +751,10 @@ HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天
 
 #### 思路
 
-```c++
+1. 到第i个数的最大和等于 max[i] = max[i-1] + arr[i] > arr[i] ? max[i-1] + arr[i] : arr[i];
 
+```c++
+ 
 ```
 
 ## 31
@@ -948,6 +973,8 @@ int GetNumberOfK(vector<int> data ,int k) {
 ```c++
 
 ```
+
+
 
 ## 41
 
@@ -1257,18 +1284,92 @@ ListNode* EntryNodeOfLoop(ListNode* pHead){
 
 #### 思路
 
-1. 二叉树的层序遍历，将奇数偶数层进行反转
+1. 二叉树的层序遍历，将奇数偶数层进行反转，类似于题60
 
 ```c++
-
+vector<vector<int> > Print(TreeNode* pRoot) {
+    vector<vector<int>> res; 
+    if(pRoot == NULL)
+        return res;
+    list<TreeNode *> queue;
+    queue.push_back(pRoot);
+    int flag = 1;
+    vector<int> v;
+    int now = 1, next = 0;
+    while(!queue.empty()) {
+        TreeNode *node = queue.front();
+        v.push_back(node->val);
+        queue.pop_front();
+        now--;
+        if(node->left != NULL) {
+            queue.push_back(node->left);
+            next++;
+        }
+        if(node->right != NULL) {
+            queue.push_back(node->right);
+            next++;
+        }
+        if(now == 0) {
+            vector<int> temp(v);
+            v.clear();
+            if(flag) {
+                flag = 0;
+            }else {
+                flag = 1;
+                reverse(temp.begin(), temp.end());
+            }
+            res.push_back(temp);
+            now = next;
+            next = 0;
+        }
+    }
+    return res;
+}
 ```
 
 ## 60
 
+把二叉树打印成多行
+
+从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+
 #### 思路
 
-```c++
+1. 使用队列就进行入队出队管理
+2. 需要找到每一行最后一个节点，从而得到每一行的值，使用now和next变量控制每行的范围
 
+```c++
+vector<vector<int> > Print(TreeNode* pRoot) {
+    vector<vector<int>> res;
+    if(pRoot == NULL)
+        return res;
+    list<TreeNode *> queue;
+    queue.push_back(pRoot);
+    vector<int> v;
+    int now = 1, next = 0;
+    while(!queue.empty()) {
+        TreeNode *node = queue.front();
+        v.push_back(node->val);
+        queue.pop_front();
+        now--;
+        if(node->left != NULL) {
+            queue.push_back(node->left);
+            next++;
+        }
+        if(node->right != NULL) {
+            queue.push_back(node->right);
+            next++;
+        }
+        if(now == 0) {
+            vector<int> temp(v);
+            res.push_back(temp);
+            v.clear();
+            now = next;
+            next = 0;
+        }
+    }
+    return res;
+}
 ```
 
 ## 61
@@ -1308,6 +1409,10 @@ void Inorder(TreeNode* pRoot,vector<TreeNode*>& vec)
 ```
 
 ## 63
+
+数据流中的中位数
+
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
 
 #### 思路
 
