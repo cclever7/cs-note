@@ -751,10 +751,32 @@ HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天
 
 #### 思路
 
-1. 到第i个数的最大和等于 max[i] = max[i-1] + arr[i] > arr[i] ? max[i-1] + arr[i] : arr[i];
+1. 1阶动态规划
+2. 到第i个数的最大和等于 max[i] = max[i-1] + arr[i] > arr[i] ? max[i-1] + arr[i] : arr[i];
 
 ```c++
- 
+int FindGreatestSumOfSubArray(vector<int> array) {
+    if(array.empty())
+        return 0;
+    int *res = new int[array.size()];
+    for(int i = 0; i < array.size(); i++) {
+        *(res + i) = 0;
+    }
+    *res = array[0];
+    for(int i = 1; i < array.size(); i++) {
+        int last_val = *(res + i - 1);
+        if(last_val + array[i] > array[i]) {
+            *(res + i) = last_val + array[i];
+        } else {
+            *(res + i) = array[i];
+        }
+    }
+    int max = 1 << 31;
+    for(int i = 0; i < array.size(); i++) {
+        max = *(res + i) > max ? *(res + i) : max;
+    }
+    return max;
+} 
 ```
 
 ## 31
@@ -765,7 +787,21 @@ HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天
 
 #### 思路
 
+1. 循环计算即可
+
 ```c++
+int NumberOf1Between1AndN_Solution(int n) {
+    int res = 0;
+    for(int i = 1; i <= n; i++) {
+        int temp = i;
+        while(temp > 0) {
+            if(temp % 10 == 1)
+                res++;
+            temp /= 10;
+        }
+    }
+    return res;
+}
 
 ```
 
@@ -777,18 +813,55 @@ HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天
 
 #### 思路
 
-```c++
+1.设定排序规则，后将数组连接到字符串，重点在cmp
 
+```c++
+string PrintMinNumber(vector<int> numbers) {
+    int len = numbers.size();
+    if(len == 0) return "";
+    sort(numbers.begin(), numbers.end(), cmp);
+    string res;
+    for(int i = 0; i < len; i++){
+        res += to_string(numbers[i]);
+    }
+    return res;
+}
+static bool cmp(int a, int b){
+    string A = to_string(a) + to_string(b);
+    string B = to_string(b) + to_string(a);
+    return A < B;
+}
 ```
 
 ## 33
 
+丑数
 
+把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
 
 #### 思路
 
-```c++
+首先从丑数的定义我们知道，一个丑数的因子只有2,3,5，那么丑数p = 2 ^ x * 3 ^ y * 5 ^ z，换句话说一个丑数一定由另一个丑数乘以2或者乘以3或者乘以5得到，那么我们从1开始乘以2,3,5，就得到2,3,5三个丑数，在从这三个丑数出发乘以2,3,5就得到4，6,10,6，9,15,10,15,25九个丑数，我们发现这种方法得到重复的丑数，而且我们题目要求第N个丑数，这样的方法得到的丑数也是无序的。那么我们可以维护三个队列：
+（1）丑数数组： 1
+乘以2的队列：2
+乘以3的队列：3
+乘以5的队列：5
 
+```c++
+int GetUglyNumber_Solution(int index) {
+    if (index < 7)return index;
+    vector<int> res(index);
+    res[0] = 1;
+    int t2 = 0, t3 = 0, t5 = 0, i;
+    for (i = 1; i < index; ++i)
+    {
+        res[i] = min(res[t2] * 2, min(res[t3] * 3, res[t5] * 5));
+        if (res[i] == res[t2] * 2)t2++;
+        if (res[i] == res[t3] * 3)t3++;
+        if (res[i] == res[t5] * 5)t5++;
+    }
+    return res[index - 1];
+}
 ```
 
 ## 34
@@ -826,7 +899,13 @@ int FirstNotRepeatingChar(string str) {
 
 ## 35
 
+数组中的逆序对
+
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+
 #### 思路
+
+1. 暴力扫描，双重循环复杂度为O(N平方)，算法超时
 
 ```c++
 
@@ -948,15 +1027,43 @@ int GetNumberOfK(vector<int> data ,int k) {
 2. 非递归解法
 
 ```c++
-
+//method 1
+int TreeDepth(TreeNode* pRoot) {
+    if(pRoot == nullptr)
+        return 0;
+    int left = TreeDepth(pRoot->left) + 1;
+    int right = TreeDepth(pRoot->right) + 1;
+    return max(left, right);
+}
 ```
 
 ## 39
 
+平衡二叉树
+
+输入一棵二叉树，判断该二叉树是否是平衡二叉树。在这里，我们只需要考虑其平衡性，不需要考虑其是不是排序二叉树
+
 #### 思路
 
-```c++
+1. 平衡二叉树左右子树的高度不超过1， 从上往下依次比较，若满足则深度需要加1
+2. 递归解法 
 
+```c++
+bool IsBalanced_Solution(TreeNode* pRoot) {
+    return get_tree_depth(pRoot) != -1;
+}
+
+int get_tree_depth(TreeNode *pRoot) {
+    if(pRoot == nullptr) 
+        return 0;
+    int left = get_tree_depth(pRoot->left);
+    if(left == -1)
+        return -1;
+    int right = get_tree_depth(pRoot->right);
+    if(right == -1)
+        return -1;
+    return abs(left - right) > 1 ? -1 : 1 + max(left, right);
+}
 ```
 
 ## 40
