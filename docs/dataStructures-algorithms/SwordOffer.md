@@ -1078,10 +1078,28 @@ int get_tree_depth(TreeNode *pRoot) {
 2. 依照这个思路，我们来看两个数（我们假设是AB）出现一次的数组。我们首先还是先异或，剩下的数字肯定是A、B异或的结果，**这个结果的二进制中的1，表现的是A和B的不同的位**。我们就取第一个1所在的位数，假设是第3位，接着把原数组分成**两组**，分组标准是第3位是否为1。如此，**相同的数肯定在一个组**，因为相同数字所有位都相同，而不同的数，**肯定不在一组**。然后把这两个组按照最开始的思路，依次异或，剩余的两个结果就是这两个只出现一次的数字。
 
 ```c++
-
+void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
+    if(data.empty())
+        return ;
+    int res = data[0];
+    for(int i = 1; i < data.size(); i++) {
+        res = res ^ data[i];
+    }
+    int idx = 0;
+    while(res > 0) {
+        if(res & 1 == 1)
+            break;
+        res = res >> 1;
+        idx++;
+    }
+    for(int i = 0; i < data.size(); i++) {
+        if(data[i] >> idx & 1 == 1)
+            *num1 ^= data[i];
+        else
+            *num2 ^= data[i];
+    }
+}
 ```
-
-
 
 ## 41
 
@@ -1091,10 +1109,31 @@ int get_tree_depth(TreeNode *pRoot) {
 
 #### 思路
 
-1. 使用滑动窗口进行查找
+1. 使用滑动窗口进行查找，等差数列的和为 (low + high) * (high - low + 1) / 2;
+2. 如果相等即得到一组序列值 ，如果小于sum则窗口需要扩大->high++,若大于窗口需要缩小->low--
 
 ```c++
-
+vector<vector<int> > FindContinuousSequence(int sum) {
+    vector<vector<int>> res;
+    if(sum == 1)
+        return res;
+    int low = 1, high = 2;
+    while(low < high) {
+        int val = (low + high) * (high - low + 1) / 2; //等差数列求和
+        if(val == sum) {
+            vector<int> v;
+            for(int i = low; i <= high; i++)
+                v.push_back(i);
+            res.push_back(v);
+            low++;
+        } else if(val < sum) {
+            high++;
+        } else {
+            low++;
+        }
+    }
+    return res;
+}
 ```
 
 ## 42
@@ -1107,9 +1146,29 @@ int get_tree_depth(TreeNode *pRoot) {
 
 1. 暴力求解 O(N2)
 2. 使用Map进行存储后来进行寻找当前键值的差值
+3. 使用滑动窗口，来判断。
 
 ```c++
-
+//method 3
+ vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+     vector<int> res;
+     if(array.size() <= 1)
+         return res;
+     int low = 0, high = array.size() - 1;
+     while(low < high) {
+         int val = array[low] + array[high];
+         if(val < sum) {
+             low++;
+         } else if(val > sum) {
+             high--;
+         } else {
+             res.push_back(array[low]);
+             res.push_back(array[high]);
+             break;  // 1 X 3 肯定小于 2 X 2
+         }
+     }
+     return res;
+ }
 ```
 
 ## 43
@@ -1123,7 +1182,18 @@ int get_tree_depth(TreeNode *pRoot) {
 1. 左旋转K位就是将，前K位放置于字符串的尾部
 
 ```c++
-
+string LeftRotateString(string str, int n) {
+    string res = "";
+    if(str.empty() || n > str.size())
+        return res;
+    for(int i = n; i < str.size(); i++) {
+        res += str[i];
+    }
+    for(int i = 0; i < n; i++) {
+        res += str[i];
+    }
+    return res;
+}
 ```
 
 ## 44
@@ -1134,13 +1204,18 @@ int get_tree_depth(TreeNode *pRoot) {
 
 #### 思路
 
-1.  
+1.   按空格进行翻转
+2.  先整体翻转，再按单词进行翻转
 
 ```c++
 
 ```
 
 ## 45
+
+扑克牌顺子
+
+LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张^_^)...他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。
 
 #### 思路
 
@@ -1481,6 +1556,16 @@ vector<vector<int> > Print(TreeNode* pRoot) {
 
 ## 61
 
+序列化二叉树
+
+请实现两个函数，分别用来序列化和反序列化二叉树
+
+二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。
+
+二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
+
+例如，我们可以把一个只有根节点为1的二叉树序列化为"1,"，然后通过自己的函数来解析回这个二叉树
+
 #### 思路
 
 ```c++
@@ -1558,6 +1643,10 @@ vector<int> maxInWindows(const vector<int>& num, unsigned int size)
 
 ## 65
 
+矩阵中的路径 
+
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。 例如![image-20200807215247249](D:\git\docs\dataStructures-algorithms\medium\image-20200807215247249.png)矩阵中包含一条字符串"bcced"的路径，但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+
 #### 思路
 
 ```c++
@@ -1566,6 +1655,10 @@ vector<int> maxInWindows(const vector<int>& num, unsigned int size)
 
 ## 66
 
+机器人运行范围
+
+地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
+
 #### 思路
 
 ```c++
@@ -1573,6 +1666,10 @@ vector<int> maxInWindows(const vector<int>& num, unsigned int size)
 ```
 
 ## 67
+
+ 剪绳子
+
+给你一根长度为n的绳子，请把绳子剪成整数长的m段（m、n都是整数，n>1并且m>1，m<=n），每段绳子的长度记为k[1],...,k[m]。请问k[1]x...xk[m]可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
 
 #### 思路
 
