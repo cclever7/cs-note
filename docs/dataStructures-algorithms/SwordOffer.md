@@ -1326,33 +1326,162 @@ static void quickSort(int number[], int start, int end){
 
 ## 51
 
+构建乘积数组
+
+给定一个数组A[0,1,...,n-1],请构建一个数组B[0,1,...,n-1],其中B中的元素B[i]=A[0]*A[1]*...*A[i-1]*A[i+1]*...*A[n-1]。不能使用除法。（注意：规定B[0] = A[1] * A[2] * ... * A[n-1]，B[n-1] = A[0] * A[1] * ... * A[n-2];）
+
+对于A长度为1的情况，B无意义，故而无法构建，因此该情况不会存在。
+
 #### 思路
 
-```c++
+下三角用连乘可以很容求得，上三角，从下向上也是连乘。
 
+因此我们的思路就很清晰了，先算下三角中的连乘，即我们先算出B[i]中的一部分，然后倒过来按上三角中的分布规律，把另一部分也乘进去
+
+<img src="D:\git\docs\dataStructures-algorithms\medium\image-20200808102436161.png" alt="image-20200808102436161" style="zoom: 67%;" />
+
+```c++
+vector<int> multiply(const vector<int>& A) {
+    vector<int> res(A.size());
+    if(A.size() <= 1)
+        return res;
+    //计算下三角
+    res[0] = 1;
+    for(int i = 1; i < A.size(); i++) {
+        res[i] = res[i-1] * A[i-1];
+    }
+    //计算上三角
+    int temp = 1;
+    for(int j = A.size() - 2; j >= 0; j--) {
+        temp *= A[j+1];
+        res[j] *= temp;
+    }
+    return res;
+}
 ```
 
 ## 52
 
+正则表达式匹配
+
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
 #### 思路
 
-```c++
+**当模式中的第二个字符不是“\*”时：**
 
+1、如果字符串第一个字符和模式中的第一个字符相匹配，那么字符串和模式都后移一个字符，然后匹配剩余的。
+
+2、如果 字符串第一个字符和模式中的第一个字符相不匹配，直接返回false。
+
+**而当模式中的第二个字符是“\*”时：**
+
+如果字符串第一个字符跟模式第一个字符不匹配，则模式后移2个字符，继续匹配。如果字符串第一个字符跟模式第一个字符匹配，可以有3种匹配方式：
+
+1、模式后移2字符，相当于x*被忽略；
+
+2、字符串后移1字符，模式后移2字符；
+
+3、字符串后移1字符，模式不变，即继续匹配字符下一位，因为*可以匹配多位；
+
+```c++
+bool match(char* str, char* pattern)
+{
+    if (*str == '\0' && *pattern == '\0')
+        return true;
+    if (*str != '\0' && *pattern == '\0')
+        return false;
+    //if the next character in pattern is not '*'
+    if (*(pattern+1) != '*')
+    {
+        if (*str == *pattern || (*str != '\0' && *pattern == '.'))
+            return match(str+1, pattern+1);
+        else
+            return false;
+    }
+    //if the next character is '*'
+    else
+    {
+        if (*str == *pattern || (*str != '\0' && *pattern == '.'))
+            return match(str, pattern+2) || match(str+1, pattern);
+        else
+            return match(str, pattern+2);
+    }
+}
 ```
 
 ## 53
 
+表示数值的字符串
+
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+
 #### 思路
 
-```c++
+1. 方法一：正则表达式进行匹配
+2. 方法二：如下，根据规则进行逐位判断
 
+```c++
+//method 2
+bool isNumeric(char* str) {
+    // 标记符号、小数点、e是否出现过
+    bool sign = false, decimal = false, hasE = false;
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == 'e' || str[i] == 'E') {
+            if (i == strlen(str)-1) return false; // e后面一定要接数字
+            if (hasE) return false;  // 不能同时存在两个e
+            hasE = true;
+        } else if (str[i] == '+' || str[i] == '-') {
+            // 第二次出现+-符号，则必须紧接在e之后
+            if (sign && str[i-1] != 'e' && str[i-1] != 'E') return false;
+            // 第一次出现+-符号，且不是在字符串开头，则也必须紧接在e之后
+            if (!sign && i > 0 && str[i-1] != 'e' && str[i-1] != 'E') return false;
+            sign = true;
+        } else if (str[i] == '.') {
+            // e后面不能接小数点，小数点不能出现两次
+            if (hasE || decimal) return false;
+            decimal = true;
+        } else if (str[i] < '0' || str[i] > '9') // 不合法字符
+            return false;
+    }
+    return true;
+}
 ```
 
 ## 54
 
+字符流中第一个不重复的字符
+
+请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"。当从该字符流中读出前六个字符“google"时，第一个只出现一次的字符是"l"。
+
 #### 思路
 
+1. 利用一个队列来记录数据读取的顺序 
+2. 利用一个map来记录数据读入的次数
+3. 顺序遍历这个队列，用map进行查找，找到1就返回
+
 ```c++
+list<char> queue;
+map<char, int> mmap;
+void Insert(char ch) {
+    queue.push_back(ch);
+    map<char, int>::iterator itor = mmap.find(ch);
+    if(itor == mmap.end()) {
+        mmap.insert(make_pair(ch, 1));
+    } else {
+        itor->second += 1;
+    }
+}
+//return the first appearence once char in current stringstream
+char FirstAppearingOnce() {
+    for(list<char>::iterator itor = queue.begin(); itor != queue.end(); itor++) {
+        map<char, int>::iterator map_itor = mmap.find(*itor);
+        if(map_itor->second == 1) {
+            return map_itor->first;
+        }
+    }
+    return '#';
+}
 
 ```
 
