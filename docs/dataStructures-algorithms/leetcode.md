@@ -28,37 +28,76 @@
 
 - [121~130][#121]
 
+- [131~140][#131]
+
+- [141~148][#141]
+
   
 
 ## 01
 
-
+求给定二叉树的最小深度。最小深度是指树的根结点到最近叶子结点的最短路径上结点的数量。
 
 #### 思路
 
-
+1. 若节点为空则返回为0，若节点的左右节点为空则返回为1，若节点左节点或右节点为空则返回 1+ run(), 否则返回最小值 
 
 ```c++
-
+int run(TreeNode* root) {
+    if(root == nullptr)
+        return 0;
+    else if(root->left == nullptr && root->right == nullptr)
+        return 1;
+    else if(root->right == nullptr)
+        return 1 + run(root->left);
+    else if(root->left == nullptr)
+        return 1 + run(root->right);
+    else
+        return 1 + min(run(root->left), run(root->right));
+}
 ```
-
-
 
 ## 02
 
+计算逆波兰表达式
 
+计算逆波兰式（后缀表达式）的值，运算符仅包含"+","-","*"和"/"，被操作数可能是整数或其他表达式
 
 #### 思路
 
-
+1. 使用一个栈进行操作，碰到+-*/就取栈顶的两个元素进行操作，否则就将数进行入栈操作
 
 ```c++
-
+    int evalRPN(vector<string>& tokens) {
+        // write code here
+        if(tokens.empty())
+            return 0;
+        stack<int> stk;
+        for(auto x : tokens) {
+            if(x == "+" || x == "-" || x == "/" || x == "*") {
+                if(stk.size() < 2)
+                    return 0;
+                int a = stk.top();
+                stk.pop();
+                int b = stk.top();
+                stk.pop();
+                int c = 0;
+                if(x == "+") 
+                    c = a + b;
+                else if (x == "-")
+                    c = b - a;
+                else if (x == "*")
+                    c = a * b;
+                else 
+                    c = b / a;
+                stk.push(c);
+            } else {
+                stk.push(atoi(x.c_str()));
+            }
+        }
+        return stk.top();
+    }
 ```
-
-
-
-## 03
 
 
 
@@ -102,28 +141,56 @@
 
 ## 06
 
-
+给出一个二叉树，返回这个二叉树的后序遍历
 
 #### 思路
 
-
+1. 递归方法
+2. 非递归方法，使用栈进行操作
 
 ```c++
-
+//method 1
+vector<int> res;
+vector<int> postorderTraversal(TreeNode* root) {
+    // write code here
+    if(root != nullptr) {
+        if(root->left != nullptr)
+            postorderTraversal(root->left);
+        if(root->right != nullptr)
+            postorderTraversal(root->right);
+        res.push_back(root->val);
+    }
+    return res;
+}
+//method 2
+...
 ```
-
-
 
 ## 07
 
-
+求给定的二叉树的前序遍历。
 
 #### 思路
 
-
+1. 递归方法
+2. 非递归方法，使用栈进行操作
 
 ```c++
-
+//method 1
+vector<int> res;
+vector<int> preorderTraversal(TreeNode* root) {
+    // write code here
+    if(root != nullptr) {
+        res.push_back(root->val);
+        if(root->left != nullptr)
+            preorderTraversal(root->left);
+        if(root->right != nullptr)
+            preorderTraversal(root->right);
+    }
+    return res;
+}
+//method 2
+...
 ```
 
 
@@ -326,14 +393,39 @@
 
 ## 22
 
-
+给定一个二叉树，请计算节点值之和最大的路径的节点值之和是多少。
+这个路径的开始节点和结束节点可以是二叉树中的任意节点
+例如：
+给出以下的二叉树，
+![image-20200809150905508](medium/image-20200809150905508.png)
+返回的结果为6
 
 #### 思路
 
-
+1. 广度遍历， 每一层的结果等当前结果乘以10，加上下一层的左右节点的值 
+2. 深度遍历，使用堆栈
 
 ```c++
+//method 1
+int sumNumbers(TreeNode* root) {
+    // write code here
+    int res = 0;
+    if(root == nullptr) {
+        return res; 
+    }
+    return preorder_traverse(root, res);
+}
 
+int preorder_traverse(TreeNode* root, int res) {
+    if(root == nullptr)
+        return 0;
+    res = res * 10 + root->val;
+    if(root->left == nullptr && root->right == nullptr)
+        return res;
+    return preorder_traverse(root->left, res) + preorder_traverse(root->right, res);
+}
+
+//method 2
 ```
 
 
@@ -1403,4 +1495,522 @@
 
 
 #### 思路
+
+```c++
+
+```
+
+
+
+## 101
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 102
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 103
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 104
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 105
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 106
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 107
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 108
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 109
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 110
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 111
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 112
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 113
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 114
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 115
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 116
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 117
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 118
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 119
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 120
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 121
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 122
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 123
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 124
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 125
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 126
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 127
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 128
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 129
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 130
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 131
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 132
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+## 133
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 134
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 135
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 136
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 137
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 138
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
 

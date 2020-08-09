@@ -56,6 +56,12 @@ STL(Standard Template Library,**标准模板库**)，STL 从广义上分为: **�
 | unordered_map      | 哈希表            | 插入、删除、查找 O(1) 最差 O(n)                           | 无序   | 不可重复   |                                                              |
 | unordered_multimap | 哈希表            | 插入、删除、查找 O(1) 最差 O(n)                           | 无序   | 可重复     |                                                              |
 
+## String 
+
+c_str();
+
+
+
 ## Array
 
  Array 是固定大小的顺序容器，它们保存了一个以严格的线性顺序排列的特定数量的元素。
