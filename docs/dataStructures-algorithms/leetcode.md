@@ -99,7 +99,7 @@ int run(TreeNode* root) {
     }
 ```
 
-
+## 03
 
 #### 思路
 
@@ -113,14 +113,49 @@ int run(TreeNode* root) {
 
 ## 04
 
-
+在(nlogn)的时间内使用常数级空间复杂度对链表进行排序
 
 #### 思路
 
-
+1. 使用归并排序
+2. 对链表需要将链表分开即找到中间节点，即使用快慢指针
 
 ```c++
+ ListNode* sortList(ListNode* head) {
+     // write code here
+     if(!head || !head->next)
+         return head;
+     ListNode *p = head;
+     ListNode *q = head->next;
+     while(q && q->next) {
+         p = p->next;
+         q = q->next->next;
+     }
+     ListNode *left = sortList(p->next);
+     p->next = nullptr;
+     ListNode *right = sortList(head);
+     return merge(left, right);
+ }
 
+ListNode* merge(ListNode* left, ListNode* right) {
+    ListNode* head = new ListNode(0);
+    ListNode *p = head;
+    while(left && right) {
+        if(left->val < right->val) {
+            p->next = left;
+            left = left->next;
+        } else {
+            p->next = right;
+            right = right->next;
+        }
+        p = p->next;
+    }
+    if(left)
+        p->next = left;
+    if(right)
+        p->next = right;
+    return head->next;
+}
 ```
 
 
@@ -211,11 +246,17 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 ## 09
 
-
+将给定的单链表\ L *L*： L_0→L_1→…→L_{n-1}→L_ n*L*0→*L*1→…→*L**n*−1→*L**n*
+重新排序为：L_0→L_n →L_1→L_{n-1}→L_2→L_{n-2}→…*L*0→*L**n*→*L*1→*L**n*−1→*L*2→*L**n*−2→…
+要求使用原地算法，不能改变节点内部的值，需要对实际的节点进行交换。
+例如：
+对于给定的单链表{1,2,3,4}，将其重新排序为{1,4,2,3}.
 
 #### 思路
 
-
+1. 找到链表的中间节点
+2. 将后一段链表利用头插头逆序
+3. 前后两段链表各进行取一个，合并成新的链表 
 
 ```c++
 
@@ -225,27 +266,70 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 ## 10
 
+对于一个给定的链表，返回环的入口节点，如果没有环，返回null
 
+拓展：
+
+你能给出不利用额外空间的解法么？
 
 #### 思路
 
-
+1. 利用map，有环时一定能够找到
+2. 使用快慢指针原理，快指针比慢指针多走两步，套圈原理
 
 ```c++
+//mehtod 1
+ListNode *detectCycle(ListNode *head) {
+    if(!head)
+        return head;
+    map<ListNode*, int> node_map;
+    ListNode *p = head;
+    while(p) {
+        auto itor = node_map.find(p);
+        if(itor != node_map.end()) {
+            return p;
+        } else {
+            node_map.insert(make_pair(p, 1));
+            p = p->next;
+        }
+    }
+    return nullptr;
+}
+//method 2
+
 
 ```
 
-
-
 ## 11
 
+判断给定的链表中是否有环，解法与第10题基本类似
 
+扩展：你能给出不利用额外空间的解法么？
 
 #### 思路
 
-
+1. 利用map，有环时一定能够找到
+2. 使用快慢指针原理，快指针比慢指针多走两步，套圈原理
 
 ```c++
+//method 1
+bool hasCycle(ListNode *head) {
+    if(!head)
+        return head;
+    map<ListNode*, int> node_map;
+    ListNode* p = head;
+    while(p) {
+        auto itor = node_map.find(p);
+        if(itor != node_map.end()) {
+            return true;
+        } else {
+            node_map.insert(make_pair(p, 1));
+            p = p->next;
+        }
+    }
+    return false;
+}
+//method 2
 
 ```
 
@@ -281,11 +365,14 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 ## 14
 
+现在有一个整数类型的数组，数组中只有一个元素只出现一次，其余元素都出现三次。你需要找出只出现一次的元素
 
+**注意：**你需要给出一个线性时间复杂度的算法，你能在不使用额外内存空间的情况下解决这个问题么？
 
 #### 思路
 
-
+1. Single Number的本质，就是用一个数记录每个bit出现的次数，如果一个bit出现两次就归0，这种运算采用二进制底下的位操作^是很自然的。
+2. Single Number II中，如果能定义三进制底下的某种位操作，也可以达到相同的效果，Single Number II中想要记录每个bit出现的次数，一个数搞不定就加两个数，用ones来记录只出现过一次的bits，用twos来记录只出现过两次的bits，ones&twos实际上就记录了出现过三次的bits，这时候我们来模拟进行出现3次就抵消为0的操作，抹去ones和twos中都为1的bits。
 
 ```c++
 
@@ -295,28 +382,71 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 ## 15
 
+现在有一个整数类型的数组，数组中素只有一个元素只出现一次，其余的元素都出现两次。
 
+**注意：**你需要给出一个线性时间复杂度的算法，你能在不使用额外内存空间的情况下解决这个问题么？
 
 #### 思路
 
-
+1. 使用map来统计元素出现的次数
+2. 使用异或，相等的元素进行异或得到是零，因此唯一不重复的数是数组最终异或的结果
 
 ```c++
-
+int singleNumber(int* A, int n) {
+    // write code here
+    if(n == 0)
+        return -1;
+    int res = 0;
+    for(int i = 0; i < n; i++) {
+        res ^= A[i];
+    }
+    return res;
+}
 ```
 
 
 
 ## 16
 
+有N个小朋友站在一排，每个小朋友都有一个评分
 
+你现在要按以下的规则给孩子们分糖果：
+
+- 每个小朋友至少要分得一颗糖果
+- 分数高的小朋友要他比旁边得分低的小朋友分得的糖果多
+
+你最少要分发多少颗糖果？
 
 #### 思路
 
-
+1. 动态规划
+2. 与前面的邻居比较，前向遍历权重数组ratings，如果ratings[i]>ratings[i-1]，则A[i]=A[i-1]+1；
+3. 与后面的邻居比较，后向遍历权重数组ratings，如果ratings[i]>ratings[i+1]且A[i] <=A[i+1]+1，则更新A，A[i]=A[i+1]+1；
+4. 对A求和即为最少需要的糖果。
 
 ```c++
-
+int candy(vector<int>& ratings) {
+    // write code here
+    if(ratings.empty())
+        return 0;
+    int *res = new int[ratings.size()];
+    for(int i = 0; i < ratings.size(); i++)
+        res[i] = 1;
+    for(int i = 1; i < ratings.size(); i++) {
+        if(ratings[i] > ratings[i-1])
+            res[i] = res[i-1] + 1;
+    }
+    //
+    for(int i = ratings.size() - 2; i >= 0; i--) {
+        if(ratings[i] > ratings[i+1] && res[i] <= res[i+1])
+            res[i] = res[i+1] + 1;
+    }
+    int sum = 0;
+    for(int i = 0; i < ratings.size(); i++) {
+        sum += res[i];
+    }
+    return sum;
+}
 ```
 
 
@@ -2011,6 +2141,193 @@ int preorder_traverse(TreeNode* root, int res) {
 ```c++
 
 ```
+
+## 139
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 140
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 141
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+## 142
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+
+
+## 140
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 143
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 144
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 145
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 146
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+
+
+## 147
+
+
+
+#### 思路
+
+
+
+```c++
+
+```
+
+
+
+
+
+## 148
+
+给出一个整数数组，请在数组中找出两个加起来等于目标值的数，
+
+你给出的函数twoSum 需要返回这两个数字的下标（index1，index2），需要满足 index1 小于index2.。注意：下标是从1开始的
+
+假设给出的数组中只存在唯一解
+
+例如：
+
+给出的数组为 {2, 7, 11, 15},目标值为9
+输出 index1=1, index2=2
+
+#### 思路
+
+1. 
+
+```c++
+
+```
+
+
+
+
+
+
+
+
 
 
 
