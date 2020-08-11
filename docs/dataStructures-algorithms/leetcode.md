@@ -674,11 +674,21 @@ int preorder_traverse(TreeNode* root, int res) {
 
 ## 31
 
+给出一个三角形，计算从三角形顶部到底部的最小路径和，每一步都可以移动到下面一行相邻的数字，
 
+例如，给出的三角形如下：
+
+```
+[↵     [2],↵    [3,4],↵   [6,5,7],↵  [4,1,8,3]↵]
+```
+
+最小的从顶部到底部的路径和是2 + 3 + 5 + 1 = 11。
+
+注意：如果你能只用O（N）的额外的空间来完成这项工作的话，就可以得到附加分，其中N是三角形中的行总数。
 
 #### 思路
 
-
+1. 
 
 ```c++
 
@@ -688,28 +698,80 @@ int preorder_traverse(TreeNode* root, int res) {
 
 ## 32
 
+给出一个索引k，返回杨辉三角的第k行
 
+例如，k=3，
+
+返回[1,3,3,1].
+
+备注：
+
+你能将你的算法优化到只使用O(k)的额外空间吗?
 
 #### 思路
 
-
+按行进行模拟，先赋入第一行的初始值， 后续的行当为起始或最终的值其为1， 其它均为res[i] = res[i] + res[i-1]
 
 ```c++
-
+vector<int> getRow(int rowIndex) {
+    // write code here
+    vector<int> res= {1};
+    if(rowIndex == 0)
+        return res;
+    for(int i = 1; i <= rowIndex; i++) {
+        int row_cnt = i + 1;
+        vector<int> v2(row_cnt);
+        for(int j = 0; j < row_cnt; j++) {
+            if(j == 0 || j == row_cnt - 1)
+                v2[j] = 1;
+            else
+                v2[j] = res[j-1] + res[j];
+        }
+        res.clear();
+        res.assign(v2.begin(), v2.end());
+        v2.clear();
+    }
+    return res;
+}
 ```
-
-
 
 ## 33
 
+给出一个值numRows，生成杨辉三角的前numRows行
 
+例如，给出 numRows = 5,
+
+```
+返回     [1],↵    [1,1],↵   [1,2,1],↵  [1,3,3,1],↵ [1,4,6,4,1]↵]
+```
 
 #### 思路
 
-
+1. 按行进行模拟，先赋入第一行的初始值， 后续的行当为起始或最终的值其为1， 其它均为res[i] = res[i] + res[i-1]
 
 ```c++
-
+vector<vector<int> > generate(int numRows) {
+    // write code here
+    vector<vector<int>> res;
+    if(numRows == 0)
+        return res;
+    vector<int> v = {1};
+    res.push_back(v);
+    for(int i = 1; i < numRows; i++) {
+        int rows_cnt = i + 1;
+        vector<int> tmp(rows_cnt);
+        for(int j = 0; j < rows_cnt; j++) {
+            if(j == 0 || j == rows_cnt - 1){
+                tmp[j] = 1;
+            } else {
+                vector<int> v = res[i-1];
+                tmp[j] = v[j] + v[j-1];
+            }
+        }
+        res.push_back(tmp);
+    }
+    return res;
+}
 ```
 
 
@@ -1092,14 +1154,31 @@ int preorder_traverse(TreeNode* root, int res) {
 
 ## 61
 
-
+给出两个有序的整数数组 和 ，请将数组 合并到数组 中，变成一个有序的数组注意：
+可以假设 数组有足够的空间存放 数组的元素， 和 中初始的元素数目分别为 和 
 
 #### 思路
 
-
+1. 由两个数据从后往前比较，不用开辟额外空间
+2. 方法与“we are happy" 替换为 ”we%10are%10happy"字符串替换题类似，都是从后往前计算
 
 ```c++
-
+void merge(int A[], int m, int B[], int n) {
+    while(m > 0 && n > 0) {
+        if(A[m-1] > B[n-1]) {
+            A[m+n-1] = A[m-1];
+            m--;
+        } else {
+            A[m+n-1] = B[n-1];
+            n--;
+        }
+    }
+    while(n > 0) {
+        A[n - 1] = B[n - 1];
+        n--;
+    }
+    return ;
+}
 ```
 
 
