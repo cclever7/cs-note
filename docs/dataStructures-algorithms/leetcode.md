@@ -1199,17 +1199,43 @@ void merge(int A[], int m, int B[], int n) {
 
 ## 63
 
+划分链表 
 
+给出一个链表和一个值 ，以 为参照将链表划分成两部分，使所有小于 的节点都位于大于或等于 的节点之前。
+两个部分之内的节点之间要保持的原始相对顺序。
+例如：
+给出 1\to 4 \to 3 \to 2 \to 5 \to 21→4→3→2→5→2 和 \ x = 3 x=3,
+返回 1\to 2 \to 2 \to 4 \to 3 \to 51→2→2→4→3→5.
 
 #### 思路
 
+1. 构建两个链表头结点，分别存放大于X的数，和小于x的数。最后再将两者进行连接即可
 
-
+```C++
+ListNode* partition(ListNode* head, int x) {
+    // write code here
+    if(!head)
+    return head;
+    ListNode *h1 = new ListNode(0);
+    ListNode *h2 = new ListNode(0);
+    ListNode *p = head, *p1 = h1, *p2 = h2;
+    while(p) {
+    ListNode *next = p->next;
+    if(p->val < x) {
+    p1->next = p;
+    p1 = p1->next;
+    p1->next = nullptr;
+    } else {
+    p2->next = p;
+    p2 = p2->next;
+    p2->next = nullptr;
+    }
+    p = next;
+    }
+    p1->next = h2->next;
+    return h1->next;
+}
 ```
-
-```
-
-
 
 ## 64
 
@@ -1227,7 +1253,9 @@ void merge(int A[], int m, int B[], int n) {
 
 ## 65
 
+给出n个数字，代表直方图的条高，直方图每一条的宽度为1，请计算直方图中最大矩形的面积
 
+![image-20200811103842814](medium/image-20200811103842814.png)
 
 #### 思路
 
