@@ -1,4 +1,4 @@
-<center><font size = 45>Effective</font></center>
+<center><font size = 45>Effective C++</font></center>
 
 1. 视 C++ 为一个语言联邦（C、Object-Oriented C++、Template C++、STL）
 2. 宁可以编译器替换预处理器（尽量以 `const`、`enum`、`inline` 替换 `#define`）
@@ -56,7 +56,9 @@
 54. 让自己熟悉包括 TR1 在内的标准程序库（TR1，C++ Technical Report 1，C++11 标准的草稿文件）
 55. 让自己熟悉 Boost（准标准库）
 
-## More Effective
+
+
+<center><font size=45>More Effective C++</font></center>
 
 1. 仔细区别 pointers 和 references（当你知道你需要指向某个东西，而且绝不会改变指向其他东西，或是当你实现一个操作符而其语法需求无法由 pointers 达成，你就应该选择 references；任何其他时候，请采用 pointers）
 2. 最好使用 C++ 转型操作符（`static_cast`、`const_cast`、`dynamic_cast`、`reinterpret_cast`）
