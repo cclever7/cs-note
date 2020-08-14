@@ -18,13 +18,49 @@
 
    CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。概括来说就是：当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换回这个任务时，可以再加载这个任务的状态。**任务从保存到再加载的过程就是一次上下文切换**。
 
+6. **同步**
+
+   发出一个功能调用时，在没有得到结果之前，该调用就不返回。也就是必须一件一件事做，等前一件做完了才能做下一件事.
+
+7. **异步**
+
+   异步的概念和同步相对。当一个异步过程调用发出后，调用者不能立刻得到结果。实际处理这个调用的部件在完成后，通过状态、通知和回调来通知调用者
+
+8. **阻塞** 
+
+   阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。
+
+9. **非阻塞**
+
+   非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。
+
 ##### 线程与进程的区别
 
 线程是进程划分成的更小的运行单位。线程和进程最大的不同在于基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程极有可能会相互影响。线程执行开销小，但不利于资源的管理和保护；而进程正相反
 
+##### 锁机制
+
+1. 悲观锁，**悲观锁认为自己在使用数据的时候一定有别的线程来修改数据，因此在获取数据的时候会先加锁**，确保数据不会被别的线程修改
+
+2. 乐观锁 ，**乐观锁认为自己在使用数据时不会有别的线程修改数据，所以不会添加锁，**只是在更新数据的时候去判断之前有没有别的线程更新了这个数据，**最常采用的是CAS算法**
+
+3. CAS（Compare And Swap）
+
+   CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。UnSafe 类的 objectFieldOffset() 方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址，返回值是 valueOffset。另外 value 是一个volatile变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。
+
+##### 阻塞非阻塞同步异步的区别
+
+同步和异步关注的是消息通信机制，而阻塞和非阻塞关注的是程序在等待调用结果（消息，返回值）时的状态
 
 
-## C++多线程相关支持
+
+## 多线程相关
+
+##### pthread.h
+
+pthread.h是标准库没有添加多线程之前的在Linux上用的多线程库，而之前在windows上的多线程支持要包含wndows.h, 从C++11开始，标准库里已经包含了对线程的支持，std::thread是C++11标准库中的多线程的支持库，
+
+##### std::thread
 
 C++11 新标准中引入了五个头文件来支持多线程编程，它们分别是 `<atomic>, <thread>, <mutex>, <condition_variable>` 和 `<future>`。
 
@@ -38,13 +74,15 @@ C++11 新标准中引入了五个头文件来支持多线程编程，它们分�
 
 
 
-## 线程的生命周期状态
+## 线程的状态
 
+#### 生命周期
 
-
-#### 线程的通信
-
-
+1. 新建状态:
+2. 就绪状态:
+3. 运行状态: 
+4. 阻塞状态:
+5. 线程死亡
 
 #### 线程死锁
 
@@ -52,7 +90,7 @@ C++11 新标准中引入了五个头文件来支持多线程编程，它们分�
 
 ![image-20200807174031905](D:\git\docs\C++\medium\image-20200807174031905.png)
 
-## thread
+## Thread 线程
 
 `std::thread` **代表了一个线程对象，** 在 `<thread>` 头文件中声明。`<thread>` 头文件主要声明了 `std::thread` 类，另外在 `std::this_thread` 命名空间中声明了 `get_id`，`yield`， 等辅助函数，本章稍微会详细介绍 `std::thread` 类及相关函数。
 
@@ -112,57 +150,143 @@ C++11 新标准中引入了五个头文件来支持多线程编程，它们分�
 
 #### Lock 类
 
-，C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始化）技术。（RAII：Resource Acquisition Is Initialization，资源获取即初始化，参见维基百科中与 [RAII](http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization) 相关的定义）
+C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始化）技术。
 
-1. `std::lock_guard`，与 Mutex RAII 相关，方便线程对互斥量上锁。
-2. `std::unique_lock`，与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
+1. `std::lock_guard`
 
-- 其他类型
+   与 Mutex RAII 相关，方便线程对互斥量上锁。即在某个 `lock_guard` 对象的声明周期内，它所管理的锁对象会一直保持上锁状态；而 `lock_guard` 的生命周期结束之后，它所管理的锁对象会被解锁
 
-  1. `std::once_flag`，`call_once` 辅助函数会使用到该类型的对象。
-  2. `std::adopt_lock_t`，一个空的标记类，定义如下：`struct adopt_lock_t {};`，该类型的常量对象`adopt_lock`（`adopt_lock` 是一个常量对象，定义如下：`constexpr adopt_lock_t adopt_lock {};`，`constexpr` 是 C++11 中的新关键字） 通常作为参数传入给 `unique_lock` 或 `lock_guard` 的构造函数。
-  3. `std::defer_lock_t`，一个空的标记类，定义如下：`struct defer_lock_t {};`，该类型的常量对象`defer_lock`（`defer_lock` 是一个常量对象，定义如下：`constexpr defer_lock_t defer_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
-  4. `std::try_to_lock_t`，一个空的标记类，定义如下：`struct try_to_lock_t {};`，该类型的常量对象`try_to_lock`（`try_to_lock` 是一个常量对象，定义如下：`constexpr try_to_lock_t try_to_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
+2. `std::unique_lock`
 
-  
+   对象以独占所有权的方式管理 mutex 对象的上锁和解锁操作，所谓独占所有权，就是没有其他的 `unique_lock` 对象同时拥有某个 mutex 对象的所有权。与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
+
+#### 锁类型相关的Tag类
+
+1. `std::adopt_lock_t`，一个空的标记类，定义如下：`struct adopt_lock_t {};`，该类型的常量对象`adopt_lock`（`adopt_lock` 是一个常量对象，定义如下：`constexpr adopt_lock_t adopt_lock {};`，`constexpr` 是 C++11 中的新关键字） 通常作为参数传入给 `unique_lock` 或 `lock_guard` 的构造函数。
+2. `std::defer_lock_t`，一个空的标记类，定义如下：`struct defer_lock_t {};`，该类型的常量对象`defer_lock`（`defer_lock` 是一个常量对象，定义如下：`constexpr defer_lock_t defer_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
+3. `std::try_to_lock_t`，一个空的标记类，定义如下：`struct try_to_lock_t {};`，该类型的常量对象`try_to_lock`（`try_to_lock` 是一个常量对象，定义如下：`constexpr try_to_lock_t try_to_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
 
 #### 辅助函数
 
-1. `std::try_lock`，尝试同时对多个互斥量上锁。
-2. `std::lock`，同时对多个互斥量上锁。
-3. `std::call_once`，如果多个线程需要同时调用某个函数，`call_once` 可以保证多个线程对该函数只调用一次
+1. `std::try_lock`，尝试同时对多个互斥量上锁。线程调用也会出现`lock`的三种情况
+2. `std::lock`，同时对多个互斥量上锁。调用线程将锁住该互斥量。线程调用该函数会发生下面 3 种情况：
+   - 如果该互斥量当前没有被锁住，则调用线程将该互斥量锁住，直到调用 unlock之前，该线程一直拥有该锁。
+   - 如果当前互斥量被其他线程锁住，则当前的调用线程被阻塞住
+   -  如果当前互斥量被当前调用线程锁住，则会产生死锁(deadlock)
+3. `unlock`， 解锁，释放对互斥量的所有权。
+4. `std::call_once`，如果多个线程需要同时调用某个函数，`call_once` 可以保证多个线程对该函数只调用一次
 
 
 
-# 条件变量与线程同步
+## Condition 条件变量
 
-- `<condition_variable>` 头文件中的类及相关函数的介绍。
-- `std::condition_variable` 与 Pthread 线程库中的 `pthread_cond_t` 类型的对比，包括两者编程接口的差异及其他细节。
-- 利用条件变量 `std::condition_variable` 进行线程同步的应用实例。
+#### 概念
+
+**条件变量是线程的另外一种同步机制**，这些同步对象为线程提供了会合的场所，即线程交互时的一个线程给另外的一个或者多个线程发送消息，我们指定在条件变量这个地方发生，一个线程用于修改这个变量使其满足其它线程继续往下执行的条件，其它线程则接收条件已经发生改变的信号。C++11利用条件变量 `std::condition_variable` 进行线程同步的应用实例，`Linux` 下使用 `pthread` 库中的 `pthread_cond_*()` 函数提供了与条件变量相关的功能
+
+当 `std::condition_variable` 对象的某个 `wait` 函数被调用的时候，它使用 `std::unique_lock`(封装 `std::mutex`) 来锁住当前线程。当前线程会一直被阻塞，直到另外一个线程在相同的 `std::condition_variable` 对象上调用了 `notification` 函数来唤醒当前线程
+
+#### 函数
+
+1. `wait()`函数
+
+   - `void wait (unique_lock<mutex>& lck);`
+
+     当前线程调用 `wait()` 后将被阻塞(此时当前线程应该获得了锁（`lck`）, 直到另外某个线程调用 `notify_*` 唤醒了当前线程，在线程被阻塞时，该函数会自动调用 `lck.unlock()` 释放锁，使得其他被阻塞在锁竞争上的线程得以继续执行。
+
+   - `template <class Predicate> void wait (unique_lock<mutex>& lck, Predicate pred);`
+
+     设置了 `Predicate`，只有当 `pred` 条件为 `false` 时调用 `wait()` 才会阻塞当前线程，并且在收到其他线程的通知后只有当 `pred` 为 `true` 时才会被解除阻塞。
+
+2. `std::condition_variable::notify_one()`
+
+   唤醒某个等待(`wait`)线程。如果当前没有等待线程，则该函数什么也不做，如果同时存在多个等待线程，则唤醒某个线程是不确定的
+
+3. `std::condition_variable::notify_all()` 
+
+   唤醒所有的等待(`wait`)线程。如果当前没有等待线程，则该函数什么也不做
+
+4. `std::notify_all_at_thread_exit`
+
+   当调用该函数的线程退出时，所有在 cond 条件变量上等待的线程都会收到通知
+
+5. 唤醒所有的等待(`wait`)线程。如果当前没有等待线程，则该函数什么也不做
 
 
 
-## <future\>头文件摘要
+## Future 异步
 
-C++11 标准中与异步任务系相关的类型主要是以下四种 `std::promise`，`std::packaged_task`（`std::promise`，`std::packaged_task` 也称为异步任务的提供者 Provider，此外 `std::async` 也可以作为异步任务的提供者，不过 `std::async` 并不是类，而是函数，本章后面会详细介绍异步任务的提供者 Provider），`std::future`，`std::shared_future`。另外 `<future>` 中还定义一些辅助的类，例如： `std::future_error`，`std::future_errc`，`std::status`，`std::launch`。
+异步的概念和同步相对。当一个异步过程调用发出后，调用者不能立刻得到结果。实际处理这个调用的部件在完成后，通过状态、通知和回调来通知调用者。与C++ 11异步任务相关的类主要在`<future>`头文件中，此外 `std::async` 也可以作为异步任务的提供者，不过 `std::async` 并不是类，而是函数
+
+#### 主要类和函数
+
+1. Providers 类：`std::promise`, `std::package_task`
+2. Futures 类：`std::future`, `std::shared_future`.
+3. Providers 函数：`std::async()`
+4. 其他类型：`std::future_error`, `std::future_errc`, `std::future_status`, `std::launch`.
+
+#### 异步任务提供者（Providers)
+
+1. `std::promise`：它可以在某一时刻设置共享状态的值
+
+   `std::promise` 对象可以保存某一类型 T 的值，该值可被 future 对象读取（可能在另外一个线程中），因此 promise 也提供了一种线程同步的手段，在 promise 对象构造时可以和一个共享状态（通常是std::future）相关联，并可以在相关联的共享状态(`std::future`)上保存一个类型为 T 的值。
+
+2. `std::package_task`：它在某一时刻通过调用被包装的任务来设置共享状态的值
+
+   `std::packaged_task` 包装一个可调用的对象，并且允许异步获取该可调用对象产生的结果
+
+3. `std::async()` ：是一个函数
+
+#### Future类
+
+`std::future `用来获取异步任务的结果，因此可以把它当成一种简单的线程间同步的手段。一个有效(`valid`)的 `std::future` 对象通常由三种 Provider 创建，并和某个共享状态相关类
 
 
 
+## Atomic 原子类型
 
+原子类型对象的主要特点就是从不同线程访问不会导致数据竞争，意味着多个线程访问同一个资源时，有且仅有一个线程能对资源进行操作。通常情况下原子操作可以通过互斥的访问方式来保证
 
-## \<atomic\>头文件摘要
+1. `std::atomic_flag`
 
-- 什么是原子类型，原子类型的适用场景。
-- C++11 标准中 `<atomic>` 头文件中的类及相关函数的介绍。
-- 利用原子变量 `std::atomic` 进行线程同步的应用实例。
+   `atomic_flag` 一种简单的原子布尔类型，只支持两种操作，`test_and_set` 和 `clear`。
+
+2. `std::atomic`
+
+   满足其他需求(如 `store`, `load`, `exchange`, `compare_exchange`
+
+   
 
 
 
 ## 内存模型
 
+#### 分类
 
+1. **静态内存模型**主要是类(或结构)对象在内存中的布局。也就是类(或结构)成员在内存中是如何存放的。C++11有一些定义及工具用来对内存布局进行操作，更复杂的类(或结构)对象的内存布局请参考[Stanley B.Lippman](https://en.wikipedia.org/wiki/Stanley_B._Lippman)的《深度探索C++对象模型》。
+2. **动态内存模型**是从行为方面来看，多个线程对同一个对象同时读写时所做的约束，该模型理解起来要复杂一些，涉及了内存、Cache、CPU各个层次的交互，尤其是在多核系统中为了保证多线程环境下执行的正确性，需要对读写事件加以严格限制。std::memory_order就是这用来做这事的，它实际上是程序员、编译器以及CPU之间的契约，遵守契约后大家各自优化，从而可能提高程序性能。
+
+待完成
+
+
+
+1. 顺序一致性模型
+   - 从单个线程的角度来看，每个线程内部的指令都是按照程序规定的顺序（program order）来执行的；
+   - 从整个多线程程序的角度来看，整个多线程程序的执行顺序是按照某种交错顺序来执行的，且是全局一致的；
+2. 
+3. 
 
 ## 并发数据结构
+
+理解底层数据结构 ，理解底层机制是，加锁还是写CAS，锁的粒度是什么，还是写时拷贝
+
+1. `concurrentqueue`
+
+2. 
+
+   
+
+
 
 
 
@@ -170,9 +294,7 @@ C++11 标准中与异步任务系相关的类型主要是以下四种 `std::prom
 
 #### 生产者消费者模型
 
-```c++
-
-```
-
-
-
+1. 单对单
+2. 单对多
+3. 多对单
+4. 多对多
