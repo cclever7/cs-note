@@ -1,7 +1,7 @@
 <center><font size = 45>C++11</font></center>
 
-  1.所有的STL容器支持初始化列表。   std::vector<int> v = { 1, 2, 3 };
-  2.自定义calss支持初始化列表。    //？
+  1.所有的STL容器支持初始化列表。   `std::vector<int> v = { 1, 2, 3 }`
+  2.自定义class支持初始化列表。    //？
   3.auto 类型推导关键词
   4.统一的初始化方法          Uniform Initialization //？
   5.新的遍历方式,对 容器或者数组 遍历使用

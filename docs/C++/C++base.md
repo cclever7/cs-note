@@ -9,7 +9,7 @@
 
 #### 左值与右值
 
-在c++中可以放在赋值操作符左边的是左值，可以放到赋值操作符右面的是右值。
+放在赋值操作符左边为**左值**，可以放到赋值操作符右面为**右值**。
 
 1. 有些变量即可以当左值，也可以当右值。
 2. 左值为Lvalue，L代表Location，表示内存可以寻址，可以赋值。
@@ -38,7 +38,7 @@
 
 #### RTTI
 
-Run-Time Type Identification,**运行时类型检查**，在C++层面主要体现在dynamic_cast和typeid,VS中虚函数表的-1位置存放了指向type_info的指针。对于存在虚函数的类型，typeid和dynamic_cast都会去查询type_info
+Run-Time Type Identification,**运行时类型检查**，在C++层面主要体现在`dynamic_cast`和`typeid`,VS中虚函数表的-1位置存放了指向`type_info`的指针。对于存在虚函数的类型，typeid和dynamic_cast都会去查询type_info
 
 1. **dynamic_cast**
 
@@ -98,7 +98,7 @@ Bit mode: 2;    // mode 占 2 位
 - signed
 - unsigned
 - short
-- long
+- `long` : `long int`4字节/8字节； `long long ` 8 字节；`long long int` 8 字节
 
 #### 自定义类型
 
