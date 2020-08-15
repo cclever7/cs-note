@@ -2,17 +2,15 @@
 
 1. 所有的STL容器支持初始化列表，例如： `std::vector<int> v = { 1, 2, 3 }`
 
-2.  自定义class支持初始化列表。  
-
-   `
+2.  自定义class支持初始化列表。  例如：
 
 3. auto 类型推导关键词
 
-4.   4.统一的初始化方法          Uniform Initialization //？
+4.   统一的初始化方法          Uniform Initialization //？
 
-5.   5.新的遍历方式,对 容器或者数组 遍历使用 for(aoto i: a){}
+5.   新的遍历方式,对 容器或者数组 遍历使用 for(aoto i: a){}
 
-6.   6.nullptr的存在，实际是 为0的值和NULL一样是等于0，但是在函数发生重载的时候编译器可以知道是调用的那个函数。
+6.   nullptr的存在，实际是 为0的值和NULL一样是等于0，但是在函数发生重载的时候编译器可以知道是调用的那个函数。
 
       void funC(int a)
        void funC(int* a)
