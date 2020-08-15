@@ -64,9 +64,11 @@
         + [3.4 用于函数指针的ptr_fun](#34-用于函数指针的ptr_fun)
         + [3.5 用于成员函数指针的mem_fun和mem_fun_ref](#35-用于成员函数指针的mem_fun和mem_fun_ref)
 
-<br>
-<br>
-<br>
+
+
+
+
+
 
 # 一.简介
 
@@ -500,9 +502,9 @@ __default_alloc_template<threads, inst> ::free_list[__NFREELISTS] =
 <div align="center"> <img src="../pic/stl-2-8.png"/> </div>
 
 * 重新填充free-list的函数[refill()](tass-sgi-stl-2.91.57-source/stl_alloc.h#L537)
-    
+  
 - 若free-list中没有可用区块时，会调用chunk_alloc**从内存池**中申请空间重新填充free-list。缺省申请20个新节点(新区块)，如果内存池空间不足，获得的节点数可能小于20
-    
+  
 * [chunk_alloc()](tass-sgi-stl-2.91.57-source/stl_alloc.h#L465)函数从内存池申请空间，根据end_free-start_free判断内存池中剩余的空间
     - 如果剩余空间充足
         + 直接调出20个区块返回给free-list
@@ -1179,7 +1181,7 @@ heap是一颗完全二叉树，完全二叉树使用数组实现，因此使用�
     <div align="center"> <img src="../pic/stl-4-11.png"/> </div>
 
 * [make_heap](tass-sgi-stl-2.91.57-source/stl_heap.h#L184)
-    
+  
     - [__make_heap](tass-sgi-stl-2.91.57-source/stl_heap.h#L189)
 
 ## 7.priority_queue
@@ -2156,11 +2158,11 @@ STL的sort算法，数据量大时采用Quick Sort，分段递归排序。一旦
                 <div align="center"> <img src="../pic/stl-6-20.png"/> </div>
 
     - [nth_element](tass-sgi-stl-2.91.57-source/stl_algo.h#L1380)
-        
+      
     + [__nth_element](tass-sgi-stl-2.91.57-source/stl_algo.h#L1365)
     
 <div align="center"> <img src="../pic/stl-6-21.png"/> </div>
-    
+
     <br>
 
 # 七.仿函数
