@@ -95,7 +95,7 @@
 
 ### 1）以const替换#define
 
-```
+```c++
 #define ASPECT_RATIO 1.653
 替换为：
 const double AspectRatio = 1.653
@@ -110,7 +110,7 @@ const double AspectRatio = 1.653
 
   。如：
 
-  ```
+  ```c++
   const char* const authorName = "Scott Meyers";
   ```
 
@@ -118,7 +118,7 @@ const double AspectRatio = 1.653
 
   ：class专属常量需要声明在class内部，并且被class使用：
 
-  ```
+  ```c++
   class GamePlayer{
       static const int NumTurns = 5; //常量声明式
       int scores[NumTurns];          //使用该常量
@@ -137,7 +137,7 @@ const double AspectRatio = 1.653
 
 正如上面所提到的，编译器可能不支持类内初始值，因此改用"**enum hack**"：
 
-```
+```c++
 class GamePlayer{
     enum {NumTurns = 5};
     int scores[NumTurns];   //这就没问题了
@@ -150,7 +150,7 @@ class GamePlayer{
 
 以#define实现宏看起来像函数，并且不会导致函数调用带来的开销，但是可能引发错误：
 
-```
+```c++
 #define CALL_WITH_MAX(a,b) f((a) > (b) ?  (a) : (b))
 
 int a = 5,b = 0;
@@ -168,7 +168,7 @@ CALL_WITH_MAX(++a,b + 10);  //a被累加1次
 
 如果变量本身不应该被修改，应该使用const修饰。这样编译器可以进行保护，确保这个变量不会被修改
 
-```
+```c++
 char greeting[] = "Hello";
 char *p = greeting;                    // non-const pointer, non-const data
 const char *p = greeting;              // non-const pointer, const data
@@ -184,7 +184,7 @@ const char * const p = greeting;       // const pointer, const data
 - 修饰参数时，和修饰一般变量相同
 - **修饰返回值，可以降低因客户错误而造成的意外**
 
-```
+```c++
 Rational a, b, c;
 ...
 if (a * b = c){ //其实是想做一个比较动作，使用const修饰返回值可以避免这种错误
@@ -194,7 +194,7 @@ if (a * b = c){ //其实是想做一个比较动作，使用const修饰返回值
 
 如果a和b都是内置类型。这样的代码直截了当就是不合法。而一个“良好的用户自定义类型”的特征是他们避免与内置类型不兼容。因此对operator*的定义应该如下：
 
-```
+```c++
 const Rational operator*(const Rational& lhs, const Rational& rhs);
 ```
 
@@ -207,7 +207,7 @@ const修饰成员函数有2个好处：
 
 但是，使用const修饰成员函数时需要注意，C++对常量性的定义是bitwise constness，即函数const成员函数不应该修改对象的任何成员变量。因此，如果成员变量是一个指针，那么不修改指针而修改指针所指之物，也符合bitwise constness，因此如果不是从bitwise constness的角度，这样也是修改了对象：
 
-```
+```c++
 class CTextBlock {
 public:
   char& operator[](std::size_t position) const   // bitwise constness声明
@@ -224,7 +224,7 @@ char *pc = &cctb[0];            //调用const operator[]取得一个指针，
 
 还有一种logical constness：一个const成员函数可以修改它所处理的对象内的某些bits，但只有在客户端侦测不出的情况下才行：
 
-```
+```c++
 class CTextBlock {
 public:
   std::size_t length() const;
@@ -246,7 +246,7 @@ std::size_t CTextBlock::length() const{
 
 但是，C++对常量性的定义是bitwise constness的，所以这样的操作非法。解决办法是使用mutable:
 
-```
+```c++
 class CTextBlock {
 public:
   std::size_t length() const;
@@ -270,7 +270,7 @@ std::size_t CTextBlock::length() const{
 
 最后，const和non-const版本的函数可能含有重复的代码，如果抽离出来单独成为一个成员函数还是有重复。如果希望去重，可以使用“运用const成员函数实现出其non-const孪生兄弟”的技术：
 
-```
+```c++
 class CTextBlock {
 public:
     const char& operator[](size_t pos) const{
@@ -401,7 +401,7 @@ public:
 
 如果希望在继承体系中根据类型在构建对象时表现出不同行为，可以会想到在基类的构造函数中调用一个虚函数：
 
-```
+```c++
 class Transaction {                           //所有交易的基类
 public:                                           
     Transaction(){           
@@ -444,7 +444,7 @@ public:
 
 考虑如下Widget类：
 
-```
+```c++
 class Bitmap {...};
 class Widget{
     ...
@@ -455,7 +455,7 @@ private:
 
 下面的operator=实现是一份不安全的实现，在自赋值时会出现问题：
 
-```
+```c++
 Widget& 
 Widget::operator=(const Widget& rhs){
     delete pb;                   // stop using current bitmap
@@ -468,7 +468,7 @@ Widget::operator=(const Widget& rhs){
 
 1. 在开头添加“证同测试”
 
-   ```
+   ```c++
    Widget& Widget::operator=(const Widget& rhs){
        if (this == &rhs) return *this;
        delete pb;                   // stop using current bitmap
@@ -481,7 +481,7 @@ Widget::operator=(const Widget& rhs){
 
 2. 通过确保异常安全来获得自赋值的回报
 
-   ```
+   ```c++
    Widget& Widget::operator=(const Widget& rhs){
        Bitmap *pOrig = pb;               // remember original pb
        pb = new Bitmap(*rhs.pb);         // make pb point to a copy of *pb
@@ -494,7 +494,7 @@ Widget::operator=(const Widget& rhs){
 
 3. 使用copy and swap技术
 
-   ```
+   ```c++
    //参数为pass by reference
    Widget& Widget::operator=(const Widget &rhs){
        Widget temp(rhs);
@@ -545,7 +545,7 @@ Widget::operator=(const Widget& rhs){
 
 一个对象管理资源的例子是auto_ptr:
 
-```
+```c++
 void f()
 {
     std::auto_ptr<Investment> pIntv(createInvestment());    
@@ -614,7 +614,7 @@ FontHandle f2 = f1; //原意是想使用Font，复制一个RAII对象
 
 因此，应该像这样使用new和delete
 
-```
+```c++
 std::string* stringPtr1 = new std::string;
 std::string* stringPtr2 = new std::string[100];
 ...
@@ -629,7 +629,7 @@ delete [] stringPtr2;
 
 这点在typedef中尤其需要注意：
 
-```
+```c++
 typedef std::string AddressLines[4];        //每个人的地址有4行，每行是一个string
 
 std::string *pa1 = new AddressLines;        //就像new string[4]一样
@@ -646,7 +646,7 @@ delete [] pa1;          //很好
 
 考虑如下情况：
 
-```
+```c++
 func1(std::tr1::shared_ptr<原始资源类>(new 原始资源类),func2());
 ```
 
@@ -885,7 +885,7 @@ void clearEverything(WebBrowser& wb){
 
 为class支持隐式类型转换不是个好主意，但是在数值类型之间颇为合理。考虑有理数和内置整形之间的相乘运算。具有如下有理数：
 
-```
+```c++
 class Rational{
 public: 
     Rational(int n = 0, int d = 1); //构造函数刻意不为explicit，提供了Int-to-Rational的隐式转换
@@ -898,7 +898,7 @@ private:
 
 现在，有理数提供了Int-to-Rational的隐式转换方式，那么operator*应该实现成member，还是non-member？
 
-```
+```c++
 class Rational{
 public: 
     //实现为member
@@ -911,7 +911,7 @@ const Rational operator*(const Rational& lhs, const Rational& rhs);
 
 问题发生在混合运算上。如果实现成member，那么下面的混合运算只有一半行得通：
 
-```
+```c++
 result = oneHalf * 2;                  // OK
 result = 2 * oneHalf;                  // Error
 ```
@@ -1089,7 +1089,7 @@ result = 2 * oneHalf;                  // Error
 
 考虑下面例子，有一个菜单类，changeBg函数可以改变它的背景，切换背景计数，同时提供线程安全：
 
-```
+```c++
 class Menu{
     Mutex mutex;            //提供多线程互斥访问
     Image *bg;          //背景图片
@@ -1144,7 +1144,7 @@ void Menu::changeBg(istream& src){
 
 "copy and swap"设计策略通常能够**为对象**提供异常安全的“强烈保证”。当我们要改变一个对象时，先把它复制一份，然后去修改它的副本，改好了再与原对象交换。关于swap的详细讨论可以参见[条款25](https://github.com/arkingc/note/blob/master/C%2B%2B/EffectiveC%2B%2B.md#条款25考虑写出一个不抛出异常的swap函数)。这种策略用在前面的例子中会像这样：
 
-```
+```c++
 class Menu{
     ...
 private:
@@ -1204,7 +1204,7 @@ inline在大多数C++程序中是**编译期行为**。inline只是对编译器�
 
 **构造函数和析构函数往往是inlining的糟糕候选人**。C++对于”对象被创建和被销毁时发生什么事“做了各式各样的保证。在对象构造期间如果抛出异常，该对象已经构造好的部分会被自动销毁...，因此，对于下列代码：
 
-```
+```c++
 class Base{
 public:
     ...
@@ -1223,7 +1223,7 @@ private:
 
 虽然看上去Derived的构造函数为空，符合一个函数成为inline的的特性。但是为了确保C++对于”对象被创建和被销毁时发生什么事“做出的各式各样的保证，编译器会在其中安插代码，因此实际的Derived构造函数可能是这个样子：
 
-```
+```c++
 Derived::Derived()
 {
     Base::Base();
@@ -1256,7 +1256,7 @@ Derived::Derived()
 
 C++并没有把“将接口从实现中分离”这件事做得很好。例如：
 
-```
+```c++
 #include<string>
 #include "date.h"
 #include "address.h"
@@ -1275,7 +1275,7 @@ private:
 
 你可能会想着将实现细目分开：
 
-```
+```c++
 namespace std{
     class string;   //前置声明，但不正确
 }
@@ -1298,7 +1298,7 @@ public:
 
   ：
 
-  ```
+  ```c++
   int main(){
       int x;           //定义一个int
       Person p(...);   //定义一个Person
@@ -1307,7 +1307,7 @@ public:
 
   这和Java，Smalltalk中不同，因为它们在定义对象时，编译器只分配足够空间给一个指针使用。也就是说，它们将上述代码视为这样：
 
-  ```
+  ```c++
   int main(){
       int x;          //定义一个int
       Person* p;      //定义一个指针指向Person对象
@@ -1316,7 +1316,7 @@ public:
 
 **1）一个办法是，可以把Person分割为两个类：1）一个只提供接口(Person)；2）一个负责实现接口(PersonImpl)；就是使用[条款25](https://github.com/arkingc/note/blob/master/C%2B%2B/EffectiveC%2B%2B.md#条款25考虑写出一个不抛出异常的swap函数)中的”pimpl手法“：接口class中只包含一个负责实现接口的class的指针，因此任何改变都只是在负责实现接口的class中进行。那么Person的客户就完全与Date,Address,以及Person的实现细目分离了。那些classes的任何实现修改都不需要Person客户端重新编译。此外，由于客户无法看到Person的实现细目，也就不可能写出什么“取决于那些细目的代码”。这正是接口与实现分类。这种情况下，像Person这样使用pimpl的classes往往被称为handle classes**
 
-```
+```c++
 class Person{
 public:
     Person(string& name);
@@ -1332,7 +1332,7 @@ string Person::name(){
 
 **2）另一种制作Handle class的办法是，令Person成为一种特殊的abstract base class，称为interface class**。其目的是详细描述derived classes的接口，因此它通常不带成员变量，也没有构造函数，只有一个virtual析构函数以及一组pure virtual函数，用来叙述整个接口
 
-```
+```c++
 class Person{
 public:
     virtual ~Person();
@@ -1343,7 +1343,7 @@ public:
 
 客户不能实例化它，只能使用它的引用和指针。然而客户一定需要某种方法来获得一个实例，比如工厂方法：
 
-```
+```c++
 class Person{
 public:
     static shared_ptr<Person> create(string& name);
@@ -1363,7 +1363,7 @@ shared_ptr<Person> p(Person::create("alice"));
 
   ：
 
-  ```
+  ```c++
   class Date;
   Date today();
   void clearAppointments(Date d);
@@ -1373,7 +1373,7 @@ shared_ptr<Person> p(Person::create("alice"));
 
   。为了促使这个准则，需要两个头文件：一个用于声明式，一个用于定义式。因此，上面的例子应该是这样：
 
-  ```
+  ```c++
   #include "datefwd.h"    //包含了class Date的声明
   Date today();
   void clearAppointments(Date d);
@@ -1391,7 +1391,7 @@ shared_ptr<Person> p(Person::create("alice"));
 
 可以举一个例子验证一下上面的说法。例如：
 
-```
+```c++
 class Person {...};
 class Student : public Person {...};
 ```
@@ -1400,7 +1400,7 @@ class Student : public Person {...};
 
 因此，C++中，任何函数如果期望获得一个类型为基类的实参，都也愿意接收一个派生类对象。但是反之不成立：
 
-```
+```c++
 void eat(const Person &p);
 void study(const Student &s);
 Person p;
@@ -1464,7 +1464,7 @@ study(p);   //错误
 
 例如，某个航空公司有A,B两种类型的飞机，他们有相同的fly行为，这个fly行为在基类Airplane中声明为impure virtual函数，并且具有缺省的飞行实现。现在引入了一种新机型C，但是这个缺省的fly行为并不适合C，如果C忘记重新定义fly，那么它将按照A,B缺省的行为飞行
 
-```
+```c++
 class Airplane{
 public:
     virtual void fly(){
@@ -1481,7 +1481,7 @@ p->fly();   //调用Airplane::fly
 
 a）要避免这种错误，可以将fly改为pure virtual函数，并且将缺省的飞行行为实现为一个protected函数：
 
-```
+```c++
 class Airplane{
 public:
     virtual void fly() = 0;
@@ -1504,7 +1504,7 @@ public:
 
 b）有些人反对以不同函数分别提供接口和缺省实现，像上面的fly和defaultFly。因为他们关心因过渡雷同函数名称而引起的class命名空间污染问题。那么可以将缺省的行为定义在fly中，即为fly实现一份缺省的定义：
 
-```
+```c++
 class Airplane{
 public:
     virtual void fly() = 0;
@@ -1535,7 +1535,7 @@ public:
 
 以一个例子来介绍其它几种可替代方案。在一个游戏人物的类中，存在一个健康值计算的函数，不同的角色可以提供不同的健康值计算方法，并且存在一个缺省实现。以传统的public virtual函数实现如下：
 
-```
+```c++
 class GameCharacter{
 public:
     virtual int healthValue() const;    //健康值计算函数，派生类可以重新定义
@@ -1546,7 +1546,7 @@ public:
 
 这种方案的主要思想是：保留healthValue为public成员，但是让其成为non-virtual，并调用一个private(也可以是protected) virtual函数进行实际工作：
 
-```
+```c++
 class GameCharacter{
 public:
     //non-virtual函数，virtual函数的包裹器(wrapper)
@@ -1572,7 +1572,7 @@ NVI手法的一个优点是可以在真正操作进行的前后保证一些“�
 
 上面的方案本质还是使用virtual函数，人物的健康值计算(操作)还是与人物(类)相关。后面这几种方案，都是将任务的健康值计算(操作)与具体的每个人(对象)相关，并且可以每个人(对象)的健康值计算(操作)可以修改
 
-```
+```c++
 class GameCharacter;    //前置声明
 //健康值计算的缺省函数
 int defaultHealthCalc(const GameCharacter &gc);
@@ -1597,7 +1597,7 @@ private:
 
 这种方案是前一种的加强，将函数指针改成任何可调用对象。因此允许任何与可调用声明相兼容(即可以通过类型转换与声明相符)的可调用物
 
-```
+```c++
 class GameCharacter;    //前置声明
 //健康值计算的缺省函数
 int defaultHealthCalc(const GameCharacter &gc);
@@ -1625,7 +1625,7 @@ private:
 
 
 
-```
+```c++
 class GameCharacter;    //前置声明
 class HealthCalcFunc{
 public:
@@ -1660,7 +1660,7 @@ private:
 
 另一方面，假设真的重新定义了继承而来的non-virtual函数，会表现出下列令人困惑的情况：
 
-```
+```c++
 class B{
 public:
     void mf();
@@ -1690,7 +1690,7 @@ pD->mf();       //调用D::mf
 
 **原因就在于，virtual函数是动态绑定，而缺省参数值却是静态绑定**。所以你可能调用了一个派生类的virtual函数，但是使用到的缺省参数，却是基类的
 
-```
+```c++
 class Shape{
 public:
     enum ShapeColor {Red,Green,Blue};
@@ -1726,7 +1726,7 @@ pc->draw();         //调用Shape::draw，但是静态类型为Shape，所以缺
 
 但是，即使派生类严格遵循基类的缺省参数，也存在问题：当基类的缺省参数发生变化时，派生类的所有缺省参数也需要跟着修改。因此，**本质在于，不应该在virtual函数中使用缺省参数**，如果有这样的需求，那么这种场景就适合使用[条款35](https://github.com/arkingc/note/blob/master/C%2B%2B/EffectiveC%2B%2B.md#)中，public virtual函数的几种替代方案，比如NVI手法：
 
-```
+```c++
 class Shape{
 public:
     enum ShapeColor {Red,Green,Blue};
@@ -1768,7 +1768,7 @@ private:
 
 - has-a：
 
-  ```
+  ```c++
   class Address {...};
   class PhoneNumber {...};
   class Person{
@@ -1784,7 +1784,7 @@ private:
 
 - 根据某物实现出：
 
-  ```
+  ```c++
   template <class T, class Sequence = deque<T> >
   class stack {
   ...
@@ -1804,7 +1804,7 @@ private:
 
 - 编译器不会把子类对象转换为父类对象
 
-  ```
+  ```c++
   class Person { ... };
   class Student: private Person { ... };     // private继承
   void eat(const Person& p);                 // 任何人都会吃
@@ -1826,7 +1826,7 @@ private:
 
 假设Widget类需要执行周期性任务，于是希望继承Timer的实现。 因为Widget不是一个Timer，所以选择了private继承：
 
-```
+```c++
 class Timer {
 public:
    explicit Timer(int tickFrequency);
@@ -1849,7 +1849,7 @@ private:
 
 如果使用复合，上面的例子可以这样实现：
 
-```
+```c++
 class Widget {
 private:
     class WidgetTimer: public Timer {
@@ -1910,14 +1910,14 @@ private:
 
 以下代码中，typename和class等价：
 
-```
+```c++
 template<class T> class Widget;
 template<typename T> class Widget;
 ```
 
 但是如果在template中，遇到嵌套从属名称，需要明确声明是一种类型时，必须使用typename。考虑如下例子：
 
-```
+```c++
 template<typename C>
 void print2nd(const C& container)
 {
@@ -1930,7 +1930,7 @@ void print2nd(const C& container)
 
 因此，C++有个规则解决这种歧义：如果解析器在template中遭遇一个嵌套从属名称，它便假设这个名称不是个类型，除非你告诉它是。所以缺省情况下嵌套从属名称不是类型。那么怎么告诉它是一个类型，当然就是typename了，所以上述代码应该像这样：
 
-```
+```c++
 template<typename C>
 void print2nd(const C& container)
 {
@@ -1944,7 +1944,7 @@ void print2nd(const C& container)
 1. **typename不可出现在base classes list内的嵌套从属名称之前**
 2. **typename也不可出现在成员初始值列表中作为base class修饰符**
 
-```
+```c++
 template<typename T>
 class Derived : public Base<T>::Nested{ //typename不可出现在此
 public:
@@ -1963,7 +1963,7 @@ typename相关规则在不同的编译器上有不同的实践。某些编译器
 
 假设以下MsgSender类可以通过两种方式发送信息到各个公司：
 
-```
+```c++
 template<typename Company>
 class MsgSender{
 public:
@@ -1983,7 +1983,7 @@ public:
 
 假设我们有时候想要在每次送出信息时志记(log)某些信息。因此有了以下派生类：
 
-```
+```c++
 template<typename Company>
 class LoggingMsgSender : public MsgSender<Company>{
 public:
@@ -2000,7 +2000,7 @@ public:
 
 现在问题是，如果有一个公司CompanyZ只支持加密传送，那么泛化的MsgSender就不适合，因此需要为其产生一个特化版的MsgSender：
 
-```
+```c++
 template<>
 class MsgSender<CompanyZ>{
 public:
@@ -2019,7 +2019,7 @@ public:
 
 1. 使用this->
 
-   ```
+   ```c++
    template<typename Company>
    class LoggingMsgSender : public MsgSender<Company>{
    public:
@@ -2036,7 +2036,7 @@ public:
 
 2. 使用using
 
-   ```
+   ```c++
    template<typename Company>
    class LoggingMsgSender : public MsgSender<Company>{
    public:
@@ -2055,7 +2055,7 @@ public:
 
 3. 通过作用域符明确指出
 
-   ```
+   ```c++
    template<typename Company>
    class LoggingMsgSender : public MsgSender<Company>{
    public:
@@ -2084,7 +2084,7 @@ public:
 
 - 对于非类型模板参数产生的代码膨胀，用函数参数或成员变量来替换模板参数即可消除冗余
 
-  ```
+  ```c++
   //非类型模板参数造成代码膨胀
   template<typename T, int n>
   class Square{
@@ -2128,7 +2128,7 @@ public:
 
 需要使用成员函数模板的一个例子是构造函数和copying赋值运算符。例如，假设SmartPtr是一种智能指针，并且它是一个template class。现在有一个继承体系：
 
-```
+```c++
 class Top {...};
 class Middle : public Top {...};
 class Bottom : public Middle {...};
@@ -2136,7 +2136,7 @@ class Bottom : public Middle {...};
 
 现在希望通过一个SmartPtr<Bottom>或SmartPtr<Middle>来初始化一个SmartPtr<Top>。如果是指针，即Middle*和Bottom*可以隐式转换成Top*，问题是：**同一个template的不同具现体之间不存在什么与生俱来的固有关系，即使具现体之间具有继承关系**。因此，SmartPtr<Bottom>或SmartPtr<Middle>并不能隐式转化成SmartPtr<Top>。因此，我们需要一个构造函数模板，来实现这种转换：
 
-```
+```c++
 template<typename T>
 class SmartPtr{
 public:
@@ -2163,7 +2163,7 @@ private:
 
 **template实参推导过程中从不将隐式类型转换函数纳入考虑**，下列将[条款24](https://github.com/arkingc/note/blob/master/C%2B%2B/EffectiveC%2B%2B.md#条款24若所有参数皆需类型转换请为此采用non-member函数)中的Rational和operator*改成了template，混合运算会编译错误：
 
-```
+```c++
 template<typename T>
 class Rational{
 public:
@@ -2185,7 +2185,7 @@ Rational<int> result = oneHalf * 2   //编译错误
 
 那么解决办法是什么？在class template将其声明为friend，从而具现化一个operator*，具现化后就可以不受template的限制了：
 
-```
+```c++
 template<typename T>
 class Rational{
 public:
@@ -2205,7 +2205,7 @@ public:
 
 上面的代码可能还有一个问题，虽然有friend，上述函数仍是隐式的inline。如果函数实体代码量较大，可以令operator*不做任何事，只调用一个定义与class外部的辅助函数（当然这里没必要，因为本身只有1行）
 
-```
+```c++
 template<typename T> class Rational;
 
 //helper template
@@ -2308,7 +2308,7 @@ namespace std{
 
 ### 实现class专属的new-handlers
 
-```
+```c++
 class NewHandlerHolder{
 public:
     explicit NewHandlerHolder(std::new_handler nh): handler(nh){}
@@ -2361,7 +2361,7 @@ class Widget: public NewHandlerSupport<Widget>{ ... };
 
 1993年之前C++的operator new在失败时会返回null而不是抛出异常。如今的C++仍然支持这种nothrow的operator new
 
-```
+```c++
 Widget *p1 = new Widget;    // 失败时抛出 bad_alloc 异常
 if(p1 == 0) ...             // 这个测试一定失败
 
@@ -2387,7 +2387,7 @@ nothrow new只能保证所调用的nothrow版的operator new不抛出异常，�
 
 下面是一个”为了检测运用错误“而实现的简单的operator new的例子，通过在首部和尾部插入一个签名，返回中间内存块给程序使用，如果程序在使用内存时发生过在区块前或区块后写入的行为，那么签名就会被修改，因此可以检测这种行为：
 
-```
+```c++
 static const int signature = 0xDEADBEEF;    // 边界符
 typedef unsigned char Byte; 
 
@@ -2425,7 +2425,7 @@ void* operator new(std::size_t size) throw(std::bad_alloc) {
 
 下面是non-member operator new的伪码：
 
-```
+```c++
 void* operator new(std::size_t size) throw(std::bad_alloc)
 {
     using namespace std;
@@ -2449,7 +2449,7 @@ void* operator new(std::size_t size) throw(std::bad_alloc)
 
 在继承中定制member operator new时，一般是针对某特定class的对象分配行为提供最优化，此时，并不是为了该class的任何derived classes。也就是说，针对class X而设计的operator new，其行为很典型地只为大小刚好为sizeof(X)的对象而设计。然而一旦被继承下去，有可能base class的operator new被调用用以分配derived class对象：
 
-```
+```c++
 class Base{
 public:
     static void* operator new(std::size_t size) throw(std::bad_alloc);
@@ -2464,7 +2464,7 @@ Derived *p = new Derived;    //这里调用的是Base::operator new
 
 如果Base class专属的operator new并没有设计上述问题的处理方法，那么最佳做法是将“内存申请量错误”的调用行为改采标准operator new，像这样：
 
-```
+```c++
 void* Base::operator new(std::size_t size) throw(std::bad_alloc)
 {
     if(size != sizeof(Base))            //如果大小错误
@@ -2477,7 +2477,7 @@ void* Base::operator new(std::size_t size) throw(std::bad_alloc)
 
 operator delete比起operator new更简单，需要记住的唯一事情就是C++保证“删除null指针永远安全”：
 
-```
+```c++
 void operator delete(void* rawMemory) throw()
 {
     if(rawMemory == 0)  return;  //如果将被删除的是个null指针，那就什么都不做
@@ -2487,7 +2487,7 @@ void operator delete(void* rawMemory) throw()
 
 member版本也很简单，只需要多一个动作检查删除数量。万一class专属的operator new将大小有误的分配行为转交::operator new执行，你也必须将大小有误的删除行为转交::operator delete执行
 
-```
+```c++
 void* Base::operator delete(void* rawMemory,std::size_t size) throw()
 {
     if(rawMemory == 0)  return;         //检查null指针
@@ -2508,7 +2508,7 @@ void* Base::operator delete(void* rawMemory,std::size_t size) throw()
 
 placement new是带有额外参数的operator new，但是通常都指“接受一个指针指向对象该被构造之处”的operator new。这个版本被纳入了C++标准程序库，只要#include<new>\就可以使用：
 
-```
+```c++
 void* operator new(std::size_t,void* pMemory) throw();
 ```
 
@@ -2528,7 +2528,7 @@ new会先调用operator new，然后构造对象。如果对象构造过程中�
 
 一个比较好的方法是：
 
-```
+```c++
 class StandardNewDeleteForms{
 public:
     //正常的 new/delete
