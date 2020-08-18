@@ -46,7 +46,7 @@
 
 3. CAS（Compare And Swap）
 
-   CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。UnSafe 类的 objectFieldOffset() 方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址，返回值是 valueOffset。另外 value 是一个volatile变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。
+   CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。`UnSafe` 类的 `objectFieldOffset() `方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址，返回值是` valueOffset`。另外 `value` 是一个`volatile`变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。
 
 ##### 阻塞非阻塞同步异步的区别
 
@@ -54,23 +54,42 @@
 
 
 
+## 多学一点
+
+##### `sleep()`和`wait()`的区别
+
+1. `sleep` 不释放CPU资源，不释放锁
+2. `wait` 释放CPU资源，放弃锁；`wait`主要配合`notify`使用，主要用于线程通信
+
+##### `join()`
+
+​    
+
+##### `yield()`
+
+
+
 ## 多线程相关
 
-##### pthread.h
+##### `pthread.h`
 
-pthread.h是标准库没有添加多线程之前的在Linux上用的多线程库，而之前在windows上的多线程支持要包含wndows.h, 从C++11开始，标准库里已经包含了对线程的支持，std::thread是C++11标准库中的多线程的支持库，
+`pthread.h`是标准库没有添加多线程之前的在Linux上用的多线程库，
 
-##### std::thread
+##### `windows.h`
 
-C++11 新标准中引入了五个头文件来支持多线程编程，它们分别是 `<atomic>, <thread>, <mutex>, <condition_variable>` 和 `<future>`。
+在windows上的多线程支持要包含`windows.h`
+
+##### `std::thread`
+
+从C++11开始，标准库里已经包含了对线程的支持，`std::thread`是C++11标准库中的多线程的支持库，C++11 新标准中引入了五个头文件来支持多线程编程，它们分别是 `<atomic>, <thread>, <mutex>, <condition_variable>` 和 `<future>`。
 
 <img src="medium/image-20200814171948633.png" alt="image-20200814171948633" style="zoom: 67%;" />
 
-1. `<thread>`：该头文件主要声明了 `std::thread` 类，另外 `std::this_thread` 命名空间也在该头文件中。
-2. `<future>`：该头文件主要声明了 `std::promise`, `std::package_task` 两个 Provider 类，以及 `std::future` 和 `std::shared_future` 两个 Future 类，另外还有一些与之相关的类型和函数，`std::async()` 函数就声明在此头文件中。
-3. `<atomic>`：该头文主要声明了两个类, `std::atomic` 和 `std::atomic_flag`，另外还声明了一套 C 风格的原子类型和与 C 兼容的原子操作的函数。
+1. `<thread>`：该头文件主要声明了 `std::thread` **线程类**，另外 `std::this_thread` 命名空间也在该头文件中。
+2. `<future>`：**异步类相关**，该头文件主要声明了 `std::promise`, `std::package_task` 两个 Provider 类，以及 `std::future` 和 `std::shared_future` 两个 Future 类，另外还有一些与之相关的类型和函数，`std::async()` 函数就声明在此头文件中。
 4. `<mutex>`：该头文件主要声明了**与互斥量(Mutex)相关的类**，包括 `std::mutex_*` 一系列类，`std::lock_guard`, `std::unique_lock`, 以及其他的类型和函数。
-5. `<condition_variable>`：该头文件主要声明了与条件变量相关的类，包括 `std::condition_variable` 和 `std::condition_variable_any`。
+5. `<condition_variable>`：该头文件主要声明了**与条件变量相关的类**，包括 `std::condition_variable` 和 `std::condition_variable_any`。
+5. `<atomic>`：该头文主要声明了两个类, `std::atomic` 和 `std::atomic_flag`，另外还声明了一套 C 风格的原子类型和与 C 兼容的**原子操作的函数**。
 
 
 
@@ -78,11 +97,11 @@ C++11 新标准中引入了五个头文件来支持多线程编程，它们分�
 
 #### 生命周期
 
-1. 新建状态
-2. 就绪状态
-3. 运行状态 
-4. 阻塞状态
-5. 线程死亡
+1. 新建状态：创建了一个线程之后,该线程就处于新建状态
+2. 就绪状态：启动方法之后,该线程处于就绪状态
+3. 运行状态 ：处于就绪状态的线程获得了CPU资源，开始运行
+4. 阻塞状态：线程主动放弃CPU资源 
+5. 线程死亡：线程结束
 
 #### 线程死锁
 
@@ -92,22 +111,16 @@ C++11 新标准中引入了五个头文件来支持多线程编程，它们分�
 
 
 
-## Thread 线程
+## thread 线程
 
-`std::thread` **代表了一个线程对象，** 在 `<thread>` 头文件中声明。`<thread>` 头文件主要声明了 `std::thread` 类，另外在 `std::this_thread` 命名空间中声明了 `get_id`，`yield`， 等辅助函数，本章稍微会详细介绍 `std::thread` 类及相关函数。
+`std::thread` **代表了一个线程对象，** 在 `<thread>` 头文件中声明。`<thread>` 头文件主要声明了 `std::thread` 类，声明了 `get_id`，`yield`，`sleep_until` 以及 `sleep_for` 等辅助函数
 
-#### 构造函数
-
-| 默认构造函数 (1)           | thread() noexcept;                                           |
-| -------------------------- | ------------------------------------------------------------ |
-| 初始化构造函数 (2)         | template <class Fn, class... Args> explicit thread(Fn&& fn, Args&&... args); |
-| 拷贝构造函数 [deleted] (3) | thread(const thread&) = delete;                              |
-| Move 构造函数 (4)          | thread(thread&& x) noexcept;                                 |
-
-1. 默认构造函数(1)，创建一个空的 `std::thread` 执行对象。
-2. 初始化构造函数(2)，创建一个 `std::thread` 对象，该 `std::thread` 对象可被 `joinable`，新产生的线程会调用 `fn` 函数，该函数的参数由 `args` 给出。
-3. 拷贝构造函数(被禁用)(3)，意味着 `std::thread` 对象不可拷贝构造。
-4. Move 构造函数(4)，move 构造函数(move 语义是 C++11 新出现的概念，详见附录)，调用成功之后 `x` 不代表任何 `std::thread` 执行对象。
+| 构造函数                   | 声明                                                         |                                                              |
+| -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 默认构造函数 (1)           | thread() noexcept;                                           | 创建一个空的 `std::thread` 执行对象。                        |
+| 初始化构造函数 (2)         | template <class Fn, class... Args> explicit thread(Fn&& fn, Args&&... args); | 创建一个 `std::thread` 对象，该 `std::thread` 对象可被 `joinable`，新产生的线程会调用 `fn` 函数，该函数的参数由 `args` 给出。 |
+| 拷贝构造函数 [deleted] (3) | thread(const thread&) = delete;                              | 被禁用，意味着 `std::thread` 对象不可拷贝构造。              |
+| `Move` 构造函数 (4)        | thread(thread&& x) noexcept;                                 | `move `构造函数，调用成功之后 `x` 不代表任何 `std::thread` 执行对象。 |
 
 #### 其它函数
 
