@@ -40,13 +40,13 @@
 
 ##### 锁机制
 
-1. 悲观锁，**悲观锁认为自己在使用数据的时候一定有别的线程来修改数据，因此在获取数据的时候会先加锁**，确保数据不会被别的线程修改
+1. **悲观锁**，**悲观锁认为自己在使用数据的时候一定有别的线程来修改数据，因此在获取数据的时候会先加锁**，确保数据不会被别的线程修改
 
-2. 乐观锁 ，**乐观锁认为自己在使用数据时不会有别的线程修改数据，所以不会添加锁，**只是在更新数据的时候去判断之前有没有别的线程更新了这个数据，**最常采用的是CAS算法**
+2. **乐观锁** ，**乐观锁认为自己在使用数据时不会有别的线程修改数据，所以不会添加锁，**只是在更新数据的时候去判断之前有没有别的线程更新了这个数据，**最常采用的是CAS算法**
 
-3. CAS（Compare And Swap）
+3. **CAS**（Compare And Swap）
 
-   CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。`UnSafe` 类的 `objectFieldOffset() `方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址，返回值是` valueOffset`。另外 `value` 是一个`volatile`变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。
+   CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。即每次修改时都需要拿期望值去比较
 
 ##### 阻塞非阻塞同步异步的区别
 
@@ -54,26 +54,11 @@
 
 
 
-## 多学一点
-
-##### `sleep()`和`wait()`的区别
-
-1. `sleep` 不释放CPU资源，不释放锁
-2. `wait` 释放CPU资源，放弃锁；`wait`主要配合`notify`使用，主要用于线程通信
-
-##### `join()`
-
-​    
-
-##### `yield()`
-
-
-
 ## 多线程相关
 
 ##### `pthread.h`
 
-`pthread.h`是标准库没有添加多线程之前的在Linux上用的多线程库，
+`pthread.h`是标准库，C++11没有添加多线程之前的在Linux上用的多线程库
 
 ##### `windows.h`
 
@@ -81,7 +66,9 @@
 
 ##### `std::thread`
 
-从C++11开始，标准库里已经包含了对线程的支持，`std::thread`是C++11标准库中的多线程的支持库，C++11 新标准中引入了五个头文件来支持多线程编程，它们分别是 `<atomic>, <thread>, <mutex>, <condition_variable>` 和 `<future>`。
+原先使用多线程只能用系统的API，无法解决跨平台问题。从C++11开始语言层面上的多线程，标准库里已经包含了对线程的支持，`std::thread`是C++11标准库中的多线程的支持库C++11 新标准中引入了五个头文件来支持多线程编程
+
+它们分别是 `<atomic>, <thread>, <mutex>, <condition_variable>` 和 `<future>`。
 
 <img src="medium/image-20200814171948633.png" alt="image-20200814171948633" style="zoom: 67%;" />
 
@@ -107,29 +94,100 @@
 
 线程死锁描述的是这样一种情况：多个线程同时被阻塞，它们中的一个或者全部都在等待某个资源被释放。由于线程被无限期地阻塞，因此程序不可能正常终止。如下图所示，线程 A 持有资源 2，线程 B 持有资源 1，他们同时都想申请对方的资源，所以这两个线程就会互相等待而进入死锁状态。
 
-![image-20200807174031905](D:\git\docs\C++\medium\image-20200807174031905.png)
+<img src="D:\git\docs\C++\medium\image-20200807174031905.png" alt="image-20200807174031905" style="zoom: 67%;" />
+
+死锁必须具备以下四个条件：
+
+1. 互斥条件：该资源任意一个时刻只由一个线程占用。
+2. 请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放。
+3. 不剥夺条件:线程已获得的资源在末使用完之前不能被其他线程强行剥夺，只有自己使用完毕后才释放资源。
+4. 循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系
+
+#### 避免线程死锁
+
+我上面说了产生死锁的四个必要条件，为了避免死锁，我们只要破坏产生死锁的四个条件中的其中一个就可以了。现在我们来挨个分析一下：
+
+1. **破坏互斥条件** ：这个条件我们没有办法破坏，因为我们用锁本来就是想让他们互斥的（临界资源需要互斥访问）。
+2. **破坏请求与保持条件** ：一次性申请所有的资源。
+3. **破坏不剥夺条件** ：占用部分资源的线程进一步申请其他资源时，如果申请不到，可以主动释放它占有的资源。
+4. **破坏循环等待条件** ：靠按序申请资源来预防。按某一顺序申请资源，释放资源则反序释放。破坏循环等待条件。
 
 
 
 ## thread 线程
 
-`std::thread` **代表了一个线程对象，** 在 `<thread>` 头文件中声明。`<thread>` 头文件主要声明了 `std::thread` 类，声明了 `get_id`，`yield`，`sleep_until` 以及 `sleep_for` 等辅助函数
+`std::thread` **代表了一个线程对象，** 在 `<thread>` 头文件中声明。`<thread>` 头文件主要声明了 `std::thread` 类，声明了 `swap`，`get_id`，`yield`，`sleep_until` 以及 `sleep_for` 等辅助函数
 
-| 构造函数                   | 声明                                                         |                                                              |
-| -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 默认构造函数 (1)           | thread() noexcept;                                           | 创建一个空的 `std::thread` 执行对象。                        |
-| 初始化构造函数 (2)         | template <class Fn, class... Args> explicit thread(Fn&& fn, Args&&... args); | 创建一个 `std::thread` 对象，该 `std::thread` 对象可被 `joinable`，新产生的线程会调用 `fn` 函数，该函数的参数由 `args` 给出。 |
-| 拷贝构造函数 [deleted] (3) | thread(const thread&) = delete;                              | 被禁用，意味着 `std::thread` 对象不可拷贝构造。              |
-| `Move` 构造函数 (4)        | thread(thread&& x) noexcept;                                 | `move `构造函数，调用成功之后 `x` 不代表任何 `std::thread` 执行对象。 |
+| 构造函数               | 声明                                                         | 意义                                                         |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 默认构造函数           | thread() noexcept;                                           | 创建一个空的 `std::thread` 执行对象                          |
+| 初始化构造函数         | template <class Fn, class... Args> explicit thread(Fn&& **fn**, Args&&... **args**); | 创建一个 `std::thread` 对象，该 `std::thread` 对象可被 `joinable`，新产生的线程会调用 `fn` 函数，该函数的参数由 `args` 给出。 |
+| 拷贝构造函数 [deleted] | thread(const thread&) = delete;                              | 被禁用，意味着 `std::thread` 对象不可拷贝构造。              |
+| `Move` 构造函数        | thread(thread&& x) noexcept;                                 | `move `构造函数，调用成功之后 `x` 不代表任何 `std::thread` 执行对象。详情见右值引用、`std::move` |
 
-#### 其它函数
+#### 成员函数
+
+1. `std::thread  joinable()`函数，用于检测线程是否有效。
+
+   `joinable`：代表该线程是可执行线程。
+
+   `not-joinable `：通常一下几种情况会导致线程成为`not-joinable`
+
+   - 由`thread`的缺省构造函数构造而成(`thread()`没有参数)
+   - 该`thread`被`move`过（包括`move`构造和`move`赋值）
+   - 该线程调用过`join`或者`detach`
+
+2. `join`：创建线程执行线程函数，调用该函数会阻塞当前线程，直到线程执行完`join`才返回。
+
+3. `detach`: 将当前线程对象所代表的执行实例与该线程对象分离，使得线程的执行可以单独进行。`detach`调用之后，目标线程就成为了守护线程，驻留后台运行，与之关联的`std::thread`对象失去对目标线程的关联，无法再通过`std::thread`对象取得该线程的控制权。
+
+4. `get_id`：得到当前线程ID
+
+5. `swap`: 交换两个线程对象所代表的底层句柄。
+
+#### `std::this_thread` 函数
 
 1. `get_id`：得到当前线程ID
-2. `join`：调用该函数会阻塞当前线程，直到由 `*this` 所标示的线程执行完毕才返回。
-3. `yield`: 当前线程放弃执行，操作系统调度另一线程继续执行。
-4. `sleep`：`sleep_until` 以及 `sleep_for` 线程休眠至某个指定的时刻，该线程才被重新唤醒。
-5. `swap`: 交换两个线程对象所代表的底层句柄。
-6. `detach`: 将当前线程对象所代表的执行实例与该线程对象分离，使得线程的执行可以单独进行。一旦线程执行完毕，它所分配的资源将会被释放
+2. `yield`: 当前线程放弃执行，操作系统调度另一线程继续执行。
+3. `sleep`：`sleep_until` 以及 `sleep_for` 线程休眠至某个指定的时刻或某个时间片段，该线程才被重新唤醒。
+
+```c++
+#include <iostream>
+#include <utility>
+#include <thread>
+#include <chrono>
+#include <functional>
+#include <atomic>
+ 
+void f1(int n)
+{
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Thread " << n << " executing\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+ 
+void f2(int& n)
+{
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Thread 2 executing\n";
+        ++n;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+ 
+int main()
+{
+    int n = 0;
+    std::thread t1; // t1 is not a thread
+    std::thread t2(f1, n + 1); // pass by value
+    std::thread t3(f2, std::ref(n)); // pass by reference
+    std::thread t4(std::move(t3)); // t4 is now running f2(). t3 is no longer a thread
+    t2.join();
+    t4.join();
+    std::cout << "Final value of n is " << n << '\n';
+}
+```
 
 
 
@@ -149,23 +207,25 @@
 
 1. `std::mutex`
 
-   最基本的 Mutex 类，该类提供了最基本的上锁和解锁操作。同时，基本的互斥量不允许某个线程在已获得互斥量的情况下重复对该互斥量进行上锁操作，所以重复上锁将会导致死锁（结果通常未定义的）。
+   **最基本的 Mutex 类，**该类提供了最基本的上锁和解锁操作。同时，基本的互斥量不允许某个线程在已获得互斥量的情况下重复对该互斥量进行上锁操作，所以重复上锁将会导致死锁（结果通常未定义的）。
 
 2. `std::recursive_mutex`
 
-   递归 Mutex 类，与 `std::mutex` 功能基本相同，但是允许互斥量的拥有者（通常是某个线程）重复对该互斥量进行上锁操作而不会产生死锁，但必须保证上锁和解锁的次数相同。
+   **递归 Mutex 类**，与 `std::mutex` 功能基本相同，但是允许互斥量的拥有者（通常是某个线程）重复对该互斥量进行上锁操作而不会产生死锁，但必须保证上锁和解锁的次数相同。
 
 3. `std::time_mutex`
 
-   定时 Mutex 类，与 `std::mutex` 功能基本相同，但是提供了两个额外的定时上锁操作，`try_lock_for` 和 `try_lock_until`，即某个线程在规定的时间内对互斥量进行上锁操作，如果在规定的时间内获得了锁则返回 `true`, 超时则返回 `false`，在本章后面的内容中我会介绍`try_lock_for` 和 `try_lock_until`两个上锁函数之间细微的差异。
+   **定时 Mutex 类，**与 `std::mutex` 功能基本相同，但是提供了两个额外的定时上锁操作，`try_lock_for` 和 `try_lock_until`，即某个线程在规定的时间内对互斥量进行上锁操作，如果在规定的时间内获得了锁则返回 `true`, 超时则返回 `false`，在本章后面的内容中我会介绍`try_lock_for` 和 `try_lock_until`两个上锁函数之间细微的差异。
 
 4. `std::recursive_timed_mutex`
 
-   定时递归 Mutex 类，既提供了重复上锁功能，又提供了定时上锁的特性（即在规定的时间内没有获得锁则返回 `false`），相当于 `std::recursive_mutex` 和 `std::time_mutex` 的组合。
+   **定时递归 Mutex 类**，既提供了重复上锁功能，又提供了定时上锁的特性（即在规定的时间内没有获得锁则返回 `false`），相当于 `std::recursive_mutex` 和 `std::time_mutex` 的组合。
 
 #### Lock 类
 
 C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始化）技术。
+
+RAII原理：如果希望保持对某个重要资源的跟踪，那么创建一个对象，并将资源生命周期与对象的生命周期相关联。最简单的RAII形式是创建这样一个对象：构造函数中获取一份资源，析构函数中则释放资源
 
 1. `std::lock_guard`
 
@@ -173,15 +233,15 @@ C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始
 
 2. `std::unique_lock`
 
-   对象以独占所有权的方式管理 mutex 对象的上锁和解锁操作，所谓独占所有权，就是没有其他的 `unique_lock` 对象同时拥有某个 mutex 对象的所有权。与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
+   对象以独占所有权的方式管理 `mutex` 对象的上锁和解锁操作，所谓独占所有权，就是没有其他的 `unique_lock` 对象同时拥有某个 `mutex` 对象的所有权。与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
 
 #### 锁类型相关的Tag类
 
 1. `std::adopt_lock_t`，一个空的标记类，定义如下：`struct adopt_lock_t {};`，该类型的常量对象`adopt_lock`（`adopt_lock` 是一个常量对象，定义如下：`constexpr adopt_lock_t adopt_lock {};`，`constexpr` 是 C++11 中的新关键字） 通常作为参数传入给 `unique_lock` 或 `lock_guard` 的构造函数。
-2. `std::defer_lock_t`，一个空的标记类，定义如下：`struct defer_lock_t {};`，该类型的常量对象`defer_lock`（`defer_lock` 是一个常量对象，定义如下：`constexpr defer_lock_t defer_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
+2. `std::defer_lock_t`，一个空的标记类，定义如下：`struct defer_lock_t {};`，该类型的常量对象`defer_lock`（`defer_lock` 是一个常量对象，定义如下：`constexpr defer_lock_t defer_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。
 3. `std::try_to_lock_t`，一个空的标记类，定义如下：`struct try_to_lock_t {};`，该类型的常量对象`try_to_lock`（`try_to_lock` 是一个常量对象，定义如下：`constexpr try_to_lock_t try_to_lock {};`） 通常作为参数传入给`unique_lock` 或 `lock_guard` 的构造函数。。
 
-#### 辅助函数
+#### 成员函数
 
 1. `std::try_lock`，尝试同时对多个互斥量上锁。线程调用也会出现`lock`的三种情况
 2. `std::lock`，同时对多个互斥量上锁。调用线程将锁住该互斥量。线程调用该函数会发生下面 3 种情况：
@@ -278,18 +338,68 @@ C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始
 
 #### 分类
 
-1. **静态内存模型**主要是类(或结构)对象在内存中的布局。也就是类(或结构)成员在内存中是如何存放的。C++11有一些定义及工具用来对内存布局进行操作，更复杂的类(或结构)对象的内存布局请参考[Stanley B.Lippman](https://en.wikipedia.org/wiki/Stanley_B._Lippman)的《深度探索C++对象模型》。
-2. **动态内存模型**是从行为方面来看，多个线程对同一个对象同时读写时所做的约束，该模型理解起来要复杂一些，涉及了内存、Cache、CPU各个层次的交互，尤其是在多核系统中为了保证多线程环境下执行的正确性，需要对读写事件加以严格限制。std::memory_order就是这用来做这事的，它实际上是程序员、编译器以及CPU之间的契约，遵守契约后大家各自优化，从而可能提高程序性能。
+1. **静态内存模型**：主要是类(或结构)对象在内存中的布局。也就是类(或结构)成员在内存中是如何存放的。C++11有一些定义及工具用来对内存布局进行操作，更复杂的类(或结构)对象的内存布局请参考Stanley B.Lippman的《深度探索C++对象模型》。
+2. **动态内存模型**：是从行为方面来看，多个线程对同一个对象同时读写时所做的约束，该模型理解起来要复杂一些，涉及了内存、Cache、CPU各个层次的交互，尤其是在多核系统中为了保证多线程环境下执行的正确性，需要对读写事件加以严格限制。std::memory_order就是这用来做这事的，它实际上是程序员、编译器以及CPU之间的契约，遵守契约后大家各自优化，从而可能提高程序性能。
 
-待完成
+#### 为什么需要内存模型 
+
+<img src="medium/image-20200819214836498.png" alt="image-20200819214836498" style="zoom: 67%;" />
+
+多核情况下为了获取更高的性能，会对语句进行执行顺序上的优化(类似CPU乱序)。避免方案当然是`std::mutex`，但是当程序对代码执行效率要求很高，`std::mutex`不满足时，就需要`std::atomic`，但`std::atomic`无法发现错误
+
+#### C++11的内存模型
+
+在正式介绍memory_order之前，我们先来看两个概念：synchronized-with和happends-before。
+
+- 行为：**synchronized-with**
+
+  这是std::atomic生效的前提之一。假设X是一个atomic变量。如果线程A写了变量X, 线程B读了变量X，那么我们就说线程A、B间存在synchronized-with关系。C++11默认的原子操作(memory_order_seq_cst)就是synchronized-with的，保证了对X的读和写是互斥的，不会同时发生。
+
+  <img src="medium/image-20200819215555351.png" alt="image-20200819215555351" style="zoom:67%;" />
+
+- 结果：**happens-before**
+
+   happens-before指明了后发生的动作会看到先发生的动作的结果。还是上图，当线程B读取X时，读到的一定是写入后的X值，而不会是其它情况。happends-before具有*传递性*。如果A happens-before B，B happens-before C，那么A happends-before C
+
+- **4种内存模型**
+
+  | 序号 | 内存模型  | memory_order值                                               | **备注** |
+  | ---- | --------- | ------------------------------------------------------------ | -------- |
+  | 1    | 宽松      | memory_order_relaxed                                         |          |
+  | 2    | 释放-获取 | memory_order_acquire<br/>memory_order_release<br/>memory_order_acq_rel |          |
+  | 3    | 释放-消费 | memory_order_consume                                         | C++20起  |
+  | 4    | 顺序一致  | memory_order_seq_cst                                         |          |
+
+  1. **宽松**
+
+     在原子变量上采用relaxed ordering的操作不参与synchronized-with关系。Relaxed ordering的限定范围是同线程，在同一线程内对**同一原子变量**的访问不可以被重排，仍保持happens-before关系，但这与别的线程无关(不同线程间的同一原子变量的操作没有happens-before关系)。Relaxed ordering适用于**只要求原子操作，不需要其它同步保障**的情况。该操作典型的应用场景是程序计数器：
+
+  2. **释放-获取**
+
+     Release-acquire中没有全序关系，但它提供了一些同步方法。在这种序列模型下，原子操作对应的内存操作为：
+
+     | 序号 |      原子操作      | 对应的内存操作                 | memory_order枚举值                                           |
+     | :--: | :----------------: | ------------------------------ | ------------------------------------------------------------ |
+     |  1   |        load        | acquire                        | memory_order_acquire                                         |
+     |  2   |       store        | release                        | memory_order_release                                         |
+     |  3   | fetch_add exchange | acquire 或 release 或 两者都是 | memory_order_acquire memory_order_release memory_order_acq_rel |
+     | ...  |        ...         | ...                            | ...                                                          |
+
+     Release-acquire中同步是成对出现的，仅建立在释放和获取同一原子对象的线程之间。其它线程有可能看到不一样的内存访问顺序。在我们常用的x86系统(强顺序系统)上，释放-获取顺序对于多数操作是自动进行的，无需为此同步模式添加额外的CPU指令。但在弱顺序系统(如ARM)上，必须使用特别的CPU加载或内存栅栏指令。
+
+     Release-acquire有一个特点：线程A中所有发生在release x之前的写操作(包括非原子或宽松原子)，对在线程B acquire x之后都可见。本来A、B间读写操作顺序不定。这么一同步，在x这个点前后，A、B线程之间有了个顺序关系，称作inter-thread happens-before。
+
+     一个释放-获取同步的例子是`std::mutex`：线程A释放锁而线程B获得它时，发生于线程A环境的临界区(释放之前)中的所有内存写入操作，对于线程B(获得之后)均可见。
+
+  3. **释放-消费**
+
+     释放-消费顺序的规范正在修订中，C++标准暂不鼓励使用memory_order_consume。此处不过多介绍
+
+  4. **顺序一致**
+
+     顺序一致性原子操作是全序的，可以看作是释放-获取操作的加强版，它与释放-获取顺序相同的方式排序内存(在一个线程中先发生于存储的任何结果都变成进行加载的线程中的可见副效应)的同时，还对所有内存操作建立单独全序。它意味着将程序看做是一个简单的序列。如果对于一个原子变量的所有操作都是顺序一致的，那么多线程程序的行为就像是这些操作都以一种特定顺序被单线程程序执行。
 
 
-
-1. 顺序一致性模型
-   - 从单个线程的角度来看，每个线程内部的指令都是按照程序规定的顺序（program order）来执行的；
-   - 从整个多线程程序的角度来看，整个多线程程序的执行顺序是按照某种交错顺序来执行的，且是全局一致的；
-2. 
-3. 
 
 ## 并发数据结构
 
@@ -297,12 +407,7 @@ C++11 标准中定义了两种与互斥量相关的 RAII（资源获取即初始
 
 1. `concurrentqueue`
 
-2. 
-
    
-
-
-
 
 
 ## 应用场景
@@ -324,5 +429,5 @@ C++11多线程-内存模型：https://www.jianshu.com/p/7d237771dc94
 
 Cplusplus-Concurrency-In-Practice：https://github.com/forhappy/Cplusplus-Concurrency-In-Practice
 
-
+C++并发编程-博客园：https://www.cnblogs.com/huty/p/8516997.html
 
