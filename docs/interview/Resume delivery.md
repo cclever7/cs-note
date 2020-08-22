@@ -6,7 +6,7 @@
 | 亿联网络           | https://yealink.zhiye.com/Campus                             |           |      |
 | 同程旅行           | https://mp.weixin.qq.com/s/6pClg_gX_5mClzXAJDaY-w            | 测评      |      |
 | 酷家乐             | https://www.nowcoder.com/discuss/472776?from=21tqpkjl        |           |      |
-| VIPKID             | https://www.nowcoder.com/discuss/470853?from=21tqpvipk       |           |      |
+| VIPKID             | https://www.nowcoder.com/discuss/470853?from=21tqpvipk       | 8/21笔试  |      |
 | 作业帮             | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 未投      |      |
 | 有赞               | 无C++                                                        | 未投      |      |
 | 心动网络 x TapTap  | https://www.nowcoder.com/careers/XD/26963?from=21tqpxd       |           |      |
@@ -21,13 +21,13 @@
 | 海康威视           |                                                              |           |      |
 | 奇安信             | https://campus.qianxin.com/campus/jobSearch                  |           |      |
 | 声网               |                                                              |           |      |
-| 顺丰科技           |                                                              |           |      |
+| 顺丰科技           | http://campus.sf-express.com/index.html#/personalCenter      | 测评      |      |
 | 长虹2021提前批     | https://mp.weixin.qq.com/s/qXc68WVnmg44PhanzkrYDg            |           |      |
 | 老虎集团           | https://www.nowcoder.com/discuss/457284?from=21tqplh         |           |      |
 | 涂鸦智能           | https://www.nowcoder.com/discuss/467000?from=21tqptyzn       |           |      |
 | 宁波银行           | https://zhaopin.nbcb.com.cn/recruit/resume/resumeCenter.jsp  |           |      |
 | 交通银行           | https://job.bankcomm.com                                     |           |      |
-|                    |                                                              |           |      |
+| OPPO               | https://www.nowcoder.com/discuss/445983?from=21tqp           |           |      |
 |                    |                                                              |           |      |
 |                    |                                                              |           |      |
 |                    |                                                              |           |      |

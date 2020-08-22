@@ -74,7 +74,7 @@
 
 1. `<thread>`：该头文件主要声明了 `std::thread` **线程类**，另外 `std::this_thread` 命名空间也在该头文件中。
 2. `<future>`：**异步类相关**，该头文件主要声明了 `std::promise`, `std::package_task` 两个 Provider 类，以及 `std::future` 和 `std::shared_future` 两个 Future 类，另外还有一些与之相关的类型和函数，`std::async()` 函数就声明在此头文件中。
-4. `<mutex>`：该头文件主要声明了**与互斥量(Mutex)相关的类**，包括 `std::mutex_*` 一系列类，`std::lock_guard`, `std::unique_lock`, 以及其他的类型和函数。
+4. `<mutex>`：该头文件主要声明了**与互斥量(Mutex)相关的类**，包括 `std::mutex_*` 一系列类，`std::lock_guard`, `std::unique_lock`, 以及其他的类型和函数，主要用于线程同步
 5. `<condition_variable>`：该头文件主要声明了**与条件变量相关的类**，包括 `std::condition_variable` 和 `std::condition_variable_any`。
 5. `<atomic>`：该头文主要声明了两个类, `std::atomic` 和 `std::atomic_flag`，另外还声明了一套 C 风格的原子类型和与 C 兼容的**原子操作的函数**。
 
@@ -96,7 +96,7 @@
 
 <img src="D:\git\docs\C++\medium\image-20200807174031905.png" alt="image-20200807174031905" style="zoom: 67%;" />
 
-死锁必须具备以下四个条件：
+**死锁必须具备以下四个条件**：
 
 1. 互斥条件：该资源任意一个时刻只由一个线程占用。
 2. 请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放。
@@ -127,7 +127,7 @@
 
 #### 成员函数
 
-1. `std::thread  joinable()`函数，用于检测线程是否有效。
+1. `std::thread  joinable()`函数，用于检测线程是否有效。相同线程不能被`join()`和`detach()`两次
 
    `joinable`：代表该线程是可执行线程。
 
@@ -137,9 +137,9 @@
    - 该`thread`被`move`过（包括`move`构造和`move`赋值）
    - 该线程调用过`join`或者`detach`
 
-2. `join`：创建线程执行线程函数，调用该函数会阻塞当前线程，直到线程执行完`join`才返回。
+2. `join`：创建线程执行线程函数，调用该函数会阻塞当前线程，直到线程执行完`join`才返回。主线程等待子线程
 
-3. `detach`: 将当前线程对象所代表的执行实例与该线程对象分离，使得线程的执行可以单独进行。`detach`调用之后，目标线程就成为了守护线程，驻留后台运行，与之关联的`std::thread`对象失去对目标线程的关联，无法再通过`std::thread`对象取得该线程的控制权。
+3. `detach`: 将当前线程对象所代表的执行实例与该线程对象分离，使得线程的执行可以单独进行。`detach`调用之后，目标线程就成为了守护线程，驻留后台运行，与之关联的`std::thread`对象失去对目标线程的关联，无法再通过`std::thread`对象取得该线程的控制权。主线程不等子线程
 
 4. `get_id`：得到当前线程ID
 
@@ -207,19 +207,19 @@ int main()
 
 1. `std::mutex`
 
-   **最基本的 Mutex 类，**该类提供了最基本的上锁和解锁操作。同时，基本的互斥量不允许某个线程在已获得互斥量的情况下重复对该互斥量进行上锁操作，所以重复上锁将会导致死锁（结果通常未定义的）。
+   **最基本的 Mutex 类，**该类提供了最基本的上锁和解锁操作。同时，基本的互斥量不允许某个线程在已获得互斥量的情况下重复对该互斥量进行上锁操作，所以重复上锁将会导致死锁（结果通常未定义的）
 
 2. `std::recursive_mutex`
 
-   **递归 Mutex 类**，与 `std::mutex` 功能基本相同，但是允许互斥量的拥有者（通常是某个线程）重复对该互斥量进行上锁操作而不会产生死锁，但必须保证上锁和解锁的次数相同。
+   **递归 Mutex 类**，与 `std::mutex` 功能基本相同，但是允许互斥量的拥有者（通常是某个线程）重复对该互斥量进行上锁操作而不会产生死锁，但必须保证上锁和解锁的次数相同
 
 3. `std::time_mutex`
 
-   **定时 Mutex 类，**与 `std::mutex` 功能基本相同，但是提供了两个额外的定时上锁操作，`try_lock_for` 和 `try_lock_until`，即某个线程在规定的时间内对互斥量进行上锁操作，如果在规定的时间内获得了锁则返回 `true`, 超时则返回 `false`，在本章后面的内容中我会介绍`try_lock_for` 和 `try_lock_until`两个上锁函数之间细微的差异。
+   **定时 Mutex 类，**与 `std::mutex` 功能基本相同，但是提供了两个额外的定时上锁操作，`try_lock_for` 和 `try_lock_until`，即某个线程在规定的时间内对互斥量进行上锁操作，如果在规定的时间内获得了锁则返回 `true`, 超时则返回 `false`，在本章后面的内容中我会介绍`try_lock_for` 和 `try_lock_until`两个上锁函数之间细微的差异
 
 4. `std::recursive_timed_mutex`
 
-   **定时递归 Mutex 类**，既提供了重复上锁功能，又提供了定时上锁的特性（即在规定的时间内没有获得锁则返回 `false`），相当于 `std::recursive_mutex` 和 `std::time_mutex` 的组合。
+   **定时递归 Mutex 类**，既提供了重复上锁功能，又提供了定时上锁的特性（即在规定的时间内没有获得锁则返回 `false`），相当于 `std::recursive_mutex` 和 `std::time_mutex` 的组合
 
 #### Lock 类
 
@@ -229,11 +229,23 @@ RAII原理：如果希望保持对某个重要资源的跟踪，那么创建一�
 
 1. `std::lock_guard`
 
-   与 Mutex RAII 相关，方便线程对互斥量上锁。即在某个 `lock_guard` 对象的声明周期内，它所管理的锁对象会一直保持上锁状态；而 `lock_guard` 的生命周期结束之后，它所管理的锁对象会被解锁
+   ```c++
+   std::mutex mtx;
+   void foo() {
+       std::lock_guard<std::mutex> lck(mtx);
+       ...
+   }
+   ```
+
+   与 Mutex RAII 相关，方便线程对互斥量上锁。即在某个 `lock_guard` 对象的声明周期内，它所管理的锁对象会一直保持上锁状态；而 `lock_guard` 的生命周期结束之后，它所管理的锁对象会被解锁。`lock_guard` 对象的声明周期内，它所管理的锁对象会一直保持上锁状态；而 `lock_guard`的生命周期结束之后，它所管理的锁对象会被解锁，类似于智能指针，这也就是RAII
 
 2. `std::unique_lock`
 
-   对象以独占所有权的方式管理 `mutex` 对象的上锁和解锁操作，所谓独占所有权，就是没有其他的 `unique_lock` 对象同时拥有某个 `mutex` 对象的所有权。与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。
+   对象以独占所有权的方式管理 `mutex` 对象的上锁和解锁操作，所谓独占所有权，就是没有其他的 `unique_lock` 对象同时拥有某个 `mutex` 对象的所有权。与 Mutex RAII 相关，方便线程对互斥量上锁，但提供了更好的上锁和解锁控制。提供更多的函数因此更加灵活
+
+   - 上锁/解锁操作：`lock`，`try_lock`，`try_lock_for`，`try_lock_until` 和 `unlock`
+   - 修改操作：移动赋值(`move assignment`)(前面已经介绍过了)，交换(`swap`)（与另一个 `std::unique_lock` 对象交换它们所管理的 `Mutex` 对象的所有权），释放(`release`)（返回指向它所管理的 Mutex 对象的指针，并释放所有权）
+   - 获取属性操作：`owns_lock`（返回当前 `std::unique_lock` 对象是否获得了锁）、`operator bool()`（与 `owns_lock` 功能相同，返回当前 `std::unique_lock` 对象是否获得了锁）、`mutex`（返回当前 `std::unique_lock` 对象所管理的 `Mutex` 对象的指针）。
 
 #### 锁类型相关的Tag类
 
@@ -302,7 +314,7 @@ RAII原理：如果希望保持对某个重要资源的跟踪，那么创建一�
 
 #### 异步任务提供者（Providers)
 
-1. `std::promise`：它可以在某一时刻设置共享状态的值
+1. `std::promise`：它可以在某一时刻设置共享状态的值，它可以在某一时刻设置共享状态的值。
 
    `std::promise` 对象可以保存某一类型 T 的值，该值可被 future 对象读取（可能在另外一个线程中），因此 promise 也提供了一种线程同步的手段，在 promise 对象构造时可以和一个共享状态（通常是std::future）相关联，并可以在相关联的共享状态(`std::future`)上保存一个类型为 T 的值。
 
@@ -314,7 +326,24 @@ RAII原理：如果希望保持对某个重要资源的跟踪，那么创建一�
 
 #### Future类
 
-`std::future `用来获取异步任务的结果，因此可以把它当成一种简单的线程间同步的手段。一个有效(`valid`)的 `std::future` 对象通常由三种 Provider 创建，并和某个共享状态相关类
+`std::future `用来获取异步任务的结果，对象可以异步返回共享状态的值。因此可以把它当成一种简单的线程间同步的手段。一个有效(`valid`)的 `std::future` 对象通常由三种 Provider 创建，并和某个共享状态相关类
+
+```c++
+void print_int(std::future<int>& fut) {
+    int x = fut.get(); // 获取共享状态的值.
+    std::cout << "value: " << x << '\n'; // 打印 value: 10.
+}
+
+int main ()
+{
+    std::promise<int> prom; // 生成一个 std::promise<int> 对象.
+    std::future<int> fut = prom.get_future(); // 和 future 关联.
+    std::thread t(print_int, std::ref(fut)); // 将 future 交给另外一个线程t.
+    prom.set_value(10); // 设置共享状态的值, 此处和线程t保持同步.
+    t.join();
+    return 0;
+}
+```
 
 
 
@@ -415,8 +444,17 @@ RAII原理：如果希望保持对某个重要资源的跟踪，那么创建一�
 #### 生产者消费者模型
 
 1. 单对单
+
+   
+
 2. 单对多
+
+   
+
 3. 多对单
+
+   
+
 4. 多对多
 
 
