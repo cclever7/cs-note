@@ -1,6 +1,6 @@
 主要收集了C++知识和面试相关的的知识，整个工程还在完善中，Git初学暂不支持提交Issue和pr，目前仅供自用。
 
-您可以选择移步查看[码云](https://gitee.com/sdfafadf/c_interview)，或进行[在线阅读](https://sdfafadf.gitee.io/c_interview)。
+您可以选择移步查看[码云](https://gitee.com/dowisdom/c_interview)，或进行[在线阅读](https://dowisdom.gitee.io/c_interview)。
 
 **码字不易，拒绝白嫖，点点关注，点点小星星。磕头了，砰砰砰~**
 
