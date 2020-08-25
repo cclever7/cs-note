@@ -14,23 +14,23 @@
 
 - [51~60](#51)
 
-- [61~70][#61]
+- [61~70](#61)
 
-- [71~80][#71]
+- [71~80](#71)
 
-- [81~90][#81]
+- [81~90](#81)
 
-- [91~100][#91]
+- [91~100](#91)
 
-- [101~110][#101]
+- [101~110](#101)
 
-- [111~120][#111]
+- [111~120](#111)
 
-- [121~130][#121]
+- [121~130](#121)
 
-- [131~140][#131]
+- [131~140](#131)
 
-- [141~148][#141]
+- [141~148](#141)
 
   
 
@@ -862,11 +862,11 @@ vector<vector<int> > generate(int numRows) {
 
 ## 40
 
-
+给定一个单链表，其中的元素按升序排序，请将它转化成平衡二叉搜索树（BST）
 
 #### 思路
 
-
+此题相对于41题 ，就是需要找到链表的中间节点，此时可用快慢指针进行查找
 
 ```c++
 
@@ -876,25 +876,49 @@ vector<vector<int> > generate(int numRows) {
 
 ## 41
 
+给出一个升序排序的数组，将其转化为平衡二叉搜索树（BST）.
 
+输入
+[-1,0,1,2]
+输出
+{1,0,2,-1}
 
 #### 思路
 
-
-
+这道题是二分查找树的题目，要把一个有序数组转换成一颗二分查找树。从本质来看，如果把一个数组看成一棵树（也就是以中点为根，左右为左右子树，依次下去），数组就等价于一个二分查找树。所以如果要构造这棵树，那就是把中间元素转化为根，然后递归构造左右子树。
 ```c++
+TreeNode* sortedArrayToBST(vector<int>& num) {
+    // write code here
+    if(num.empty())
+        return nullptr;
+    int left = 0, right = num.size() - 1;
+    return getNode(num, left, right);
+}
 
+TreeNode* getNode(std::vector<int> num, int left, int right) {
+    if(left > right)
+        return nullptr;
+    if(left == right)
+        return new TreeNode(num[left]);
+    int mid = left + (right - left + 1) / 2;
+    TreeNode *root = new TreeNode(num[mid]);
+    root->left = getNode(num, left, mid - 1);
+    root->right = getNode(num, mid + 1, right);
+    return root;
+}
 ```
 
 
 
 ## 42
 
+给定一个二叉树，返回该二叉树由底层到顶层的层序遍历，（从左向右，从叶子节点到根节点，一层一层的遍历）
 
+例如：给定的二叉树是{3,9,20,#,#,15,7}, 遍历的结果是：[[15,7],[9,20],[3]]
 
 #### 思路
 
-
+1. 层序遍历采用队列的思路
 
 ```c++
 
@@ -904,7 +928,7 @@ vector<vector<int> > generate(int numRows) {
 
 ## 43
 
-
+给出一棵树的中序和后序遍历，请构造这颗二叉树
 
 #### 思路
 
@@ -918,7 +942,7 @@ vector<vector<int> > generate(int numRows) {
 
 ## 44
 
-
+给出一棵树的前序遍历和中序遍历，请构造这颗二叉树
 
 #### 思路
 
@@ -932,7 +956,7 @@ vector<vector<int> > generate(int numRows) {
 
 ## 45
 
-
+求给定二叉树的最大深度，最大深度是指树的根结点到最远叶子结点的最长路径上结点的数量。
 
 #### 思路
 
@@ -946,7 +970,8 @@ vector<vector<int> > generate(int numRows) {
 
 ## 46
 
-
+给定一个二叉树，返回该二叉树的之字形层序遍历，（第一层从左向右，下一层从右向左，一直这样交替）
+例如：给定的二叉树是{3,9,20,#,#,15,7},
 
 #### 思路
 
@@ -960,7 +985,8 @@ vector<vector<int> > generate(int numRows) {
 
 ## 47
 
-
+给定一个二叉树，返回该二叉树层序遍历的结果，（从左到右，一层一层地遍历）
+例如：给定的二叉树是{3,9,20,#,#,15,7},
 
 #### 思路
 
@@ -974,35 +1000,79 @@ vector<vector<int> > generate(int numRows) {
 
 ## 48
 
-
+给定一棵二叉树，判断琪是否是自身的镜像（即：是否对称）
 
 #### 思路
 
-
+1. 节点的左子树的右子树相等，且左子树的右子树等于右子树的左子树，采用递归进行求解
 
 ```c++
+bool isSymmetric(TreeNode *root) {
+    if(root == nullptr)
+        return true;
+    return method(root->left, root->right);
+}
+
+bool method(TreeNode *left, TreeNode *right) {
+    if(left == nullptr && right == nullptr)
+        return true;
+    if(left == nullptr)
+        return false;
+    if(right == nullptr)
+        return false;
+    if(left->val == right->val) {
+        return method(left->left, right->right) && method(left->right, right->left);
+    }
+    return false;
+}
 
 ```
-
-
 
 ## 49
 
+给出两个二叉树，请写出一个判断两个二叉树是否相等的函数。
 
+判断两个二叉树相等的条件是：两个二叉树的结构相同，并且相同的节点上具有相同的值。
 
 #### 思路
 
-
+1. 要么p和q都为空，否则p和q的节点值相同，且其左右子树节点也相同。使用递归
 
 ```c++
-
+bool isSameTree(TreeNode* p, TreeNode* q) {
+    // write code here
+    if(p == nullptr && q == nullptr)
+        return true;
+    if(p == nullptr)
+        return false;
+    if(q == nullptr)
+        return false;
+    if(p->val == q->val) {
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+    return false;
+}
 ```
-
-
 
 ## 50
 
+二叉搜索树（BST）中的两个节点被错误地交换了，请在不改变树的结构的情况下恢复这棵树。
 
+输入: [1,3,null,null,2]
+
+  1
+ /
+ 3
+ \
+  2
+
+输出: [3,1,null,null,2]
+
+  3
+ /
+ 1
+ \
+  2
 
 #### 思路
 
@@ -1269,14 +1339,37 @@ ListNode* partition(ListNode* head, int x) {
 
 ## 66
 
-
+给出一个升序排序的链表，删除链表中的所有重复出现的元素，只保留原链表中只出现一次的元素。
+例如：
+给出的链表为1 \to 2\to 3\to 3\to 4\to 4\to51→2→3→3→4→4→5, 返回1\to 2\to51→2→5.
+给出的链表为1\to1 \to 1\to 2 \to 31→1→1→2→3, 返回2\to 32→3.
 
 #### 思路
 
-
+1. 构造一个新的头节点，利前驱，当前，下一节点进行操作即可
 
 ```c++
-
+ListNode* deleteDuplicates(ListNode* head) {
+    // write code here
+    if(head == nullptr)
+        return nullptr;
+    ListNode *nhead = new ListNode(0);
+    nhead->next = head;
+    ListNode *p = nhead;
+    while(p && p->next && p->next->next) {
+        ListNode *s = p, *m = s->next, *e = m->next;
+        if(m->val == e->val) {
+            while(e && m->val == e->val) {
+                m = m->next;
+                e = e->next;    
+            }
+            p->next = e;
+        } else {
+            p = p->next;
+        }
+    }
+    return nhead->next;
+}
 ```
 
 ## 67
@@ -1461,15 +1554,55 @@ ListNode* partition(ListNode* head, int x) {
 
 ## 80
 
-
+实现函数 int sqrt(int x). 计算并返回x的平方根
 
 #### 思路
+
+1. 使用二分法不断的进行查找，注意此题mid 应为 x / mid， 不能乘法否则会溢出
+
+```c++
+int sqrt(int x) {
+    if(x == 0)
+        return 0;
+    int left = 1, right = x;
+    while(left <= right) {
+        int mid = (left + right) / 2;
+        if(mid == x / mid)
+            return mid;
+        else {
+            if(mid < x / mid) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    }
+    return right;
+}
+```
 
 
 
 ## 81
 
+给定一个单词数组和长度L，将该单词数组中文本两端对齐(左边和右边)，使每一行都有L个字符。
+你要在每一行中尽可能多地填充单词。在必要时填充额外的空格' '，使每行正好有L个字符。
+单词之间的额外空格要尽可能均匀地分布。如果一行的空格数不能在单词之间平均分配，请在左边分配更多的空格
+对于最后一行文本，它应该左对齐，并且单词之间不插入额外的空格。
 
+例如,
+
+单词数组为:["This", "is", "an", "example", "of", "text", "justification."]
+
+L:16.
+
+返回
+
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
 
 #### 思路
 
@@ -1729,23 +1862,45 @@ ListNode* partition(ListNode* head, int x) {
 
 ## 100
 
+请实现函数 pow(x, n).
 
+Implement pow(x, n).
 
 #### 思路
 
-```c++
+ 题目当然不会是一个简单的循环就能AC的，
+* 首先要注意符号的问题，负数n次幂要取倒数，
+* 其次是时间复杂度的问题，可通过设置一个中间变量tmp记录平方值，来折半计算，将O(n)降为O(logn)
+* 当指数为偶数时，直接 tmp *= tmp 即可，当指数为奇数时，除了tmp *= tmp 外， 结果还要乘上自己一次
 
+```c++
+double pow(double x, double n) {
+    double res = 1.0;
+    double tmp = x;
+    for(int i = (int)abs(n); i > 0; i /= 2) {
+        if(i % 2 != 0)
+            res *= tmp;
+        tmp *= tmp;
+    }
+    return (n > 0 ? res : 1/res);
+}
 ```
 
 
 
 ## 101
 
+给出一个字符串数组，返回所有互为“换位词（anagrams）”的字符串的组合。（换位词就是包含相同字母，但字母顺序可能不同的字符串）备注：所有的输入都是小写字母
 
+例如：
+
+输入["tea","nat","ate","eat","tan"]
+
+返回`[["ate", "eat","tea"],["nat","tan"]]`
 
 #### 思路
 
-
+1. 关键点是对数组每个元素即字符串进行排序，这样换位词始终为一个词
 
 ```c++
 
@@ -2438,3 +2593,6 @@ ListNode* partition(ListNode* head, int x) {
 
 
 
+
+
+[#61]: 

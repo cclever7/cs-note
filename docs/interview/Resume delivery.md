@@ -1,34 +1,86 @@
-| 公司               | 投递链接                                                     | 状态      | 其它 |
-| ------------------ | ------------------------------------------------------------ | --------- | ---- |
-| 资讯汇总（牛客）   | https://www.nowcoder.com/discuss/430637?channel=1000&source_id=home_feed |           |      |
-| 华为Cloud & AI, BG | http://career.huawei.com/reccampportal/portal5/campus-recruitment.html |           |      |
-| 中国电信云         | https://www.nowcoder.com/discuss/472901?from=21tqpdxy        |           |      |
-| 亿联网络           | https://yealink.zhiye.com/Campus                             |           |      |
-| 同程旅行           | https://mp.weixin.qq.com/s/6pClg_gX_5mClzXAJDaY-w            | 测评      |      |
-| 酷家乐             | https://www.nowcoder.com/discuss/472776?from=21tqpkjl        |           |      |
-| VIPKID             | https://www.nowcoder.com/discuss/470853?from=21tqpvipk       | 8/21笔试  |      |
-| 作业帮             | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 未投      |      |
-| 有赞               | 无C++                                                        | 未投      |      |
-| 心动网络 x TapTap  | https://www.nowcoder.com/careers/XD/26963?from=21tqpxd       |           |      |
-| 美团点评           | https://www.nowcoder.com/discuss/466431?from=21tqpmeituan    | 10.31截止 |      |
-| 快手               |                                                              |           |      |
-| TCL                | C++嵌入式                                                    | 未投      |      |
-| 招联金融           | https://www.nowcoder.com/discuss/464416?from=21tqpzljr       |           |      |
-| 小红书             | https://campus.liepin.com/apply/showapplylist/               |           |      |
-| 商汤科技           |                                                              |           |      |
-| 众安保险           | X                                                            |           |      |
-| 苏宁               | https://www.nowcoder.com/discuss/464271?from=21tqpsn         |           |      |
-| 海康威视           |                                                              |           |      |
-| 奇安信             | https://campus.qianxin.com/campus/jobSearch                  |           |      |
-| 声网               |                                                              |           |      |
-| 顺丰科技           | http://campus.sf-express.com/index.html#/personalCenter      | 测评      |      |
-| 长虹2021提前批     | https://mp.weixin.qq.com/s/qXc68WVnmg44PhanzkrYDg            |           |      |
-| 老虎集团           | https://www.nowcoder.com/discuss/457284?from=21tqplh         |           |      |
-| 涂鸦智能           | https://www.nowcoder.com/discuss/467000?from=21tqptyzn       |           |      |
-| 宁波银行           | https://zhaopin.nbcb.com.cn/recruit/resume/resumeCenter.jsp  |           |      |
-| 交通银行           | https://job.bankcomm.com                                     |           |      |
-| OPPO               | https://www.nowcoder.com/discuss/445983?from=21tqp           |           |      |
-|                    |                                                              |           |      |
-|                    |                                                              |           |      |
-|                    |                                                              |           |      |
+| 重点公司               | 投递链接                                                     | 状态      | 其它 |
+| ---------------------- | ------------------------------------------------------------ | --------- | ---- |
+| 华为Cloud & AI, BG     | http://career.huawei.com/reccampportal/portal5/campus-recruitment.html |           |      |
+| 哔哩哔哩               | https://app.mokahr.com/campus_apply                          |           |      |
+| 腾讯                   |                                                              | 9.16      |      |
+| 阿里巴巴               |                                                              |           |      |
+| 蚂蚁金服               |                                                              |           |      |
+| 京东                   | https://www.nowcoder.com/discuss/452605?from=21tqp           | 己投递    |      |
+| 虾皮                   | 0830截止  25号投递                                           |           |      |
+| 快手                   |                                                              |           |      |
+| 网易互娱、雷火、互联网 |                                                              |           |      |
+| 猿辅导                 | 12号截止                                                     |           |      |
+| 商汤科技               |                                                              |           |      |
+| 美团点评               | https://www.nowcoder.com/discuss/466431?from=21tqpmeituan    | 10.31截止 |      |
+| 深信服科技             |                                                              |           |      |
+| 拼多多                 |                                                              |           |      |
+
+
+
+| 公司              | 投递链接                                                     | 状态      | 其它 |
+| ----------------- | ------------------------------------------------------------ | --------- | ---- |
+| 资讯汇总（牛客）  | https://www.nowcoder.com/discuss/430637?channel=1000&source_id=home_feed |           |      |
+| 中国电信云        | https://www.nowcoder.com/discuss/472901?from=21tqpdxy        |           |      |
+| 亿联网络          | https://yealink.zhiye.com/Campus                             | X         |      |
+| 同程旅行          | https://mp.weixin.qq.com/s/6pClg_gX_5mClzXAJDaY-w            | 测评完成  |      |
+| 酷家乐            | https://www.nowcoder.com/discuss/472776?from=21tqpkjl        |           |      |
+| VIPKID            | https://www.nowcoder.com/discuss/470853?from=21tqpvipk       | 笔试完成  |      |
+| 作业帮            | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 未投      |      |
+| 有赞              | 无C++                                                        | 未投      |      |
+| 心动网络 x TapTap | https://www.nowcoder.com/careers/XD/26963?from=21tqpxd       |           |      |
+| TCL               | C++嵌入式                                                    | 未投      |      |
+| 招联金融          | https://www.nowcoder.com/discuss/464416?from=21tqpzljr       |           |      |
+| 小红书            | https://campus.liepin.com/apply/showapplylist/               |           |      |
+| 众安保险          | X                                                            |           |      |
+| 苏宁              | https://www.nowcoder.com/discuss/464271?from=21tqpsn         | 测评 27号 |      |
+| 海康威视          |                                                              |           |      |
+| 奇安信            | https://campus.qianxin.com/campus/jobSearch                  |           |      |
+| 声网              |                                                              |           |      |
+| 顺丰科技          | http://campus.sf-express.com/index.html#/personalCenter      | 测评完成  |      |
+| 长虹2021提前批    | https://mp.weixin.qq.com/s/qXc68WVnmg44PhanzkrYDg            |           |      |
+| 老虎集团          | https://www.nowcoder.com/discuss/457284?from=21tqplh         |           |      |
+| 涂鸦智能          | https://www.nowcoder.com/discuss/467000?from=21tqptyzn       |           |      |
+| 宁波银行          | https://zhaopin.nbcb.com.cn/recruit/resume/resumeCenter.jsp  |           |      |
+| 交通银行          | https://job.bankcomm.com                                     |           |      |
+| OPPO              | https://www.nowcoder.com/discuss/445983?from=21tqp           |           |      |
+|                   |                                                              |           |      |
+|                   |                                                              |           |      |
+|                   |                                                              |           |      |
+| 旷视科技          |                                                              |           |      |
+| 搜狗              | https://www.nowcoder.com/discuss/460205?from=21tqpsg         |           |      |
+| 思科              |                                                              |           |      |
+| 网龙              |                                                              |           |      |
+| 欢聚时代          | https://www.nowcoder.com/discuss/464281?from=21tqphj         |           |      |
+| 招商银行          | https://cmbnt.cmbchina.com/pages/mycenter/default.html       |           |      |
+
+| 公司       | 投递链接                                                     | 状态       | 其它     |
+| ---------- | ------------------------------------------------------------ | ---------- | -------- |
+| 最右       | https://www.nowcoder.com/discuss/483373?from=21tqpzy         |            | 邮件内推 |
+| 锐捷网络   | https://www.nowcoder.com/discuss/483861?from=21tqprjwl       | 获取内推码 |          |
+| 奥比中光   | https://www.nowcoder.com/discuss/484111?from=21tqpabzg       |            |          |
+| 中兴通迅   | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      |            |          |
+| 广联达     | https://app.mokahr.com/m/candidate/applications/deliver-query/glodon |            |          |
+| 4399       |                                                              |            |          |
+| 浪潮       | https://inspur.hcmcloud.cn/recruit#/progress_detail?id=1351297 | 测评+笔试  |          |
+|            |                                                              |            |          |
+|            |                                                              |            |          |
+| 还没投     |                                                              |            |          |
+| 贝壳找房   | https://www.nowcoder.com/discuss/456269?from=21tqp           |            |          |
+| 斗鱼2021   | https://www.nowcoder.com/discuss/459918?from=21tqpdy         |            |          |
+| 中电十所   | https://mp.weixin.qq.com/s/0H9DzFn-FHGtVAthlqc7MQ            |            |          |
+|            |                                                              |            |          |
+|            |                                                              |            |          |
+| **好未来** | https://www.nowcoder.com/discuss/460411?from=21tqpxes        |            |          |
+|            |                                                              |            |          |
+|            |                                                              |            |          |
+|            |                                                              |            |          |
+|            |                                                              |            |          |
+
+
+
+
+
+
+
+
 
