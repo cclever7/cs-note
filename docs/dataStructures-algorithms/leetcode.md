@@ -1734,6 +1734,12 @@ L:16.
 
 
 
+```c++
+
+```
+
+
+
 ## 91
 
 
@@ -1764,28 +1770,76 @@ L:16.
 
 ## 93
 
+给定一组不重叠的时间区间，在时间区间中插入一个新的时间区间(如果有重叠的话就合并区间)。这些时间区间初始是根据它们的开始时间排序的。
 
+示例1:给定时间区间[1,3]，[6,9]，在这两个时间区间中插入时间区间[2,5]，并将它与原有的时间区间合并，变成[1,5],[6,9].
+
+示例2：给定时间区间[1,2],[3,5],[6,7],[8,10],[12,16],在这些时间区间中插入时间区间[4,9]，并将它与原有的时间区间合并，变成[1,2],[3,10],[12,16]   这是因为时间区间[4,9]覆盖了时间区间[3,5],[6,7],[8,10].
 
 #### 思路
 
-
+1. 顺序遍历这处数组，如果新组左值大于原且右值，直接加入
+2. 如果新组右值大于新组左值，则需要进行合并
+3. 将后续未合并的添加的结果中
 
 ```c++
-
+vector<Interval> insert(vector<Interval> &intervals, Interval newInterval) {
+    std::vector<Interval> res;
+    if(intervals.empty()) {
+        res.push_back(newInterval);
+        return res;
+    }
+    int idx = 0;
+    while(idx < intervals.size() && newInterval.start > intervals[idx].end) { //新组左值大于原组右值直接加入
+        res.push_back(intervals[idx++]);
+    }
+    while(idx < intervals.size() && newInterval.end >= intervals[idx].start) {//否则，需要进行合并
+        newInterval.start = min(intervals[idx].start, newInterval.start);
+        newInterval.end = max(intervals[idx].end, newInterval.end);
+        idx++;
+    }
+    res.push_back(newInterval);
+    while(idx < intervals.size()) 
+        res.push_back(intervals[idx++]);
+    return res;
+}
 ```
 
 
 
 ## 94
 
-
+给出一组区间，请合并所有重叠的区间。
+例如，
+给出[1,3],[2,6],[8,10],[15,18],
+返回[1,6],[8,10],[15,18].
 
 #### 思路
 
-
+1. 类似于93题 
 
 ```c++
-
+vector<Interval> merge(vector<Interval> &intervals) {
+    std::vector<Interval> res;
+    if(intervals.empty())
+        return res;
+    std::sort(intervals.begin(), intervals.end(), [](Interval v1, Interval v2){
+        return v2.start > v1.start;
+    });
+    res.push_back(intervals[0]);
+    int i = 1, j = 0;
+    while(i < intervals.size()) {
+        if(intervals[i].start > res[j].end) {
+            res.push_back(intervals[i]);
+            j++;
+        } else if(intervals[i].end >= res[j].start) {
+            res[j].start = min(intervals[i].start, res[j].start);
+            res[j].end = max(intervals[i].end, res[j].end);
+        }
+        i++;
+    }
+    return res;
+}
 ```
 
 
@@ -2190,39 +2244,80 @@ double pow(double x, double n) {
 
 ## 123
 
+给定一个数组和一个值，使用就地算法将数组中所有等于这个值的元素删除，并返回新数组的长度。
 
+元素的顺序可以更改。你不用去关心大于当前数组长度的空间里面存储的值
 
 #### 思路
 
-
+1. 每次找到目标值时都和尾部节点进行交换，并且尾部指针向前移，最终返回尾部指针所在的位置
 
 ```c++
-
+int removeElement(int A[], int n, int elem) {
+    if(n == 0)
+        return 0;
+    int len = n - 1, i = len;
+    while(i >= 0) {
+        if(A[i] == elem) {
+            int temp = A[i];
+            A[i] = A[len];
+            A[len] = temp;
+            len--;
+        }
+        i--;
+    }
+    return len + 1;
+}
 ```
 
 
 
 ## 124
 
+给定一个已排序的数组，使用就地算法将重复的数字移除，使数组中的每个元素只出现一次，返回新数组的长度。不能为数组分配额外的空间，你必须使用常熟级空间复杂度的就地算法。
 
+例如，给定输入数组 A=[1,1,2]，你给出的函数应该返回length=2，A数组现在是[1,2]。
 
 #### 思路
 
-
+1. 使用一个值来标定当前最小值 ， 遍历时不断与这个值进行比较，不断的进行赋值 
 
 ```c++
-
+int removeDuplicates(int A[], int n) {
+    if(n == 0)
+        return 0;
+    int val = 1 << 31;
+    int idx = 0;
+    for(int i = 0; i < n; i++) {
+        if(A[i] > val) {
+            A[idx++] = A[i];
+            val = A[i];
+        }
+    }
+    return idx;
+}
 ```
 
 
 
 ## 125
 
+将给出的链表中的节点每\ k *k* 个一组翻转，返回翻转后的链表
+如果链表中的节点数不是\ k *k* 的倍数，将最后剩下的节点保持原样
+你不能更改节点中的值，只能更改节点本身。
+要求空间复杂度 \ O(1) *O*(1)
 
+例如：
+
+给定的链表是1\to2\to3\to4\to51→2→3→4→5
+
+对于 \ k = 2 *k*=2, 你应该返回 2\to 1\to 4\to 3\to 52→1→4→3→5
+
+对于 \ k = 3 *k*=3, 你应该返回 3\to2 \to1 \to 4\to 53→2→1→4→5
 
 #### 思路
 
-
+1. 
 
 ```c++
 
@@ -2232,11 +2327,14 @@ double pow(double x, double n) {
 
 ## 126
 
-
+将给定的链表中每两个相邻的节点交换一次，返回链表的头指针
+例如,
+给出1->2->3->4，你应该返回链表2->1->4->3。
+你给出的算法只能使用常量级的空间。你不能修改列表中的值，只能修改节点本身
 
 #### 思路
 
-
+1. 
 
 ```c++
 
@@ -2246,11 +2344,11 @@ double pow(double x, double n) {
 
 ## 127
 
-
+合并\ k *k* 个已排序的链表并将其作为一个已排序的链表返回。分析并描述其复杂度。
 
 #### 思路
 
-
+1. 基于两个链接的合并，不断的进行两两合并
 
 ```c++
 
@@ -2260,7 +2358,9 @@ double pow(double x, double n) {
 
 ## 128
 
+给出n对括号，请编写一个函数来生成所有的由n对括号组成的合法组合。
 
+例如，给出n=3，解集为："((()))", "(()())", "(())()", "()(())", "()()()"
 
 #### 思路
 
@@ -2274,11 +2374,12 @@ double pow(double x, double n) {
 
 ## 129
 
-
+给出一个仅包含字符'(',')','{','}','['和']',的字符串，判断给出的字符串是否是合法的括号序列
+括号必须以正确的顺序关闭，"()"和"()[]{}"都是合法的括号序列，但"(]"和"([)]"不合法
 
 #### 思路
 
-
+1. 使用栈进行操作， ([{都进行入栈操作， 而右边括号的都进行栈顶出栈操作，看是否会匹配
 
 ```c++
 
@@ -2288,11 +2389,11 @@ double pow(double x, double n) {
 
 ## 130
 
-
+给定一个链表，删除链表的倒数第n个节点并返回链表的头指针
 
 #### 思路
 
-
+1. 快慢指针
 
 ```c++
 
@@ -2420,65 +2521,100 @@ double pow(double x, double n) {
 
 ## 140
 
+在不使用额外的内存空间的条件下判断一个整数是否是回文数字
 
+提示：负整数可以是回文吗？（比如-1）
 
 #### 思路
 
-
+1. 首先计算数字共有多少位，然后高低同时开始比较
 
 ```c++
-
+bool isPalindrome(int x) {
+    // write code here
+    if(x < 0)
+        return false;
+    if(x == 0)
+        return true;
+    int temp = x, cnt = 0;
+    while(temp > 0) {
+        temp /= 10;
+        cnt++;
+    }
+    int left = 1, right = cnt, x1 = x, x2 = x;
+    while(right > left) {
+        int res1 = x1 % 10;	//低位
+        x1 /= 10;
+        left++;
+        int res2 = x2/pow(10, right - 1); //高位
+        x2 -= res2 * pow(10, right - 1);
+        right--;
+        if(res1 != res2)
+            return false;
+    }
+    return true;
+}
 ```
-
-
-
-
 
 ## 141
 
-
+将给出的整数x翻转。
+例1:x=123，返回321
+例2:x=-123，返回-321
 
 #### 思路
 
-
+1. 先判断正负，通过取余找到每一位，并通过字符串进行反转
 
 ```c++
-
+int reverse(int x) {
+    if(x == 0)
+        return 0;
+    bool flag = x < 0 ? true : false;
+    x = abs(x);
+    std::string s;
+    while(x > 0) {
+        int val = x % 10;
+        s.append(std::to_string(val));
+        x /= 10;
+    }
+    x = std::stoi(s);
+    return flag ? -x : x;
+}    
 ```
 
 
 
 ## 142
 
+将给出的整数x翻转。
+例1:x=123，返回321
+例2:x=-123，返回-321
 
+你有思考过下面的这些问题么？
 
-#### 思路
-
-
-
-```c++
-
-```
-
-
-
-
-
-
-
-## 140
-
-
+如果整数的最后一位是0，那么输出应该是什么？比如10,100
 
 #### 思路
 
-
+1. 先判断正负， 再用字符串进行转换
 
 ```c++
-
+int reverse(int x) {
+    // write code here
+    if(x == 0)
+        return 0;
+    bool flag = x > 0 ? false : true;
+    x = abs(x);
+    std::string s = "";
+    while(x > 0) {
+        s.append(std::to_string(x % 10));
+        x /= 10;
+    }
+    x = std::stoi(s);
+    return flag ? -x : x;
+}
 ```
-
-
 
 
 
@@ -2502,7 +2638,17 @@ double pow(double x, double n) {
 
 #### 思路
 
+想法一：
 
+从回文串的对称点开始，依次向左向右比较，不相同的时候停止遍历，直到找出最大的长度的回文子串。
+
+（1）回文子串长度为奇数：对称点只有一个字符
+
+（2）回文子串长度为偶数：对称点有两个字符
+
+时间复杂度为O(n^2):对称点的数量为O(n),每次查找的时间也为O(n),所有总时间复杂度为O(n^2) */
+
+想法二：
 
 ```c++
 
@@ -2514,53 +2660,131 @@ double pow(double x, double n) {
 
 ## 145
 
+给定两个代表非负数的链表，数字在链表中是反向存储的（链表头结点处的数字是个位数，第二个结点上的数字是十位数...），求这个两个数的和，结果也用链表表示。
 
+输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+
+输出： 7 -> 0 -> 8
 
 #### 思路
 
-
+1.  两数相加，注意进位和当l1与l2长度不一致时的情况
+2. 另外还要注意，长度一样时最后结果有进位的情况，例如5+5
 
 ```c++
-
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    // write code here
+    if(l1 == nullptr && l2 == nullptr)
+        return nullptr;
+    ListNode *head = new ListNode(0);
+    ListNode *p = head, *p1 = l1, *p2 = l2;
+    bool carry = false;
+    while(p1 && p2) {
+        int val = p1->val + p2->val;
+        if(carry) {
+            val += 1;
+            carry = false;
+        }
+        ListNode *node = new ListNode(val % 10);
+        p->next = node;
+        carry = val >= 10 ? true : false;
+        p1 = p1->next;
+        p2 = p2->next;
+        p = p->next;
+    }
+    while(p1) {
+        int val = p1->val;
+        if(carry) {
+            val += 1;
+            carry = false;
+        }
+        ListNode *node = new ListNode(val % 10);
+        p->next = node;
+        p = p->next;
+        carry = val >= 10 ? true : false;
+        p1 = p1->next;
+    }
+    while(p2) {
+        int val = p2->val;
+        if(carry) {
+            val += 1;
+            carry = false;
+        }
+        ListNode *node = new ListNode(val % 10);
+        p->next = node;
+        p = p->next;
+        carry = val >= 10 ? true : false;
+        p2 = p2->next;
+    }
+    if(!p1 && !p2 && carry) {
+        ListNode *node = new ListNode(1);
+        p->next = node;
+    }
+    return head->next;
+}
 ```
-
-
-
-
 
 ## 146
 
-
+给定一个字符串，找出最长的不具有重复字符的子串的长度。例如，“abcabcbb”不具有重复字符的最长子串是“abc”，长度为3。对于“bbbbb”，最长的不具有重复字符的子串是“b”，长度为1。
 
 #### 思路
 
-
+1. 使用left, right来标定不重复区别的界限，right - left + 1 即为不重复的长度
+2. 使用map来确定最新的元素的下标
+3. 每当发现重复元素的下标，就需要更新map的值 
 
 ```c++
-
+int lengthOfLongestSubstring(string s) {
+    // write code here
+    if(s.empty())
+        return 0;
+    const char *arr = s.c_str();
+    std::map<char, int> char_idx;
+    int max_length = 0;
+    for(int left = 0, right = 0; right < s.size(); right++) {
+        auto itor = char_idx.find(arr[right]);
+        if(itor == char_idx.end()) {
+            char_idx.insert(std::make_pair(arr[right], right));
+        } else {
+            left = max(left, itor->second + 1);
+            itor->second = right;
+        }
+        max_length = max(max_length, right - left + 1);
+    }
+    return max_length;
+}
 ```
-
-
-
-
 
 
 
 ## 147
 
-
+有两个大小分别为m和n的有序数组A和B。请找出这两个数组的中位数。你需要给出时间复杂度在O(log (m+n))以内的算法。
 
 #### 思路
 
-
+1. 合并两个有序数据后
+2. 如果是奇数，直接取中间位
+3. 如果是偶数，取中间位两位的平均值 
 
 ```c++
-
+double findMedianSortedArrays(int A[], int m, int B[], int n) {
+    std::vector<double> res;
+    for(int i = 0; i < max(m, n); i++) {
+        if(i < m) {
+            res.push_back(A[i]);
+        }
+        if(i < n) {
+            res.push_back(B[i]);
+        }
+    }
+    std::sort(res.begin(), res.end());
+    bool single = res.size() % 2 == 1;
+    int index = res.size() / 2;
+    return single ? res[index] : (res[index] + res[index - 1]) / 2;
+}
 ```
-
-
-
-
 
 ## 148
 
@@ -2577,22 +2801,41 @@ double pow(double x, double n) {
 
 #### 思路
 
-1. 
+1. 遍历数组使用map对数组中的数及其下标值进行存储
 
 ```c++
-
+vector<int> twoSum(vector<int>& numbers, int target) {
+    // write code here
+    std::vector<int> res(2);
+    if(numbers.empty())
+        return res;
+    std::map<int, std::vector<int>> mmap;
+    for(int i = 0 ; i < numbers.size(); i++) {
+        auto itor = mmap.find(numbers[i]);
+        if(itor == mmap.end()) {
+            std::vector<int> v;
+            v.push_back(i);
+            mmap.insert(std::make_pair(numbers[i], v));
+        } else {
+            itor->second.push_back(i);
+        }
+    }
+    for(int i = 0; i < numbers.size(); i++) {
+        int val = target - numbers[i];
+        auto itor = mmap.find(val);
+        if(itor != mmap.end()) {
+            if(val != numbers[i]) {
+                res[0] = i + 1;
+                res[1] = itor->second[0] + 1;
+                break;
+            } else if(val == numbers[i] && itor->second.size() >= 2) {
+                res[0] = itor->second[0] + 1;
+                res[1] = itor->second[1] + 1;
+                break;
+            }
+        }
+    }
+    std::sort(, res.end());
+    return res;
+}
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-[#61]: 
