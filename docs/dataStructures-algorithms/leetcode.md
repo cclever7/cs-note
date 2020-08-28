@@ -1076,7 +1076,7 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 
 #### 思路
 
-
+1. 
 
 ```c++
 
@@ -1470,45 +1470,117 @@ ListNode* deleteDuplicates(ListNode* head) {
 
 ## 74
 
-
+现在有一个包含n个物体的数组，其中物体颜色为颜色为红色、白色或蓝色，请对这个数组进行排序，让相同颜色的物体相邻，颜色的顺序为红色，白色，蓝色。我们用0,1,2分别代表颜色红，白，蓝
 
 #### 思路
 
+1. 一个非常直接的解法是两步的计数排序的算法
 
+   首先：遍历一遍数组，记录0,1,2的数量，然后重写这个数组，先将0写入，再将1写入，再将2写入
 
 ```c++
-
+void sortColors(int A[], int n) {
+    if(n == 0)
+        return ;
+    int red = 0, white = 0, blue = 0;
+    for(int i = 0; i < n; i++) {
+        if(A[i] == 0)
+            red++;
+        else if(A[i] == 1)
+            white++;
+        else
+            blue++;
+    }
+    int i = 0;
+    while(i < red) {
+        A[i++] = 0;
+    }
+    white += i;
+    while(i < white) {
+        A[i++] = 1;
+    }
+    blue += i;
+    while(i < blue) {
+        A[i++] = 2;
+    }
+}
 ```
-
-
 
 ## 75
 
+请写出一个高效的在m*n矩阵中判断目标值是否存在的算法，矩阵具有如下特征：
 
+每一行的数字都从左到右排序同，每一行的第一个数字都比上一行最后一个数字大
+
+例如：对于下面的矩阵：
+
+```
+[
+    [1,   3,  5,  7],
+    [10, 11, 16, 20],
+    [23, 30, 34, 50]
+]
+```
+
+要搜索的目标值为3，返回true；
 
 #### 思路
 
-
+1. 简单方法，从右上角直接开始查找，大于就往下查行增加 ，小于就往左查列减少。
 
 ```c++
-
+bool searchMatrix(vector<vector<int> >& matrix, int target) {
+    // write code here
+    int row = matrix.size();
+    int col = matrix[0].size();
+    if(col == 0 || row == 0)
+        return false;
+    int i = 0, j = col - 1;
+    while(i < row && j >= 0) {
+        if(matrix[i][j] < target)
+            i++;
+        else if(matrix[i][j] > target)
+            j--;
+        else
+            return true;
+    }
+    return false;
+}
 ```
-
-
 
 ## 76
 
-
+给定一个m*n的矩阵，如果有一个元素是0，就把该元素所在的行和列上的元素全置为0，要求使用原地算法。
 
 #### 思路
 
-
+1. 找到0的位置并通过数组来记录其的行与列
 
 ```c++
-
+void setZeroes(vector<vector<int> > &matrix) {
+    int row = matrix.size();
+    int col = matrix[0].size();
+    if(row == 0 || col == 0)
+        return ;
+    std::vector<int> rowarr, colarr;
+    for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+            if(matrix[i][j] == 0) {
+                rowarr.push_back(i);
+                colarr.push_back(j);
+            }
+        }
+    }
+    for(auto i : rowarr) {
+        for(int j = 0; j < col; j++) 
+            matrix[i][j] = 0;
+    }
+    for(auto i : colarr) {
+        for(int j = 0; j < row; j++)
+            matrix[j][i] = 0;
+    }
+}
 ```
-
-
 
 ## 77
 
@@ -1644,28 +1716,84 @@ L:16.
 
 ## 84
 
+给出两个用字符串表示的二进制数，返回他们的和（也用字符串表示）
 
+例如：
+
+a ="11"
+b ="1"
+返回"100".
 
 #### 思路
 
-
+1.  加完之后在反转
 
 ```c++
-
+string addBinary(string a, string b) {
+    // write code here
+    string res;
+    int a_len = a.size(), b_len = b.size();
+    std::reverse(a.begin(), a.end());
+    std::reverse(b.begin(), b.end());
+    int i = 0, j = 0;
+    bool carry = false;
+    while(i < a_len || j < b_len) {
+        int val1 = 0, val2 = 0, temp = 0;
+        if(i < a_len)
+            val1 = a[i++] - '0';
+        if(j < b_len)
+            val2 = b[j++] - '0';
+        temp = val1 + val2;
+        if(carry)
+            temp += 1;
+        carry = temp >= 2 ? true : false;
+        res.append(std::to_string(temp % 2));
+    }
+    if(carry)
+        res.append("1");
+    std::reverse(res.begin(), res.end());
+    return res;
+}
 ```
-
-
 
 ## 85
 
-
+将两个有序的链表合并为一个新链表，要求新的链表是通过拼接两个链表的节点来生成的。
 
 #### 思路
 
-
+1. 直接合并即可
 
 ```c++
-
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    // write code here
+    if(!l1 && !l2)
+        return nullptr;
+    ListNode *nhead = new ListNode(0);
+    ListNode *p1 = l1, *p2 = l2, *p = nhead;
+    while(p1 && p2) {
+        if(p1->val <= p2->val) {
+            ListNode *next = p1->next;
+            p1->next = nullptr;
+            p->next = p1;
+            p = p->next;
+            p1 = next;
+        } else {
+            ListNode *next = p2->next;
+            p2->next = nullptr;
+            p->next = p2;
+            p = p->next;
+            p2 = next;
+        }
+    }
+    if(p1) {
+        p->next = p1;
+    }
+    if(p2) {
+        p->next = p2;
+    }
+    return nhead->next;
+}
 ```
 
 
@@ -1686,11 +1814,25 @@ L:16.
 
 ## 87
 
+继续思考题目"Unique Paths": 如果在图中加入了一些障碍，有多少不同的路径？
 
+分别用0和1代表空区域和障碍
+
+例如：下图表示有一个障碍在3*3的图中央。
+
+```
+[
+    [0,0,0],
+    [0,1,0],
+    [0,0,0]
+]
+```
+
+有2条不同的路径   备注：m和n不超过100.
 
 #### 思路
 
-
+1. 动态规划
 
 ```c++
 
@@ -1700,14 +1842,35 @@ L:16.
 
 ## 88
 
+一个机器人在m×n大小的地图的左上角（起点，下图中的标记“start"的位置）。
 
+机器人每次向下或向右移动。机器人要到达地图的右下角。（终点，下图中的标记“Finish"的位置）。
+
+可以有多少种不同的路径从起点走到终点？
 
 #### 思路
 
-
+1. 动态规则，动态规划三步：定义数组 ，初始值 ，寻找数组元素之间的关系 dp[n] = dp[n-1] *
+2. 需要了解二维数组的构建，初始化等方式， 及动态构建的方式
 
 ```c++
-
+int uniquePaths(int m, int n) {
+    // write code here
+    if(m == 0 || n == 0)
+        return 0;
+    int dp[m][n];
+    memset(dp, 0, sizeof(dp));
+    for(int i = 0; i < m; i++)
+        dp[i][0] = 1;
+    for(int i = 0; i < n; i++)
+        dp[0][i] = 1;
+    for(int i = 1; i < m; i++) {
+        for(int j = 1; j < n; j++) {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+    }
+    return dp[m-1][n-1];
+}
 ```
 
 
@@ -1738,8 +1901,6 @@ L:16.
 
 ```
 
-
-
 ## 91
 
 
@@ -1756,17 +1917,31 @@ L:16.
 
 ## 92
 
+给出一个只包含大小写字母和空格的字符串s，请返回字符串中最后一个单词的长度，如果字符串中没有最后一个单词，则返回0 注意：单词的定义是仅由非空格字符组成的字符序列。
 
+例如：s ="Hello World",返回5。
 
 #### 思路
 
-
+1. 可以通地strlen就字符串的长度，然后从后往前数
 
 ```c++
-
+int lengthOfLastWord(const char *s) {
+    if(!s)
+        return 0;
+    int res = 0;
+    int len = strlen(s);
+    for(int i = len - 1; i >= 0; i--) {
+        if(s[i] == ' ') {
+            if(res)
+                break;
+        }
+        else
+            res++;
+    }
+    return res;
+}
 ```
-
-
 
 ## 93
 
@@ -1846,7 +2021,13 @@ vector<Interval> merge(vector<Interval> &intervals) {
 
 ## 95
 
+给出一个非负整数数组，你最初在数组第一个元素的位置，数组中的元素代表你在这个位置可以跳跃的最大长度，判断你是否能到达数组最后一个元素的位置
 
+例如
+
+A =[2,3,1,1,4], 返回 true.
+
+A =[3,2,1,0,4], 返回 false.
 
 #### 思路
 
@@ -2138,28 +2319,78 @@ double pow(double x, double n) {
 
 ## 115
 
-
+给出一个有序的数组和一个目标值，如果数组中存在该目标值，则返回该目标值的下标。如果数组中不存在该目标值，则返回如果将该目标值插入这个数组应该插入的位置的下标
+假设数组中没有重复项。
+下面给出几个样例：
+[1,3,5,6], 5 → 2
+[1,3,5,6], 2 → 1
+[1,3,5,6], 7 → 4
+[1,3,5,6], 0 → 0
 
 #### 思路
 
-
+1. 二分查找
 
 ```c++
-
+int searchInsert(int* A, int n, int target) {
+    // write code here
+    int left = 0, right = n - 1, mid = (left + right) / 2;
+    while(left <= right) {
+        if(target > A[mid]) {
+            left = mid + 1;
+        } else if(target < A[mid]) {
+            right = mid - 1;
+        } else {
+            return mid;
+        }
+        mid = (left + right) / 2;
+    }
+    return left;
+}
 ```
 
 
 
 ## 116
 
+给出一个有序数组，请在数组中找出目标值的起始位置和结束位置，你的算法的时间复杂度应该在O(log n)之内
 
+如果数组中不存在目标，返回[-1, -1].
+
+例如：给出的数组是[5, 7, 7, 8, 8, 10]，目标值是8,  返回[3, 4].
 
 #### 思路
 
-
+1. 使用二分法进行查找
 
 ```c++
+vector<int> searchRange(int* A, int n, int target) {
+    std::vector<int> res;
+    if(!A)
+        return res;
+    int left = 0, right = n - 1, mid =(left + right) / 2;
+    while(left <= right) {
+        if(target > A[mid])
+            left = mid + 1;
+        else if(target < A[mid])
+            right = mid - 1;
+        else {
+            int s = mid, e = mid;
+            while(s >= 0 && A[s] == target)
+                left--;
+            while(e < n && A[e] == target)
+                right--;
+            res.push_back(s + 1);
+            res.push_back(e - 1);
+            return res;
+        }
+        mid = (left + right) / 2;
+    }
+    res.push_back(-1);
+    res.push_back(-1);
+    return res;
 
+}
 ```
 
 
@@ -2317,10 +2548,33 @@ int removeDuplicates(int A[], int n) {
 
 #### 思路
 
-1. 
+1. 快慢指针，快指针首先到达尾端，慢指针往前走时将其放在快指针后
 
 ```c++
-
+ListNode* reverseKGroup(ListNode* head, int k) {
+    // write code here
+    if(!head)
+        return nullptr;
+    ListNode *nhead = new ListNode(0);
+    nhead->next = head;
+    ListNode *pre = nhead, *curr = head, *temp = nullptr;
+    int len = 0;
+    while(head) {
+        len++;
+        head = head->next;
+    }
+    for(int i = 0; i < len / k; i++) {
+        for(int j = 1; j < k; j++) {
+            temp = curr->next;
+            curr->next = temp->next;
+            temp->next = pre->next;
+            pre->next = temp;
+        }
+        pre = curr;
+        curr = curr->next;
+    }
+    return nhead->next;
+}
 ```
 
 
