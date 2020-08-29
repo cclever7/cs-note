@@ -2239,54 +2239,163 @@ double pow(double x, double n) {
 
 ## 109
 
+给出一个无序的整数型数组，求不在给定数组里的最小的正整数，例如：
 
+给出的数组为[1,2,0] 返回3,
+
+给出的数组为[3,4,-1,1] 返回2.
 
 #### 思路
 
-
+基于计数排序的思路。对0,1,2,...,n范围内的数把他放到对应的下标处。比如对于元素i放到下标i-1处，然后对数组从前往后遍历，找到第一个不匹配的，即是最小缺失正数。
 
 ```c++
-
+int firstMissingPositive(int* A, int n) {
+    // write code here
+    if (n < 1)
+        return 1;
+    for (int i = 0; i < n; i++){
+        if (A[i] > 0 && A[i] <= n && A[i] != A[A[i] - 1]){//注意这里防止重复元素的出现
+            swap(A[i], A[A[i]-1]);
+            i--;
+        }
+    }
+    for (int i = 0; i < n; i++){
+        if (A[i] != i + 1)
+            return i + 1;
+    }
+    return n + 1;
+}
 ```
 
 
 
 ## 110
 
+给出一组候选数\ C *C* 和一个目标数\ T *T*，找出候选数中起来和等于\ T *T* 的所有组合。\ C *C* 中的每个数字在一个组合中只能使用一次。
 
+例如：给定的候选数集是[10,1,2,7,6,1,5]，目标数是8，解集是：
+
+[1, 7]
+[1, 2, 5]
+[2, 6]
+[1, 1, 6]
 
 #### 思路
 
-
+1. 采用深度遍历，若target减小到0时则加入结果，小于0则直接返回
+2. 其中需要对结果进行去重
 
 ```c++
+vector<vector<int>> res;
+vector<vector<int> > combinationSum2(vector<int> &num, int target) {
+    if(num.empty())
+        return res;
+    sort(num.begin(), num.end());
+    vector<int> tmp;
+    dfs(num, 0, target, tmp);
+    return res;
+}
 
+void dfs(vector<int> &num, int idx, int target, vector<int> &tmp) {
+    if(target == 0) {
+        vector<int> v(tmp);
+        res.push_back(v);
+        return ;
+    }
+    if(target < 0) {
+        return ;
+    }
+
+    for(int i = idx; i < num.size(); i++) {
+        if(i > idx && num[i] == num[i - 1])
+            continue;
+        tmp.push_back(num[i]);
+        dfs(num, i + 1, target - num[i], tmp);
+        tmp.pop_back();
+    }
+}
 ```
-
-
 
 ## 111
 
+给出一组候选数C和一个目标数T，找出候选数中加起来和等于T的所有组合。C中的数字在组合中可以被无限次使用，
 
+例如：给定的候选数集是[2,3,6,7]，目标数是7
+
+解集是：
+
+[7]
+[2, 2, 3]
 
 #### 思路
 
-
+1. 深度遍历
 
 ```c++
+vector<vector<int> > combinationSum(vector<int> &candidates, int target){
+    sort(candidates.begin(), candidates.end());
+    vector<vector<int> > result;
+    vector<int> item;
+    dfs(candidates, item, result, target, 0);
+    return result;
+}
 
+void dfs(vector<int> &candidates, vector<int>& item, vector<vector<int> >& result,
+         int gap, int start){
+    if (gap == 0) {
+       result.push_back(item);
+    	return; 
+    } 
+    for (int i = start; i < candidates.size(); ++i){
+        if (gap < candidates[i])
+            return;
+
+        item.push_back(candidates[i]);
+        dfs(candidates, item, result, gap - candidates[i], i);
+        item.pop_back();
+    }
+}
 ```
 
 ## 112
 
+ount-and-say数列的前几项如下：1, 11, 21, 1211, 111221, ...
 
+1读作“1个1”或11，11读作“2个1“或者21、21读作”1个2，1个1“或者1211、给出一个整数n，请给出序列的第n项
+
+注意：序列中的数字用字符串表示
 
 #### 思路
 
-
+1. 按思路做即可
 
 ```c++
-
+string countAndSay(int n) {
+    // write code here
+    string pre = "1";
+    if(n == 1)
+        return pre;
+    string curr = "";
+    for(int i = 2; i <= n; i++) {
+        int len = pre.size();
+        int j = 0;
+        while (j < len) {
+            int cnt = 0;
+            char ch = pre[j];
+            while (pre[j] == ch) {
+                cnt++;
+                j++;
+            }
+            curr.push_back(cnt + '0');
+            curr.push_back(ch);
+        }
+        pre.clear();
+        pre = curr;
+        curr.clear();
+    }
+    return pre;
+}
 ```
 
 ## 113
