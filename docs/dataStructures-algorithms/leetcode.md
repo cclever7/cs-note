@@ -1128,14 +1128,35 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 
 ## 54
 
+给定一个值n，能构建出多少不同的值包含1...n的二叉搜索树（BST）？
 
+例如 给定 n = 3, 有五种不同的二叉搜索树（BST）
+
+![img](medium/59_1597814998150_B174853E6D8B3AC7D1CB1011AFCDDA64)
 
 #### 思路
 
-
+考虑根节点，设对于任意根节点k，有f(k)种树的可能。
+    比k小的k-1个元素构成k的左子树。则左子树有f(k-1)种情况。
+    比k大的n-k个元素构成k的右子树。则右子树有f(n-k)种情况。
+    易知，左右子树相互独立，所以f(k)=f(k-1)*f(n-k)。
+    综上，对于n，结果为k取1,2,3,...,n时，所有f(k)的和。
 
 ```c++
-
+int numTrees(int n) {
+    if(n == 0)
+        return 1;
+    int *res = new int[n + 1];
+    res[0] = 1;
+    res[1] = 1;
+    for(int i = 2; i <= n; i++) {
+        res[i] = 0;
+        for(int j = 1; j <= i; j++) {
+            res[i] += res[j-1] * res[i-j];
+        }
+    }
+    return res[n];
+}
 ```
 
 
@@ -1341,8 +1362,8 @@ ListNode* partition(ListNode* head, int x) {
 
 给出一个升序排序的链表，删除链表中的所有重复出现的元素，只保留原链表中只出现一次的元素。
 例如：
-给出的链表为1 \to 2\to 3\to 3\to 4\to 4\to51→2→3→3→4→4→5, 返回1\to 2\to51→2→5.
-给出的链表为1\to1 \to 1\to 2 \to 31→1→1→2→3, 返回2\to 32→3.
+给出的链表为1→2→3→3→4→4→5, 返回1→2→5.
+给出的链表为1→1→1→2→3, 返回2→3.
 
 #### 思路
 
@@ -1351,21 +1372,26 @@ ListNode* partition(ListNode* head, int x) {
 ```c++
 ListNode* deleteDuplicates(ListNode* head) {
     // write code here
-    if(head == nullptr)
+    if(!head)
         return nullptr;
     ListNode *nhead = new ListNode(0);
     nhead->next = head;
-    ListNode *p = nhead;
-    while(p && p->next && p->next->next) {
-        ListNode *s = p, *m = s->next, *e = m->next;
-        if(m->val == e->val) {
-            while(e && m->val == e->val) {
-                m = m->next;
-                e = e->next;    
-            }
-            p->next = e;
+    ListNode *pre = nhead, *curr = head, *next = head->next;
+    while(curr && next) {
+        ListNode *next_next = next->next;
+        if(curr->val != next->val) {
+            pre = curr;
+            curr = next;
+            next = next_next;
         } else {
-            p = p->next;
+            while(next && curr->val == next->val) {
+                curr = curr->next;
+                next = next->next;
+            }
+            pre->next = next;
+            curr = next;
+            if(curr)
+                next = curr->next;
         }
     }
     return nhead->next;
@@ -1374,17 +1400,39 @@ ListNode* deleteDuplicates(ListNode* head) {
 
 ## 67
 
-
+删除给出链表中的重复元素（链表中元素从小到大有序），使链表中的所有元素都只出现一次
+例如：
+给出的链表为1→1→2,返回1→2.
+给出的链表为1→2→3→3,返回1→2→3.
 
 #### 思路
 
-
+1. 构造一个新的头节点，利前驱，当前，下一节点进行操作即可
 
 ```c++
-
+ListNode* deleteDuplicatesII(ListNode* head) {
+    // write code here
+    if(!head)
+        return nullptr;
+    ListNode *nhead = new ListNode(0);
+    nhead->next = head;
+    ListNode *pre = nhead, *curr = head, *next = curr->next;
+    while(curr && next) {
+        ListNode *next_next = next->next;
+        if(curr->val != next->val) {
+            pre = curr;
+            curr = next;
+            next = next_next;
+        } else {
+            while(next && curr->val == next->val) {
+                next = next->next;
+            }
+            curr->next = next;
+        }
+    }
+    return nhead->next;
+}
 ```
-
-
 
 ## 68
 
@@ -2607,11 +2655,15 @@ vector<int> searchRange(int* A, int n, int target) {
 
 ## 117
 
-
+给出一个转动过的有序数组，你事先不知道该数组转动了多少
+(例如,0 1 2 4 5 6 7可能变为4 5 6 7 0 1 2).
+在数组中搜索给出的目标值，如果能在数组中找到，返回它的索引，否则返回-1。
+假设数组中不存在重复项。
 
 #### 思路
 
-
+1. 首先的出变化的点，例如 7
+2. 以7分为分介点， 在两边分别使用二分法
 
 ```c++
 
