@@ -1612,17 +1612,34 @@ void setZeroes(vector<vector<int> > &matrix) {
 
 ## 79
 
+你在爬楼梯，需要n步才能爬到楼梯顶部
 
+每次你只能向上爬1步或者2步。有多少种方法可以爬到楼梯顶部？
 
 #### 思路
 
-
+1. 动态规划思路
+2. 在第一层时只有一种，第二层时可以从一来也可以直接到二
+3. 而在三层时，其可能从二来，可以从一来，所以公式即为 dp[i] = dp[i-1] + dp[i - 2]; 类似于斐波那契数列
 
 ```c++
-
+int climbStairs(int n) {
+    // write code here
+    if(n == 0)
+        return 0;
+    if(n == 1)
+        return 1;
+    if(n == 2)
+        return 2;
+    int dp[n + 1];
+    memset(dp, 0, sizeof(dp));
+    dp[1] = 1; dp[2] = 2;
+    for(int i = 3; i <= n; i++) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    return dp[n];
+}
 ```
-
-
 
 ## 80
 
@@ -1800,14 +1817,33 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 
 ## 86
 
-
+给定一个由非负整数填充的m x n的二维数组，现在要从二维数组的左上角走到右下角，请找出路径上的所有数字之和最小的路径。
+注意：你每次只能向下或向右移动。
 
 #### 思路
 
-
+1.  动态规划四步，数组构建，初始值 ，递推方程结果  `dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j];`
 
 ```c++
-
+int minPathSum(vector<vector<int> >& grid) {
+    // write code here
+    if(grid.empty() || grid[0].empty())
+        return 0;
+    int row = grid.size(), col = grid[0].size();
+    int dp[row][col];
+    memset(dp, 0, sizeof(dp));
+    dp[0][0] = grid[0][0];
+    for(int i = 1; i < row; i++) 
+        dp[i][0] = dp[i-1][0] + grid[i][0];
+    for(int i = 1; i < col; i++)
+        dp[0][i] = dp[0][i-1] + grid[0][i];
+    for(int i = 1; i < row; i++) {
+        for(int j = 1; j < col; j++) {
+            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j];
+        }
+    }
+    return dp[row-1][col-1];
+}
 ```
 
 
@@ -2155,28 +2191,93 @@ double pow(double x, double n) {
 
 ## 103
 
+给出一组可能包含重复项的数字，返回该组数字的所有排列
 
+例如；
+
+[1,1,2]的排列如下：
+[1,1,2],[1,2,1], [2,1,1].
 
 #### 思路
 
-
+1. 深度优先搜索遍历，使用一个标记来标记该位是否被使用过
+2. 先要对数组进行排序， 如果i  = i - 1就表示已经使用过了，就没必要再使用了
 
 ```c++
-
+ void permu(vector<vector<int>> &res, vector<int> &tmp, vector<int> &num, int *bit) {
+        if(tmp.size() >= num.size()) {
+            res.push_back(tmp);
+            return ;
+        }
+        for(int i = 0; i < num.size(); i++) {
+            if(bit[i])
+                continue;
+            if(i > 0 && num[i] == num[i - 1] && !bit[i - 1])
+                continue;
+            tmp.push_back(num[i]);
+            bit[i] = 1;
+            permu(res, tmp, num, bit);
+            bit[i] = 0;
+            tmp.pop_back();
+        }
+    }
+    vector<vector<int> > permuteUnique(vector<int> &num) {
+        vector<vector<int>> res;
+        if(num.empty())
+            return res;
+        vector<int> tmp;
+        int len = num.size();
+        int bit[len];
+        sort(num.begin(), num.end());
+        memset(bit, 0, sizeof(bit));
+        permu(res, tmp, num, bit);
+        return res;
+    }
 ```
 
 
 
 ## 104
 
+给出一组数字，返回该组数字的所有排列
 
+例如：
+
+[1,2,3]的所有排列如下
+[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2], [3,2,1].
 
 #### 思路
 
-
+1. 深度优先搜索遍历，使用一个标记来标记该位是否被使用过
 
 ```c++
+void dfs(vector<vector<int>> &res, vector<int> &tmp, vector<int> &num, int *bit, int idx) {
+    if(idx >= num.size()) {
+        res.push_back(tmp);
+        return ;
+    }
+    for(int i = 0; i < num.size(); i++) {
+        if(!bit[i]) {
+            tmp.push_back(num[i]);
+            bit[i] = 1;
+            dfs(res, tmp, num, bit, idx + 1);
+            bit[i] = 0;
+            tmp.pop_back();
+        }
+    }
+}
 
+vector<vector<int> > permute(vector<int> &num) {
+    vector<vector<int>> res;
+    if(num.empty())
+        return res;
+    int len = num.size();
+    int bit[len];
+    memset(bit, 0, sizeof(bit));
+    vector<int> tmp;
+    dfs(res, tmp, num, bit, 0);
+    return res;
+}
 ```
 
 

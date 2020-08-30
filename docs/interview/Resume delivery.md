@@ -32,7 +32,7 @@
 | 小红书         |          | https://campus.liepin.com/apply/showapplylist/               |       | 已投      |      |
 | 众安保险       |          | X                                                            |       |           |      |
 | 苏宁           |          | https://www.nowcoder.com/discuss/464271?from=21tqpsn         |       | 放弃      |      |
-| 海康威视       |          |                                                              |       |           |      |
+|                |          |                                                              |       |           |      |
 | 奇安信         |          | https://campus.qianxin.com/campus/jobSearch                  |       | 已投      |      |
 | 声网           |          |                                                              |       |           |      |
 | 顺丰科技       |          | http://campus.sf-express.com/index.html#/personalCenter      |       | 测评完成  |      |
@@ -47,7 +47,7 @@
 | 广联达         |          | https://app.mokahr.com/m/candidate/applications/deliver-query/glodon |       | 笔试完    |      |
 | 中兴通迅       |          | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      |       | 已投      |      |
 | 奥比中光       |          | https://www.nowcoder.com/discuss/484111?from=21tqpabzg       |       | 已投      |      |
-| 旷视科技       |          |                                                              |       |           |      |
+|                |          |                                                              |       |           |      |
 | 搜狗           |          | https://www.nowcoder.com/discuss/460205?from=21tqpsg         |       | 已投      |      |
 | 思科           |          |                                                              |       | 结束      |      |
 | 网龙           | X        |                                                              |       | 结束      |      |
@@ -59,9 +59,9 @@
 | 吉比特         |          | https://www.nowcoder.com/discuss/465243?from=21tqpjbt        | 08.27 | 已投      |      |
 | 坚果           |          | https://mp.weixin.qq.com/s/eCQsihxkNxK52qZ0o4xDKw            | 08.27 | 已投      |      |
 | 中信证券       |          | https://mp.weixin.qq.com/s/7e9ctuZqWW3oOZDBdgUDEQ?from=21tqp | 08.28 | 己投      |      |
-|                |          |                                                              |       |           |      |
-|                |          |                                                              |       |           |      |
-|                |          |                                                              |       |           |      |
+| 广州速游       |          | https://www.nowcoder.com/discuss/464373?from=21tqpgzsy       | 08.29 | 己投      |      |
+| 海康威视       |          |                                                              |       |           |      |
+| 旷视科技       |          | https://www.nowcoder.com/discuss/456376?from=21tqpkuangs     |       |           |      |
 |                |          |                                                              |       |           |      |
 |                |          |                                                              |       |           |      |
 |                |          |                                                              |       |           |      |
