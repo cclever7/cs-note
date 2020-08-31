@@ -2880,10 +2880,33 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 
 #### 思路
 
-
+1. 组合问题优先考虑深度优先搜索遍历 
+2. 每部递归注意递归体即有几种可选的操作  +'('  or + ')'
+3. 考虑操作的限制条件，加右括号时满足左括号的剩余个数<右括号
+4. 递归退出条件，左右括号个数都用光即可
 
 ```c++
+void generateDfs(int left, int right, vector<string> &res, string s) {
+    if(left == 0 && right == 0) {
+        res.push_back(s);
+        return ;
+    }
+    if(left > 0)
+        generateDfs(left - 1, right, res, s + "(");
+    if(right > 0 && right > left) {
+        generateDfs(left, right - 1, res, s + ")");
+    }
+}
 
+vector<string> generateParenthesis(int n) {
+    // write code here
+    vector<string> res;
+    if(n == 0)
+        return res;
+    int left = n, right = n;
+    generateDfs(left, right, res, "");
+    return res;
+}
 ```
 
 
@@ -2898,7 +2921,48 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 1. 使用栈进行操作， ([{都进行入栈操作， 而右边括号的都进行栈顶出栈操作，看是否会匹配
 
 ```c++
-
+class Solution {
+public:
+    /**
+     *
+     * @param s string字符串
+     * @return bool布尔型
+     */
+    bool isValid(string s) {
+        // write code here
+        stack<char> s_stack;
+        int size = s.length();
+        if (size == 0)
+            return true;
+        for (int i = 0; i < size; i++)
+        {
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{')
+                s_stack.push(s[i]);
+            else if(s[i] == ')')
+            {
+                if (!s_stack.empty() && s_stack.top() == '(')
+                    s_stack.pop();
+                else
+                    return false;
+            }
+            else if(s[i] == ']')
+            {
+                if (!s_stack.empty() && s_stack.top() == '[')
+                    s_stack.pop();
+                else
+                    return false;
+            }
+            else if(s[i] == '}')
+            {
+                if (!s_stack.empty() && s_stack.top() == '{')
+                    s_stack.pop();
+                else
+                    return false;
+            }
+        }
+        return s_stack.empty()?true:false;
+    }
+};
 ```
 
 
@@ -2912,16 +2976,41 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 1. 快慢指针
 
 ```c++
-
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    // write code here
+    if(!head)
+        return nullptr;
+    ListNode *nhead = new ListNode(0);
+    nhead->next = head;
+    ListNode *slow = head, *fast = head, *pre = nhead;
+    int k = n;
+    while(k-- > 0)
+        fast = fast->next;
+    while(fast) {
+        fast = fast->next;
+        slow = slow->next;
+        pre = pre->next;
+    }
+    ListNode *next = slow->next;
+    pre->next = next;
+    delete slow;
+    return nhead->next;
+}
 ```
 
 ## 131
 
+给出一个仅包含数字的字符串，给出所有可能的字母组合。
 
+数字到字母的映射方式如下:(就像电话上数字和字母的映射一样)
+
+![image-20200831110116435](medium/image-20200831110116435.png)
+
+Input:Digit string "23"Output:["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 
 #### 思路
 
-
+1. 回溯法，通过深度遍历进行操作
 
 ```c++
 
@@ -2941,31 +3030,87 @@ ListNode* reverseKGroup(ListNode* head, int k) {
 
 ## 133
 
-
+给出含有n个整数的数组s，找出s中和加起来的和最接近给定的目标值的三个整数。返回这三个整数的和。你可以假设每个输入都只有唯一解。   例如，给定的整数 S = {-1 2 1 -4}, 目标值 = 1.最接近目标值的和为 2. (-1 + 2 + 1 = 2).
 
 #### 思路
 
-
+1. 使用三个指针来确定大小，首先对数组进行排序
+2. 如果大于就右指针左移，如果小于就左指针有移
+3. 每次比较时产生更接进目标值的值时，都会更新结果
 
 ```c++
+int threeSumClosest(vector<int> &num, int target) {
+    int n = num.size();
+    int result = num[0] + num[1] + num[n-1];
+    sort(num.begin(),num.end());
+    for(int i=0;i<n-2;i++)
+    {
+        int start = i + 1;
+        int end = n - 1;
+        while(start < end)
+        {
+            int sum = num[i] + num[start] + num[end];
+            if(sum < target)
+                start++;
+            else
+                end--;
 
+            if(abs(sum-target) < abs(result-target))
+                result = sum;
+        }
+    }
+    return result;
+}
 ```
-
-
 
 ## 134
 
+给出一个有n个元素的数组S，S中是否有元素a,b,c满足a+b+c=0？找出数组S中所有满足条件的三元组。
 
+注意：
+
+1. 三元组（a、b、c）中的元素必须按非降序排列。（即a≤b≤c）
+2. 解集中不能包含重复的三元组。
 
 #### 思路
 
-
+1. 首先对数组进行排序，再分别定义三个指针
+2. 特别地需要对这三指针进行去重，即num[i] == num[i + 1] 就跳过
 
 ```c++
-
+vector<vector<int>> threeSum(vector<int>& nums) {
+    sort(nums.begin(), nums.end());
+    vector<int> vec(3);
+    vector< vector<int> > result;
+    if (nums.size() < 3)
+        return result;
+    for (int i = 0; i < nums.size() - 2;)                 //难点在处理重复
+    {
+        int j = i + 1;
+        int k = nums.size() - 1;
+        int key = 0 - nums[i];
+        while (j < k)
+        {
+            if (nums[j] + nums[k] == key)
+            {
+                vec[0] = nums[i];
+                vec[1] = nums[j];
+                vec[2] = nums[k];
+                result.push_back(vec);
+                while (nums[k] == vec[2] && j < k)   --k;
+                while (nums[j] == vec[1] && j < k)   ++j;
+            }
+            else if (nums[j] + nums[k] > key)
+                 while (nums[--k] == nums[k+1] && j <k);    //重复
+            else
+                 while (nums[++j] == nums[j-1] && j <k);   //处理重复
+        }
+        int cur = nums[i];
+        while (nums[++i] == cur && i < nums.size() - 2) ;
+    }
+    return result;
+}
 ```
-
-
 
 ## 135
 
