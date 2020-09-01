@@ -8,14 +8,15 @@
 | 阿里巴巴               |          |                                                              |       |        |      |
 | 蚂蚁金服               |          |                                                              |       |        |      |
 | 京东                   |          | https://www.nowcoder.com/discuss/452605?from=21tqp           | 08.25 | 笔试完 |      |
-| 虾皮                   | 08.30    |                                                              |       |        |      |
-| 快手                   |          |                                                              |       |        |      |
+| 虾皮                   | 08.30    |                                                              |       | 结束   |      |
+| 快手                   | 10.15    |                                                              |       |        |      |
 | 网易互娱、雷火、互联网 |          |                                                              |       |        |      |
-| 猿辅导                 | 09.12    |                                                              |       |        |      |
+| 猿辅导                 | 09.12    | https://www.nowcoder.com/discuss/450873?from=21tqp           | 09.01 | 投递   |      |
 | 商汤科技               |          |                                                              |       |        |      |
 | 美团点评               | 10.31    | https://www.nowcoder.com/discuss/466431?from=21tqpmeituan    |       |        |      |
 | 深信服科技             |          |                                                              |       |        |      |
 | 拼多多                 |          | https://www.nowcoder.com/discuss/468610?from=21tqpdd         | 08.27 | 笔试   |      |
+| 滴滴                   | 09.20    |                                                              |       |        |      |
 
 | 公司           | 截止日期 | 投递链接                                                     | 时间  | 状态     | 其它 |
 | -------------- | -------- | ------------------------------------------------------------ | ----- | -------- | ---- |
@@ -62,8 +63,10 @@
 | 广州速游       |          | https://www.nowcoder.com/discuss/464373?from=21tqpgzsy       | 08.29 | 己投     |      |
 | 海康威视       |          | https://campushr.hikvision.com/                              | 08.31 | 己投     |      |
 | 旷视科技       |          | https://www.nowcoder.com/discuss/456376?from=21tqpkuangs     |       |          |      |
-|                |          |                                                              |       |          |      |
-|                |          |                                                              |       |          |      |
+| 中移物联网     |          | https://www.nowcoder.com/school/schedule/1232                | 08.31 | 己投     |      |
+| 作业帮         |          | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 08.31 | 己投     |      |
+| 触宝           |          | https://www.nowcoder.com/discuss/475365?from=21tpqcb         | 09.01 | 己投     |      |
+| TP-LINK        |          | https://docs.qq.com/sheet/DQWRqeGJmQ1N1WEl5?tab=6j13t3       | 09.01 | 己投     |      |
 |                |          |                                                              |       |          |      |
 |                |          |                                                              |       |          |      |
 
@@ -75,10 +78,10 @@
 | 滴滴               |          |                                                       |          |      |      |
 | 多益网络           |          |                                                       |          |      |      |
 | 4399               |          |                                                       |          |      |      |
-| 中国移动           |          |                                                       |          |      |      |
+|                    |          |                                                       |          |      |      |
 | 中国建设银行       |          |                                                       |          |      |      |
 | 中国银行           |          |                                                       |          |      |      |
-| 趋势科技           |          |                                                       |          |      |      |
+| 趋势科技           | 09.19    |                                                       |          |      |      |
 | 贝壳找房           |          | https://www.nowcoder.com/discuss/456269?from=21tqp    |          |      |      |
 | 斗鱼2021           |          | https://www.nowcoder.com/discuss/459918?from=21tqpdy  |          |      |      |
 | 中电十所           |          | https://mp.weixin.qq.com/s/0H9DzFn-FHGtVAthlqc7MQ     |          |      |      |

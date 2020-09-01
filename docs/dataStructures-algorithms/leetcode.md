@@ -333,29 +333,45 @@ bool hasCycle(ListNode *head) {
 
 ```
 
-
-
 ## 12
 
-
+给定一个字符串s和一组单词dict，判断s是否可以用空格分割成一个单词序列，使得单词序列中所有的单词都是dict中的单词（序列可以包含一个或多个单词）。例如:
+给定s=“leetcode”；dict=["leet", "code"].
+返回true，因为"leetcode"可以被分割成"leet code".
 
 #### 思路
 
-
+1. 动态规划，利用一维数据进行判断  dp[i] = 1  dp[i + 1] = 1表示 从i到 i + 1时其是可分的
 
 ```c++
-
+bool wordBreak(string s, unordered_set<string> &dict) {
+    int len = s.length();
+    int dp[len + 1];
+    memset(dp, 0, sizeof(dp));
+    dp[0] = 1;
+    for(int i = 0; i < len ; i++) {
+        for(int j = i; dp[i] && j < len; j++) {
+            if(dict.find(s.substr(i, j - i + 1)) != dict.end())
+                dp[j+1] = true;
+        }
+    }
+    return dp[len];
+}
 ```
 
 
 
 ## 13
 
+现在有一个这样的链表：链表的每一个节点都附加了一个随机指针，随机指针可能指向链表中的任意一个节点或者指向空。
 
+请对这个链表进行深拷贝。
 
 #### 思路
 
-
+1. 第一遍扫描：对每个结点进行复制，把复制出来的新结点插在原结点之后
+2. 第二遍扫描：根据原结点的random，给新结点的random赋值
+3. 第三遍扫描：把新结点从原链表中拆分出来
 
 ```c++
 
@@ -1916,13 +1932,38 @@ int minPathSum(vector<vector<int> >& grid) {
 
 #### 思路
 
-1. 动态规划
+1. 简单的动态规划，采用二维数组dp来记录每个点的可能次数，初始化第0行和第i行，因为此时其只有一种可能
+2. 当遇到障碍时值为0，否则采用递推公式`dp[i][j] = dp[i-1][j] + dp[i][j-1]`
 
 ```c++
-
+int uniquePathsWithObstacles(vector<vector<int> >& obstacleGrid) {
+    // write code here
+    if(obstacleGrid.empty())
+        return 0;
+    int row = obstacleGrid.size(), col = obstacleGrid[0].size();
+    int dp[row][col];
+    memset(dp, 0, sizeof(dp));
+    for(int i = 0; i < col; i++) {
+        if(obstacleGrid[0][i] == 1)
+            break;
+        dp[0][i] = 1;
+    }
+    for(int i = 0; i < row; i++) {
+        if(obstacleGrid[i][0] == 1)
+            break;
+        dp[i][0] = 1;
+    }
+    for(int i = 1; i < row; i++) {
+        for(int j = 1; j < col; j++) {
+            if(obstacleGrid[i][j] == 1)
+                dp[i][j] = 0;
+            else
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+    }
+    return dp[row-1][col-1];
+}
 ```
-
-
 
 ## 88
 
@@ -1957,8 +1998,6 @@ int uniquePaths(int m, int n) {
 }
 ```
 
-
-
 ## 89
 
 
@@ -1970,8 +2009,6 @@ int uniquePaths(int m, int n) {
 ```c++
 
 ```
-
-
 
 ## 90
 
@@ -1996,8 +2033,6 @@ int uniquePaths(int m, int n) {
 ```c++
 
 ```
-
-
 
 ## 92
 
@@ -2101,8 +2136,6 @@ vector<Interval> merge(vector<Interval> &intervals) {
 }
 ```
 
-
-
 ## 95
 
 给出一个非负整数数组，你最初在数组第一个元素的位置，数组中的元素代表你在这个位置可以跳跃的最大长度，判断你是否能到达数组最后一个元素的位置
@@ -2115,41 +2148,102 @@ A =[3,2,1,0,4], 返回 false.
 
 #### 思路
 
-
+1. 遍历数组并在每个位置寻找其能到达的最大距离，大于这个最大距离就更新
+2. 再判断最在距离是否超过了数据组大小
 
 ```c++
-
+bool canJump(int* A, int n) {
+    // write code here
+    int curmax = 0;
+    if(n == 1)
+        return true;
+    for(int i = 0; i < n; i++) {
+        if(curmax >= i) {
+            if(i + A[i] > curmax)
+                curmax = i + A[i];
+            if(curmax >= n - 1)
+                return true;
+        }
+    }
+    return false;
+}
 ```
-
-
 
 ## 96
 
+给定一个m x n大小的矩阵（m行，n列），按螺旋的顺序返回矩阵中的所有元素。
+例如，
+给出以下矩阵：
 
+```
+[
+    [ 1, 2, 3 ],
+    [ 4, 5, 6 ],
+    [ 7, 8, 9 ]
+]
+```
+
+你应该返回[1,2,3,6,9,8,7,4,5]。
 
 #### 思路
 
-
+1. 使用四个变量标定上下左右的区间，进行遍历 
 
 ```c++
-
+vector<int> spiralOrder(vector<vector<int> > &matrix) {
+    vector<int> res;
+    if(matrix.empty())
+        return res;
+    int row = matrix.size(), col = matrix[0].size();
+    int up = 0, down = row - 1, left = 0, right = col - 1;
+    while(up <= down && left <= right) {
+        for(int j = left; j <= right; j++)
+            res.push_back(matrix[up][j]);
+        up++;
+        for(int j = up; j <= down; j++)
+            res.push_back(matrix[j][right]);
+        right--;
+        if(up <= down) {
+            for(int j = right; j >= left; j--)
+                res.push_back(matrix[down][j]);
+        }
+        down--;
+        if(left <= right) {
+            for(int j = down; j >= up; j--)
+                res.push_back(matrix[j][left]);
+        }
+        left++;
+    }
+    return res;
+}
 ```
-
-
 
 ## 97
 
+请计算给出的数组（至少含有一个数字）中具有最大和的子数组（子数组要求在原数组中连续）
 
+例如：给出的数组为[−2,1,−3,4,−1,2,1,−5,4],
+
+子数组[−2,1,−3,4,−1,2,1,−5,4],具有最大的和:6.
 
 #### 思路
 
-
+1. 简单的动态规划， 第i位置的最大和等于 max(dp[i-1] + A[i], A[i]);
 
 ```c++
-
+int maxSubArray(int* A, int n) {
+    // write code here
+    int dp[n];
+    memset(dp, 0, sizeof(dp));
+    dp[0] = A[0];
+    int max_val = 1 << 31;
+    for(int i = 1; i < n; i++) {
+        dp[i] = max(dp[i-1] + A[i], A[i]);
+        max_val = dp[i] > max_val ? dp[i] : max_val;
+    }
+    return max(max_val, dp[0]);
+}
 ```
-
-
 
 ## 98
 
@@ -2171,7 +2265,19 @@ A =[3,2,1,0,4], 返回 false.
 
 #### 思路
 
+ 著名n皇后问题
+ 题目解析：
+ n个皇后摆放在n*n的棋盘格中，使得横、竖和两个对角线方向均不会同时出现两个皇后
 
+ 解题思路：
+ 由于需要在`n*n`的棋盘格中放入n个皇后，就必须每一行放一个
+ 否则就会出现一行有两个皇后的情况，会发生冲突。
+ 那么就可以递归的解决每一行问题
+ 最核心的问题是：如何能快速判断不合法的情况，即快速剪枝
+ 同行或同列的冲突可以简单用一个数组来考虑，难点是两条对角线
+ 对角线条数`2*n-1`
+ 左对角线：坐标x+y是一个唯一定值  x+y    范围为0到`2*n-2`
+ 右对角线：坐标x-y是一个唯一定值  x-y+n-1  范围为0到`2*n-2`
 
 ```c++
 
