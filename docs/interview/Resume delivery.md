@@ -3,20 +3,25 @@
 | 重点关注               | 截止时间 | 投递链接                                                     | 投递  | 状态   | 其它 |
 | ---------------------- | -------- | ------------------------------------------------------------ | ----- | ------ | ---- |
 | 华为Cloud & AI, BG     |          | http://career.huawei.com/reccampportal/portal5/campus-recruitment.html |       | 已投   |      |
-| 哔哩哔哩               |          | https://app.mokahr.com/campus_apply                          |       | 已投   |      |
-| 腾讯                   | 9.16     |                                                              |       |        |      |
+| 哔哩哔哩               |          | https://app.mokahr.com/campus_apply                          | 09.01 | 投递   |      |
+| 腾讯                   | 9.16     | https://www.nowcoder.com/discuss/469555?from=21tqptx         | 09.01 | 投递   |      |
 | 阿里巴巴               |          |                                                              |       |        |      |
 | 蚂蚁金服               |          |                                                              |       |        |      |
 | 京东                   |          | https://www.nowcoder.com/discuss/452605?from=21tqp           | 08.25 | 笔试完 |      |
+| 百度                   |          |                                                              |       |        |      |
 | 虾皮                   | 08.30    |                                                              |       | 结束   |      |
 | 快手                   | 10.15    |                                                              |       |        |      |
 | 网易互娱、雷火、互联网 |          |                                                              |       |        |      |
 | 猿辅导                 | 09.12    | https://www.nowcoder.com/discuss/450873?from=21tqp           | 09.01 | 投递   |      |
-| 商汤科技               |          |                                                              |       |        |      |
+| 商汤科技               | 10月     |                                                              |       |        |      |
 | 美团点评               | 10.31    | https://www.nowcoder.com/discuss/466431?from=21tqpmeituan    |       |        |      |
 | 深信服科技             |          |                                                              |       |        |      |
 | 拼多多                 |          | https://www.nowcoder.com/discuss/468610?from=21tqpdd         | 08.27 | 笔试   |      |
 | 滴滴                   | 09.20    |                                                              |       |        |      |
+| 新浪微博               | 09.09    | https://www.nowcoder.com/discuss/458703?from=21tqp           | 09.01 | 投递   |      |
+| 爱奇艺                 | 09.11    |                                                              |       |        |      |
+| 携程                   | 10.12    |                                                              |       |        |      |
+| 小米                   | 12.20    |                                                              |       |        |      |
 
 | 公司           | 截止日期 | 投递链接                                                     | 时间  | 状态     | 其它 |
 | -------------- | -------- | ------------------------------------------------------------ | ----- | -------- | ---- |
@@ -46,9 +51,7 @@
 | 最右           |          | https://www.nowcoder.com/discuss/483373?from=21tqpzy         |       | 已投     | 邮件 |
 | 浪潮           |          | https://inspur.hcmcloud.cn/recruit#/progress_detail?id=1351297 |       | 放弃     |      |
 | 广联达         |          | https://app.mokahr.com/m/candidate/applications/deliver-query/glodon |       | 笔试完   |      |
-| 中兴通迅       |          | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      |       | 已投     |      |
 | 奥比中光       |          | https://www.nowcoder.com/discuss/484111?from=21tqpabzg       |       | 已投     |      |
-|                |          |                                                              |       |          |      |
 | 搜狗           |          | https://www.nowcoder.com/discuss/460205?from=21tqpsg         |       | 已投     |      |
 | 思科           |          |                                                              |       | 结束     |      |
 | 网龙           | X        |                                                              |       | 结束     |      |
@@ -61,12 +64,21 @@
 | 坚果           |          | https://mp.weixin.qq.com/s/eCQsihxkNxK52qZ0o4xDKw            | 08.27 | 已投     |      |
 | 中信证券       |          | https://mp.weixin.qq.com/s/7e9ctuZqWW3oOZDBdgUDEQ?from=21tqp | 08.28 | 己投     |      |
 | 广州速游       |          | https://www.nowcoder.com/discuss/464373?from=21tqpgzsy       | 08.29 | 己投     |      |
-| 海康威视       |          | https://campushr.hikvision.com/                              | 08.31 | 己投     |      |
+| 海康威视       |          | https://campushr.hikvision.com/                              | 08.31 | 笔试完   |      |
 | 旷视科技       |          | https://www.nowcoder.com/discuss/456376?from=21tqpkuangs     |       |          |      |
 | 中移物联网     |          | https://www.nowcoder.com/school/schedule/1232                | 08.31 | 己投     |      |
 | 作业帮         |          | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 08.31 | 己投     |      |
 | 触宝           |          | https://www.nowcoder.com/discuss/475365?from=21tpqcb         | 09.01 | 己投     |      |
 | TP-LINK        |          | https://docs.qq.com/sheet/DQWRqeGJmQ1N1WEl5?tab=6j13t3       | 09.01 | 己投     |      |
+| 中兴通迅       |          | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      | 09.01 | 已投     |      |
+| BIGO           |          | https://www.nowcoder.com/discuss/463946?from=21tqpbigo       | 09.01 | 已投     |      |
+| 中国网安       |          | https://applyjob.chinahr.com/page/job/success?projectId=5f32066ed9f523040409de6f | 09.01 | 已投     |      |
+|                |          |                                                              |       |          |      |
+|                |          |                                                              |       |          |      |
+|                |          |                                                              |       |          |      |
+|                |          |                                                              |       |          |      |
+|                |          |                                                              |       |          |      |
+|                |          |                                                              |       |          |      |
 |                |          |                                                              |       |          |      |
 |                |          |                                                              |       |          |      |
 
@@ -74,7 +86,7 @@
 | ------------------ | -------- | ----------------------------------------------------- | -------- | ---- | ---- |
 | 小米               |          |                                                       |          |      |      |
 | 招商银行信用卡中心 |          |                                                       |          |      |      |
-| 百度               |          |                                                       |          |      |      |
+|                    |          |                                                       |          |      |      |
 | 滴滴               |          |                                                       |          |      |      |
 | 多益网络           |          |                                                       |          |      |      |
 | 4399               |          |                                                       |          |      |      |

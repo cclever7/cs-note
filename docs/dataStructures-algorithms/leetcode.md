@@ -1102,14 +1102,31 @@ bool isSameTree(TreeNode* p, TreeNode* q) {
 
 ## 51
 
+判断给出的二叉树是否是一个二叉搜索树（BST）
 
+二叉搜索树的定义如下
+
+- 一个节点的左子树上节点的值都小于自身的节点值
+- 一个节点的右子树上节点的值都大于自身的节点值
+- 所有节点的左右子树都必须是二叉搜索树
 
 #### 思路
 
-
+1. 递归方法，每个节点的值都 有一个上界和下界
+2. 中序遍历 ，记录前一个节点，与当前节点的值进行比较
 
 ```c++
-
+bool isValidBST(TreeNode *root) {
+    int min = 1 << 31, max = (1 << 31) - 1;
+    return isValidNode(root, min, max);
+}
+bool isValidNode(TreeNode *root, int left, int right) {
+    if(!root)
+        return true;
+    if(root->val <= left || root->val >= right)
+        return false;
+    return isValidNode(root->left, left, root->val) && isValidNode(root->right, root->val, right); 
+}
 ```
 
 
@@ -1783,14 +1800,48 @@ L:16.
 
 ## 83
 
+判断给出的字符串是否是数字
 
+一些例子：
+
+"0"=>true
+" 0.1 "=>true
+"abc"=>false
+"1 a"=>false
+"2e10"=>true
+
+注意：
+
+这道题故意陈述的比较模糊，在实现一个需求之前，你应该预先收集所有的要求
 
 #### 思路
 
-
-
 ```c++
+bool isNumber(const char *s) {
+    string str(s);
+    int index = str.find_first_not_of(' ');
+    if(str[index] == '+' || str[index] == '-') // + - 号
+        index++;
+    int points = 0,numbers = 0;
+    for(;str[index]>='0' && str[index]<='9' || str[index]=='.';index++)   // 小数点 和数字
+        s[index] == '.' ? ++points : ++ numbers;
+    if(points>1 || numbers<1)
+        return false;
 
+    if(str[index] == 'e' || str[index] == 'E')    //e
+    {
+        index++;
+        if(str[index] == '+' || str[index] == '-') // e后正负号
+            index++;
+        int afterE =0;
+        for(;str[index]>='0' && str[index]<='9';index++) //e后数字
+            afterE++;
+        if(afterE<1)
+            return false;
+    }
+    for(;str[index]==' ';index++){}
+    return str[index]=='\0';
+}
 ```
 
 
@@ -2012,14 +2063,71 @@ int uniquePaths(int m, int n) {
 
 ## 90
 
+集合[1,2,3,…,n]一共有n!种不同的排列
 
+按字典序列出所有的排列并且给这些排列标上序号
+
+我们就会得到以下的序列（以n=3为例）
+
+"123""132""213""231""312""321"现在给出n和k，请返回第k个排列
+
+注意：n在1到9之间
 
 #### 思路
 
+1. 方案一：全排列暴力递归算法， 得到全排列组合，取第k个结合
 
+2. 方案二：下一个遍历， 如果输入12345，则返回12354。
+
+   如果输入12354，则返回12435。
+
+   如果输入12435，则返回12453。
+
+   获取全排列下一个数的3个步骤。
+
+   1.从后向前查看逆序区域，找到逆序区域的前一位，也就是数字置换的边界。
+
+   2.让逆序区域的前一位和逆序区域中大于它的最小的数字交换位置。
+
+   3.把原来的逆序区域转为顺序状态。
 
 ```c++
+string getPermutation(int n, int k) {
+    // write code here
+    string s = "";
+    if(n == 0)
+        return s;
+    for(int i = 1; i <= n; i++) {
+        s.push_back('0' + i);
+    }
+    vector<string> res;
+    dfs(res, s, 0);
+    sort(res.begin(), res.end(), [](string v1, string v2){
+        for(int i = 0; i < v1.size(); i++) {
+            int k1 = v1[i] - '0', k2 = v2[i] - '0';
+            if(k1 > k2)
+                return false;
+            else if(k1 < k2)
+                return true;
+            else
+                continue;
+        }
+        return false;
+    });
+    return res[k - 1];
+}
 
+void dfs(vector<string> &res, string s, int idx) {
+    if(idx == s.size()) {
+        res.push_back(s);
+        return ;
+    }
+    for(int i = idx; i < s.size(); i++) {
+        swap(s[i], s[idx]);
+        dfs(res, s, idx + 1);
+        swap(s[i], s[idx]);
+    }
+}
 ```
 
 ## 91
