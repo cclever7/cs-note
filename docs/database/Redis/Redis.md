@@ -245,7 +245,7 @@ watch key1 [key2…]
 unwatch //取消对所有key的监视
 ```
 
-##### 分布式锁
+#### 分布式锁
 
 ```
 setnx lock-key value

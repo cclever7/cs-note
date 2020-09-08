@@ -26,7 +26,7 @@
 | 公司           | 截止日期 | 投递链接                                                     | 时间  | 状态     | 其它 |
 | -------------- | -------- | ------------------------------------------------------------ | ----- | -------- | ---- |
 | 中国电信云     |          | https://www.nowcoder.com/discuss/472901?from=21tqpdxy        |       | 已投     |      |
-| 亿联网络       |          | https://yealink.zhiye.com/Campus                             |       | 放弃     |      |
+| 亿联网络       |          | https://yealink.zhiye.com/Campus                             |       |          |      |
 | 同程旅行       |          | https://mp.weixin.qq.com/s/6pClg_gX_5mClzXAJDaY-w            |       | 测评完   |      |
 | 酷家乐         |          | https://www.nowcoder.com/discuss/472776?from=21tqpkjl        |       | 已投     |      |
 | VIPKID         |          | https://www.nowcoder.com/discuss/470853?from=21tqpvipk       |       | 笔试完   |      |
@@ -50,12 +50,12 @@
 | OPPO           |          | https://www.nowcoder.com/discuss/445983?from=21tqp           |       | 已投     |      |
 | 最右           |          | https://www.nowcoder.com/discuss/483373?from=21tqpzy         |       | 已投     | 邮件 |
 | 浪潮           |          | https://inspur.hcmcloud.cn/recruit#/progress_detail?id=1351297 |       | 放弃     |      |
-| 广联达         |          | https://app.mokahr.com/m/candidate/applications/deliver-query/glodon |       | 笔试完   |      |
+| 广联达         |          | https://app.mokahr.com/m/candidate/applications/deliver-query/glodon |       | 一面     |      |
 | 奥比中光       |          | https://www.nowcoder.com/discuss/484111?from=21tqpabzg       |       | 已投     |      |
 | 搜狗           |          | https://www.nowcoder.com/discuss/460205?from=21tqpsg         |       | 已投     |      |
 | 思科           |          |                                                              |       | 结束     |      |
 | 网龙           | X        |                                                              |       | 结束     |      |
-| 欢聚时代       |          | https://www.nowcoder.com/discuss/464281?from=21tqphj         |       | 已投     |      |
+| 欢聚时代       |          | https://www.nowcoder.com/discuss/464281?from=21tqphj         |       | 笔试     |      |
 | 招商银行       |          | https://cmbnt.cmbchina.com/pages/mycenter/default.html       |       | 已投     |      |
 | 映客           |          | https://www.nowcoder.com/discuss/476537?from=21tqpyingk      | 08.27 | 已投     |      |
 | 远景           |          |                                                              |       | 未投     |      |
@@ -66,13 +66,13 @@
 | 广州速游       |          | https://www.nowcoder.com/discuss/464373?from=21tqpgzsy       | 08.29 | 己投     |      |
 | 海康威视       |          | https://campushr.hikvision.com/                              | 08.31 | 笔试完   |      |
 | 旷视科技       |          | https://www.nowcoder.com/discuss/456376?from=21tqpkuangs     |       |          |      |
-| 中移物联网     |          | https://www.nowcoder.com/school/schedule/1232                | 08.31 | 己投     |      |
-| 作业帮         |          | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 08.31 | 己投     |      |
+| 中移物联网     |          | https://www.nowcoder.com/school/schedule/1232                | 08.31 | 笔试     |      |
+| 作业帮         |          | https://www.nowcoder.com/discuss/467107?from=21tqpzyb        | 08.31 | 结束     |      |
 | 触宝           |          | https://www.nowcoder.com/discuss/475365?from=21tpqcb         | 09.01 | 己投     |      |
 | TP-LINK        |          | https://docs.qq.com/sheet/DQWRqeGJmQ1N1WEl5?tab=6j13t3       | 09.01 | 己投     |      |
-| 中兴通迅       |          | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      | 09.01 | 已投     |      |
+| 中兴通迅       |          | http://job.zte.com.cn/ZTE.Graduate.Web/Index/Index.aspx      | 09.01 | 笔试     |      |
 | BIGO           |          | https://www.nowcoder.com/discuss/463946?from=21tqpbigo       | 09.01 | 已投     |      |
-| 中国网安       |          | https://applyjob.chinahr.com/page/job/success?projectId=5f32066ed9f523040409de6f | 09.01 | 已投     |      |
+| 中国网安       |          | https://applyjob.chinahr.com/page/job/success?projectId=5f32066ed9f523040409de6f | 09.01 | 一面     |      |
 |                |          |                                                              |       |          |      |
 |                |          |                                                              |       |          |      |
 |                |          |                                                              |       |          |      |
