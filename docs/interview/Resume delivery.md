@@ -15,7 +15,7 @@
 | 猿辅导                 | 09.12    | https://www.nowcoder.com/discuss/450873?from=21tqp           | 09.01 | 投递   |      |
 | 商汤科技               | 10月     |                                                              |       |        |      |
 | 美团点评               | 10.31    | https://www.nowcoder.com/discuss/466431?from=21tqpmeituan    |       |        |      |
-| 深信服科技             |          |                                                              |       |        |      |
+| 深信服科技             | 结束了   |                                                              |       |        |      |
 | 拼多多                 |          | https://www.nowcoder.com/discuss/468610?from=21tqpdd         | 08.27 | 笔试   |      |
 | 滴滴                   | 09.20    |                                                              |       |        |      |
 | 新浪微博               | 09.09    | https://www.nowcoder.com/discuss/458703?from=21tqp           | 09.01 | 投递   |      |
