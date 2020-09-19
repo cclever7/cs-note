@@ -36,6 +36,8 @@
 
 - [设计模式](#设计模式)
 
+- [其它](#其它)
+
   
 
 
@@ -117,3 +119,7 @@
 
 * [设计模式](/docs/design-pattern/design-pattern.md)
 
+## 其它
+
+- [智力题/场景题](/docs/other/智力题和场景题.md)
+- [HR面](/docs/other/HR面.md)
