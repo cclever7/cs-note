@@ -81,6 +81,8 @@ ttl key pttl key
 persist key
 ```
 
+
+
 ## 数据类型
 
 | Redis数据类型（共五种） | 类比Java中的数据类型 |
@@ -145,6 +147,68 @@ sinterstore key1 key2 key3     将交集存在key1内Copy to clipboardErrorCopie
 和 set 相比，sorted set 增加了一个权重参数 score，使得集合中的元素能够按 score **进行有序排列。**
 
 **举例：** 在直播系统中，实时排行信息包含直播间在线用户列表，各种礼物排行榜，弹幕消息（可以理解为按消息维度的消息排行榜）等信息，适合使用 Redis 中的 Sorted Set 结构进行存储。
+
+
+
+## Redis底层数据结构
+
+#### 字符串
+
+却不是 C 语言中的字符串（即以空字符’\0’结尾的字符数组），它是自己构建了一种名为 简单动态字符串（simple dynamic string,SDS）的抽象类型，并将 SDS 作为 Redis的默认字符串表示。
+
+```c++
+struct sdshdr{
+     int len; //记录buf数组中已使用字节的数量   //等于 SDS 保存字符串的长度
+     int free; //记录 buf 数组中未使用字节的数量
+     char buf[]; //字节数组，用于保存字符串
+}
+```
+
+#### 链表
+
+是一种常用的数据结构，C 语言内部是没有内置这种数据结构的实现，所以Redis自己构建了链表的实现
+
+```c++
+typedef  struct listNode{
+       struct listNode *prev; //前置节点
+       struct listNode *next; //后置节点
+       void *value;         //节点的值
+}listNode
+```
+
+#### 字典
+
+字典又称为符号表或者关联数组、或映射（map），是一种用于保存键值对的抽象数据结构。字典中的每一个键 key 都是唯一的，通过 key 可以对值来进行查找或修改。C 语言中没有内置这种数据结构的实现，所以字典依然是 Redis自己构建的。
+
+<img src="medium/1120165-20180528080655703-1600710948.png" alt="img" style="zoom:67%;" />
+
+#### 跳跃表
+
+跳跃表（skiplist）是一种有序数据结构，它通过在每个节点中维持多个指向其它节点的指针，从而达到快速访问节点的目的。具有如下性质
+
+<img src="medium/1120165-20180528210921601-949409375.png" alt="img" style="zoom:50%;" />
+
+#### 整数集合
+
+![img](medium/747151-20180603165111987-424577529.png)
+
+整数集合（intset）是Redis用于保存整数值的集合抽象数据类型，它可以保存类型为int16_t、int32_t 或者int64_t 的整数值，并且保证集合中不会出现重复元素。 content的数组中的数从小到大进行存放到
+
+```c++
+typedef struct intset{
+     uint32_t encoding;    //编码方式
+     uint32_t length;   //集合包含的元素数量
+     int8_t contents[];   //保存元素的数组
+}intset;
+```
+
+#### 压缩列表
+
+压缩列表（ziplist）是Redis为了节省内存而开发的，是由一系列特殊编码的连续内存块组成的顺序型数据结构，一个压缩列表可以包含任意多个节点（entry），每个节点可以保存一个字节数组或者一个整数值。
+
+压缩列表的原理：压缩列表并不是对数据利用某种算法进行压缩，而是将数据按照一定规则编码在一块连续的内存区域，目的是节省内存
+
+
 
 ## db 基本操作
 
@@ -212,6 +276,8 @@ Jedis是Redis官方推荐的Java链接工具
 
 1. **手动重写**： bgrewriteaof
 2. **自动重写**：auto-aof-rewrite-min-size size   /   auto-aof-rewrite-percentage percentage
+
+
 
 ## Redis事务
 
