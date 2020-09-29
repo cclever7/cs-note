@@ -158,7 +158,7 @@ ON Customers.cust_id = Orders.cust_id;
 
 ##### UNION ALL
 
-UNION默认会去除相同行，如果需要保留相同行，使用 UNION ALL。
+UNION默认会去除相同行，如果需要保留相同行，使用 UNION ALL
 
 ```sql
 SELECT col
