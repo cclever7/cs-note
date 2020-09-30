@@ -1,8 +1,34 @@
 ## 什么是 Shell？
 
-简单来说“Shell编程就是对一堆Linux命令的逻辑化处理”。、
+简单来说“Shell编程就是对一堆Linux命令的逻辑化处理”。
 
-<img src="medium/image-20200929093644018.png" alt="image-20200929093644018" style="zoom: 67%;" />
+<img src="medium/image-20200929093644018.png" alt="image-20200929093644018" style="zoom: 80%;" />
+
+## Shell 环境
+
+只要有一个能编写代码的文本编辑器和一个能解释执行的**脚本解释器**就可以了
+
+- Bourne Shell（/usr/bin/sh或/bin/sh）
+
+- Bourne Again Shell（/bin/bash）
+
+- C Shell（/usr/bin/csh）
+
+- K Shell（/usr/bin/ksh）
+
+- Shell for Root（/sbin/sh）
+
+  在一般情况下，人们并不区分 Bourne Shell 和 Bourne Again Shell，所以，像 **#!/bin/sh**，它同样也可以改为 **#!/bin/bash**。
+
+## Shell运行
+
+1. 作为可执行程序直接运行 `./test.sh`
+2. 作为解释器参数进行运行 `/bin/sh`
+
+## Shell注释
+
+1. 单行注释：`#`
+2. 多行注释：`:<<EOF ... EOF`
 
 ## Shell 变量
 
@@ -22,7 +48,7 @@ PATH 决定了shell将到哪些目录中寻找命令或程序 HOME 当前用户�
 
    比如我们要看当前用户目录可以使用：`echo $HOME`命令；如果我们要看当前用户Shell类型 可以使用`echo $SHELL`命令。可以看出，使用方法非常简单。
 
-2. 使用自己定义的变量`$自定义`：`hello="hello world"   echo $hello`
+2. 使用自己定义的变量`$自定义`：`hello="hello world"   echo ${hello}`
 
 3. **只读变量**：`readonly variable_name`
 
@@ -68,12 +94,11 @@ PATH 决定了shell将到哪些目录中寻找命令或程序 HOME 当前用户�
 
 1. 第一种方式：`echo ${#name} #输出 10`
 2. 第二种方式：`expr length "$name";`
-   Copy to clipboardErrorCopied
 
 ##### 截取子字符串:
 
-1. 简单的字符串截取：`echo ${str:0:10} #输出:SnailClimb`
-2. 根据表达式截取：s1=${var%%t*}#h
+1. 简单的字符串截取：`echo ${str:0:10} `
+2. 根据表达式截取：`s1=${var%%t*}#h`
 
 ##### 查找子字符串：
 
@@ -84,232 +109,185 @@ echo `expr index "$string" io`  # 输出 4
 
 
 
-expr 命令时，表达式中的运算符左右必须包含空格，如果不包含空格，将会输出表达式本身:
-
-expr 5+6    // 直接输出 5+6
-expr 5 + 6       // 输出 11
-Copy to clipboardErrorCopied
-对于某些运算符，还需要我们使用符号\进行转义，否则就会提示语法错误。
-
-expr 5 * 6       // 输出错误
-expr 5 \* 6      // 输出30
-Copy to clipboardErrorCopied
-
 ## Shell 数组
 
-bash只支持一维数组（不支持多维数组），并且没有限定数组的大小。我下面给了大家一个关于数组操作的 Shell 代码示例，通过该示例大家可以知道如何创建数组、获取数组长度、获取/删除特定位置的数组元素、删除整个数组以及遍历数组。
+bash只支持一维数组（不支持多维数组），并且没有限定数组的大小。关于数组操作的 Shell 代码示例，通过该示例大家可以知道如何创建数组、获取数组长度、获取/删除特定位置的数组元素、删除整个数组以及遍历数组。
 
 ##### 定义数组
 
-#!/bin/bash
+ 数组名=(值1 值2 ... 值n)
+
+```shell 
 array=(1 2 3 4 5);
+```
+
+##### 读取数组
+
+`echo ${array[2]} #输出：3`
+
+##### 获取所有数组中的数
+
+1. echo "数组的元素为: `${my_array[*]}"`
+2. echo "数组的元素为: `${my_array[@]}"`
+3. **遍历数组**：`for i in ${array[@]};do echo $i ;done # ，输出： 1 3 4 5 `
 
 ##### 获取数组长度
 
-length=${#array[@]}
+1. `length=${#array[@]}`
+2. `length=${#array[*]}`
 
-或者
+##### 数组删除
 
-length2=${#array[*]}
-#输出数组长度
-echo $length #输出：5
-echo $length2 #输出：5
-
-输出数组第三个元素
-
-echo ${array[2]} #输出：3
-unset array[1]# 删除下标为1的元素也就是删除第二个元素
-for i in ${array[@]};do echo $i ;done # 遍历数组，输出： 1 3 4 5 
-unset arr_number; # 删除数组中的所有元素
-for i in ${array[@]};do echo $i ;done # 遍历数组，数组元素为空，没有任何输出内容
-Copy to clipboardErrorCopied
-Shell 基本运算符
-说明：图片来自《菜鸟教程》
+1. 删除下标为1的元素也就是删除第二个元素 `unset array[1]`
+2. 删除数组中的所有元素：`unset arr_number; `
 
 
 
-## 命令
+## 命令与运算符
 
-expr
+#### 表达式
 
-代码中的 **[]** 执行基本的算数运算
+1. **[] 表达式**
 
-echo
+   **注意**：在 [] 表达式中，常见的 >, < 需要加转义字符，表示字符串大小比较，以 acill 码位置作为比较。不直接支持 >, < 运算符，还有逻辑运算符 || 、&& ，它需要用 -a[and] –o[or] 表示。
 
-printf
+   - 字符串比较, 比如两个字符串是否相同， `[[ $var1 = $var2 ]]`。在进行字符串比较时，最好使用双中括号 [[ ]]. 因为单中括号可能会导致一些错误，因此最好避开它们。
+   - 中括号 **[]** 与其中间的代码应该有空格隔开
 
-test
+2. **[[ ]] 表达式**
 
-Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。
+   **注意**：[[]] 运算符只是 [] 运算符的扩充。能够支持 >, < 符号运算不需要转义符，它还是以字符串比较大小。里面支持逻辑运算符：**|| &&** ，不再使用 **-a -o**。
 
-## 运算符
+#### 命令
 
-1. 算数运算符
-2. 关系运算符
-3. 布尔运算符
-4. 字符串运算符
-5. 文件测试运算符
+1. **expr**
 
-我以加法运算符做一个简单的示例（注意：不是单引号，是反引号）：
+   expr 是一款表达式计算工具，使用它能完成表达式的求值操作。 推荐使用`val=$(expr 10 + 20)`，不使用\`expr 10 + 20\`
 
-#!/bin/bash
-a=3;b=3;
-val=`expr $a + $b`
-#输出：Total value : 6
-echo "Total value : $val"
-Copy to clipboardErrorCopied
-关系运算符
-关系运算符只支持数字，不支持字符串，除非字符串的值是数字。
+2. **echo**
 
-shell关系运算符
+    echo 指令类似，都是用于字符串的输出  `echo string`
 
-通过一个简单的示例演示关系运算符的使用，下面shell程序的作用是当score=100的时候输出A否则输出B。
+3. **printf**
 
-#!/bin/bash
-score=90;
-maxscore=100;
-if [ $score -eq $maxscore ]
-then
-   echo "A"
-else
-   echo "B"
-fi
-Copy to clipboardErrorCopied
-输出结果：
+   printf 命令模仿 C 程序库（library）里的 printf() 程序。`printf  format-string  [arguments...]`
 
-B
-Copy to clipboardErrorCopied
-逻辑运算符
-逻辑运算符
+4. **test**
 
-示例：
+   Shell中的 test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。 `test $num1 = $num2`
 
-#!/bin/bash
-a=$(( 1 && 0))
+#### 运算符
 
-输出：0；逻辑与运算只有相与的两边都是1，与的结果才是1；否则与的结果是0
+1. **算数运算符**
 
-echo $a;
-Copy to clipboardErrorCopied
-布尔运算符
-布尔运算符
+   <img src="medium/image-20200930100255384.png" alt="image-20200930100255384" style="zoom:80%;" />
 
-这里就不做演示了，应该挺简单的。
+   - 乘号`(*)`前边必须加反斜杠`(\)`才能实现乘法运算；
 
-字符串运算符
- 字符串运算符
+2. **关系运算符**
 
-简单示例：
+   关系运算符只支持数字，不支持字符串，除非字符串的值是数字。
+
+   <img src="medium/image-20200930100608443.png" alt="image-20200930100608443" style="zoom:80%;" />
+
+3. **布尔运算符**
+
+   <img src="medium/image-20200930100633881.png" alt="image-20200930100633881" style="zoom:80%;" />
+
+4. **逻辑运算符**
+
+   <img src="medium/image-20200930100716599.png" alt="image-20200930100716599" style="zoom:80%;" />
+
+   使用 **[[ ... ]]** 条件判断结构，而不是 **[ ... ]**，能够防止脚本中的许多逻辑错误。比如，**&&**、**||**、**<** 和 **>** 操作符能够正常存在于 **[[ ]]** 条件判断结构中，但是如果出现在 **[ ]** 结构中的话，会报错。
+
+5. **字符串运算符**
+
+   <img src="medium/image-20200930100749224.png" alt="image-20200930100749224" style="zoom:80%;" />
+
+6. **文件测试运算符**
+
+   <img src="medium/image-20200930101602910.png" alt="image-20200930101602910" style="zoom:80%;" />
 
 
-#!/bin/bash
-a="abc";
-b="efg";
-if [ $a = $b ]
-then
-   echo "a 等于 b"
-else
-   echo "a 不等于 b"
-fi
-Copy to clipboardErrorCopied
-输出：
-
-a 不等于 b
-Copy to clipboardErrorCopied
-文件相关运算符
-文件相关运算符
-
-使用方式很简单，比如我们定义好了一个文件路径file="/usr/learnshell/test.sh" 如果我们想判断这个文件是否可读，可以这样if [ -r $file ] 如果想判断这个文件是否可写，可以这样-w $file，是不是很简单。
 
 ## shell流程控制
 
-if 条件语句
-简单的 if else-if else 的条件语句示例
+#### if else 条件判断语句
 
-#!/bin/bash
-a=3;
-b=9;
-if [ $a -eq $b ]
+```shell
+if condition
 then
-   echo "a 等于 b"
-elif [ $a -gt $b ]
+    command1 
+elif condition2
 then
-   echo "a 大于 b"
+    command2 
 else
-   echo "a 小于 b"
+	command3
 fi
-Copy to clipboardErrorCopied
-输出结果：
+```
 
-a 小于 b
-Copy to clipboardErrorCopied
-相信大家通过上面的示例就已经掌握了 shell 编程中的 if 条件语句。不过，还要提到的一点是，不同于我们常见的 Java 以及 PHP 中的 if 条件语句，shell if 条件语句中不能包含空语句也就是什么都不做的语句。
+`if else`语句经常与test命令结合使用，`shell if `条件语句中不能包含空语句也就是什么都不做的语句。
 
-for 循环语句
-通过下面三个简单的示例认识 for 循环语句最基本的使用，实际上 for 循环语句的功能比下面你看到的示例展现的要大得多。
+#### for 循环语句
 
-输出当前列表中的数据：
-
-for loop in 1 2 3 4 5
+```shell
+for var in item1 item2 ... itemN # 或 ${1 ... N}
 do
-    echo "The value is: $loop"
+    command1
+    command2
+    ...
+    commandN
 done
-Copy to clipboardErrorCopied
-产生 10 个随机数：
+```
 
-#!/bin/bash
-for i in {0..9};
-do 
-   echo $RANDOM;
-done
-Copy to clipboardErrorCopied
-输出1到5:
+#### while 语句
 
-通常情况下 shell 变量调用需要加 $,但是 for 的 (()) 中不需要,下面来看一个例子：
-
-#!/bin/bash
-for((i=1;i<=5;i++));do
-    echo $i;
-done;
-Copy to clipboardErrorCopied
-while 语句
-基本的 while 循环语句：
-
-#!/bin/bash
-int=1
-while(( $int<=5 ))
-do
-    echo $int
-    let "int++"
-done
-Copy to clipboardErrorCopied
-while循环可用于读取键盘信息：
-
-echo '按下 <CTRL-D> 退出'
-echo -n '输入你最喜欢的电影: '
-while read FILM
-do
-    echo "是的！$FILM 是一个好电影"
-done
-Copy to clipboardErrorCopied
-输出内容:
-
-按下 <CTRL-D> 退出
-输入你最喜欢的电影: 变形金刚
-是的！变形金刚 是一个好电影
-Copy to clipboardErrorCopied
-无限循环：
-
-while true
+```shell
+while condition
 do
     command
 done
-Copy to clipboardErrorCopied
+```
+
+#### until 循环
+
+```shell
+until condition
+do
+    command
+done
+```
+
+#### case
+
+```shell
+case 值 in
+模式1)
+    command1
+    ;;
+模式2）
+    command1
+    ;;
+esac
+```
+
+
 
 ## shell 函数
 
-##### 不带参数没有返回值的函数
+#### 函数格式
 
+```shell
+[ function ] funname [()]
+{
+    action;
+    [return int;]
+}
+```
+
+#### 不带参数没有返回值的函数
+
+```shell
 #!/bin/bash
 hello(){
     echo "这是我的第一个 shell 函数!"
@@ -318,11 +296,11 @@ echo "-----函数开始执行-----"
 hello
 echo "-----函数执行完毕-----"
 Copy to clipboardErrorCopied
+```
 
-##### 有返回值的函数
+#### 有返回值的函数
 
-输入两个数字之后相加并返回结果：
-
+```shell
 #!/bin/bash
 funWithReturn(){
     echo "输入第一个数字: "
@@ -333,20 +311,15 @@ funWithReturn(){
     return $(($aNum+$anotherNum))
 }
 funWithReturn
-echo "输入的两个数字之和为 $?"
-Copy to clipboardErrorCopied
-输出结果：
+```
 
-输入第一个数字: 
-1
-输入第二个数字: 
-2
-两个数字分别为 1 和 2 !
-输入的两个数字之和为 3
-Copy to clipboardErrorCopied
+#### 带参数的函数
 
-##### 带参数的函数
+我们可以在执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为：**$n**。**n** 代表一个数字，1 为执行脚本的第一个参数，2 为执行脚本的第二个参数，以此类推……
 
+<img src="medium/image-20200930092416645.png" alt="image-20200930092416645" style="zoom:80%;" />
+
+```shell
 #!/bin/bash
 funWithParam(){
     echo "第一个参数为 $1 !"
@@ -358,28 +331,38 @@ funWithParam(){
     echo "作为一个字符串输出所有参数 $* !"
 }
 funWithParam 1 2 3 4 5 6 7 8 9 34 73
-Copy to clipboardErrorCopied
-输出结果：
 
-第一个参数为 1 !
-第二个参数为 2 !
-第十个参数为 10 !
-第十个参数为 34 !
-第十一个参数为 73 !
-参数总数有 11 个!
-作为一个字符串输出所有参数 1 2 3 4 5 6 7 8 9 34 73 !
-
-
+```
 
 
 
 ## 输入输出重定向
 
+大多数 UNIX 系统命令从你的终端接受输入并将所产生的输出发送回到您的终端。一个命令通常从一个叫标准输入的地方读取输入，默认情况下，这恰好是你的终端。同样，一个命令通常将其输出写入到标准输出，默认情况下，这也是你的终端。
 
+<img src="medium/image-20200930102951973.png" alt="image-20200930102951973" style="zoom:80%;" />
+
+#### /dev/null 文件
+
+如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到 /dev/null：
+
+```shell
+$ command > /dev/null
+```
 
 
 
 ## 文件包含
+
+和其他语言一样，Shell 也可以包含外部脚本。这样可以很方便的封装一些公用的代码作为一个独立的文件。
+
+Shell 文件包含的语法格式如下：
+
+```shell
+. filename   # 注意点号(.)和文件名中间有一空格
+或
+source filename
+```
 
 
 

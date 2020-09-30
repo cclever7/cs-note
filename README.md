@@ -110,6 +110,7 @@
 ### Linux相关
 
 * [Linux基础知识](/docs/operating-system/linux.md)
+* [shell入门](/docs/operating-system/shell.md)
 
 ## 网络
 
