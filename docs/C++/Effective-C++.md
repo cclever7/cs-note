@@ -87,12 +87,20 @@
 
 
 
-# 一.让自己习惯C++
+# 一. 让自己习惯C++
 
 ## 条款01：视C++为一个语言联邦
 
-C++刚被推出时是C的加强版，加了一些面向对象的特性。最初的名称为C with Classes。随着时代的进步，C++不断发展，有了各种特性。 
-现在的C++是一个多重范型编程语言（multiparadigm programming language），它支持支持过程形式、支持面向对象形式Object-Oriented C++、函数形式、泛型形式、元编程形式（Template C++，STL)、这些能力使得c++成为一个无可匹敌的工具。**我们可以把c++理解为相关语言组成的联邦而非单一语言。**
+我们可以把C++理解为相关语言组成的联邦而非单一语言。包括
+
+- C
+- Object-Oriented C++
+- Template C++ 
+- STL
+
+C++刚被推出时是C的加强版，加了一些面向对象的特性。最初的名称为C with Classes。随着时代的进步，C++不断发展，有了各种特性。 现在的C++是一个多重范型编程语言，它支持支持过程形式、支持面向对象形式Object-Oriented C++、函数形式、泛型形式、元编程形式（Template C++，STL)、这些能力使得c++成为一个无可匹敌的工具
+
+
 
 ## 条款02：尽量以const,enum,inline替换#define
 
@@ -113,15 +121,11 @@ const double AspectRatio = 1.653
 
 - 定义常量指针时：由于常量定义式通常被定义在头文件内，因此有必要将指针声明为const
 
-  。如：
-
   ```c++
   const char* const authorName = "Scott Meyers";
   ```
 
-- class专属常量
-
-  ：class专属常量需要声明在class内部，并且被class使用：
+- class专属常量：class专属常量需要声明在class内部，并且被class使用：
 
   ```c++
   class GamePlayer{
@@ -132,11 +136,8 @@ const double AspectRatio = 1.653
   const int GamePlayer::NumTurns;    //NumTurns的定义
   ```
 
-  对于static修饰的class专属整形常量，如果需要对该常量取地址或编译器坚持要看到一个定义式。那么必须提供类外定义。如果类内声明时提供了初始值，类外定义就不能再设初值。但是某些编译器可能不支持类内初始值，因此需要在类外定义时提供初始值，但是这样就不能像scores成员一样，在类内使用该常量。因此，如果需要使用class专属常量，最好改用“
+  对于static修饰的class专属整形常量，如果需要对该常量取地址或编译器坚持要看到一个定义式。那么必须提供类外定义。如果类内声明时提供了初始值，类外定义就不能再设初值。但是某些编译器可能不支持类内初始值，因此需要在类外定义时提供初始值，但是这样就不能像scores成员一样，在类内使用该常量。因此，如果需要使用class专属常量，最好改用“enum hack”
 
-  enum hack
-
-  ”
 
 ### 2）以enum替换#define
 
@@ -290,8 +291,6 @@ public:
     }
 };
 ```
-
-
 
 ## 条款04：确定对象被使用前已先被初始化
 
