@@ -1,4 +1,4 @@
-// 牛客网 —— 名企高频面试题题解
+// 牛客网 —— 名企高频面试题题解(https://www.nowcoder.com/ta/job-code-high-rd)
 
 #include <iostream>
 #include <vector>
@@ -89,7 +89,9 @@ void orders(TreeNode *root, vector<vector<int>> &v) {
 
 /*
  * NC6
+ * 深度遍历
  */
+
 
 /*
  * NC7
@@ -215,6 +217,13 @@ vector<vector<int> > threeOrders(TreeNode* root) {
 }
 
 /*
+ * NC52
+ * 栈
+ */
+
+
+
+/*
  * NC53
  * 快慢指针
  */
@@ -235,6 +244,61 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
     pre->next = slow->next;
     return nhead->next;
 }
+
+/*
+ * NC65
+ * 简单动态规划，或是循环（递归）
+ */
+int Fibonacci(int n) {
+    if(n == 1 || n == 2)
+        return 1;
+    int res = 0, res1 = 1, res2 = 1;
+    for(int i = 3; i <= n; i++) {
+        res = res1 + res2;
+        res1 = res2;
+        res2 = res;
+    }
+    return res;
+}
+
+/*
+ * NC66
+ */
+ListNode* FindFirstCommonNode( ListNode* pHead1, ListNode* pHead2) {
+    if(!pHead1 || !pHead2)
+        return nullptr;
+    ListNode *p = pHead1;
+    map<ListNode *, int> mp;
+    while(p) {
+        mp.insert(make_pair(p, 1));
+        p = p->next;
+    }
+    p = pHead2;
+    while(p) {
+        auto ptr = mp.find(p);
+        if(ptr != mp.end())
+            return p;
+        p = p->next;
+    }
+    return nullptr;
+}
+
+/*
+ * NC67
+ */
+
+/*
+ * NC68
+ */
+
+/*
+ * NC69
+ */
+
+/*
+ * NC70
+ */
+
 
 /*
  * NC78
@@ -364,8 +428,3 @@ int upper_bound_(int n, int v, vector<int>& a) {
     return n;
 }
 
-int main() {
-    vector<int> v = {1, -2, 3, 5, -2, 6, -1};
-    cout << maxsumofSubarray(v);
-    return 0;
-}
